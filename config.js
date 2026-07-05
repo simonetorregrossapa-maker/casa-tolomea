@@ -159,6 +159,13 @@ window.SITE = {
     prezzoDiretto:  275,   // €/notte prenotando diretto (~10% in meno)
   },
 
+  /* ── GESTIONE (solo pannello, non mostrato sul sito pubblico) ───────── */
+  gestione: {
+    // Provvigione applicata sulle prenotazioni dirette confermate, mostrata
+    // nella tab "Incassi" del pannello (trasparenza col proprietario).
+    provvigionePct: 10,
+  },
+
   /* ── PREZZI PER STAGIONE ───────────────────────────────────────────── */
   // prezzoNotte in € (intera casa). minNotti = soggiorno minimo.
   // Il primo periodo che "contiene" il check-in determina la stima nel form.

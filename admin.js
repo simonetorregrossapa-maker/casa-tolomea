@@ -159,6 +159,7 @@
         <div class="adm-tabs">
           <button class="adm-tab" data-tab="richieste">Richieste</button>
           <button class="adm-tab" data-tab="calendario">Calendario</button>
+          <button class="adm-tab" data-tab="incassi">Incassi</button>
         </div>
         <div class="adm-bar-right">
           <button class="adm-btn adm-btn-ghost" id="admRefresh">Aggiorna</button>
@@ -182,6 +183,7 @@
 
   function renderView() {
     if (state.tab === "richieste") renderRichieste();
+    else if (state.tab === "incassi") renderIncassi();
     else renderCalendario();
   }
 
@@ -279,6 +281,71 @@
       }, { publicKey: cfg.publicKey });
       toast("Email di conferma inviata all'ospite");
     } catch (_) { toast("Conferma salvata, ma email all'ospite non inviata", "warn"); }
+  }
+
+  /* ── VISTA INCASSI / PROVVIGIONE ───────────────────────────────────── */
+  function nottiOf(r) {
+    try { return Math.max(0, Math.round((parseIso(r.checkout) - parseIso(r.checkin)) / 86400000)); }
+    catch { return 0; }
+  }
+
+  function renderIncassi() {
+    const view = $("#admView");
+    const pct = Number(CFG.gestione?.provvigionePct ?? 10);
+    const oggi = isoOf(new Date());
+
+    const conf = state.rows.filter((r) => r.confermata);
+    const attesa = state.rows.filter((r) => !r.confermata);
+
+    const somma = (arr) => arr.reduce((s, r) => s + (Number(r.totale_stimato) || 0), 0);
+    const incassato = somma(conf);
+    const provvigione = incassato * pct / 100;
+    const notti = conf.reduce((s, r) => s + nottiOf(r), 0);
+
+    const valoreAttesa = somma(attesa);
+    const provvAttesa = valoreAttesa * pct / 100;
+
+    // Confermate ordinate per check-in; separo "in arrivo/future" da "concluse".
+    const confOrd = conf.slice().sort((a, b) => (a.checkin < b.checkin ? 1 : -1));
+    const rigaIncasso = (r) => {
+      const p = (Number(r.totale_stimato) || 0) * pct / 100;
+      const passata = r.checkout < oggi;
+      return `
+        <div class="adm-inc-row">
+          <div class="adm-inc-when">
+            <strong>${r.nome || "Ospite"}</strong>
+            <span class="adm-muted">${fmtItaliano(r.checkin)} → ${fmtItaliano(r.checkout)} · ${nottiOf(r)} nott${nottiOf(r) === 1 ? "e" : "i"}</span>
+            ${passata ? `<span class="adm-badge ok">Conclusa</span>` : `<span class="adm-badge wait">In arrivo</span>`}
+          </div>
+          <div class="adm-inc-money">
+            <span>${euro(r.totale_stimato)}</span>
+            <b>${euro(p)}</b>
+          </div>
+        </div>`;
+    };
+
+    view.innerHTML = `
+      <div class="adm-stats adm-stats-4">
+        <div class="adm-stat"><b>${conf.length}</b><span>Prenotazioni dirette</span></div>
+        <div class="adm-stat"><b>${notti}</b><span>Notti vendute</span></div>
+        <div class="adm-stat"><b>${euro(incassato)}</b><span>Incassato stimato</span></div>
+        <div class="adm-stat adm-stat-accent"><b>${euro(provvigione)}</b><span>Provvigione ${pct}%</span></div>
+      </div>
+
+      <div class="adm-inc-pipeline">
+        In attesa di conferma: <strong>${attesa.length}</strong> richiest${attesa.length === 1 ? "a" : "e"}
+        · valore <strong>${euro(valoreAttesa)}</strong>
+        <span class="adm-muted">(provvigione potenziale ${euro(provvAttesa)})</span>
+      </div>
+
+      <div class="adm-inc-head">
+        <span>Prenotazione</span>
+        <span class="adm-inc-cols"><span>Totale</span><b>Provv. ${pct}%</b></span>
+      </div>
+      <div class="adm-inc-list">
+        ${confOrd.length ? confOrd.map(rigaIncasso).join("") : `<p class="adm-empty">Nessuna prenotazione diretta confermata. La provvigione si calcola sulle richieste che confermi nella tab "Richieste".</p>`}
+      </div>
+      <p class="adm-muted adm-cal-foot">Gli importi usano il totale stimato di ogni prenotazione (config prezzi). La provvigione è calcolata al ${pct}% sulle sole prenotazioni dirette confermate.</p>`;
   }
 
   /* ── VISTA CALENDARIO UNICO ────────────────────────────────────────── */

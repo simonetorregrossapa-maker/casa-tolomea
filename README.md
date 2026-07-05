@@ -85,3 +85,70 @@ non è configurato in `config.js`, così è mostrabile anche senza backend.
 
 Fatto tutto questo, l'unica operazione ricorrente è: quando arriva una richiesta,
 il proprietario apre `gestione.html`, verifica, e clicca **Conferma**.
+
+---
+
+## Automazioni email (direct booking)
+
+Tre Edge Function inviano email agli ospiti in automatico (server-side via
+**Resend**), per aumentare le prenotazioni dirette e le recensioni:
+
+| Function | Quando | A chi | Scopo |
+|---|---|---|---|
+| `promemoria` | cron giornaliero | ospiti con check-in tra N giorni | riduce no-show, upsell (transfer, arrivo anticipato) |
+| `recensione` | cron giornaliero | ospiti dopo il check-out | più recensioni = ranking OTA + fiducia sul diretto |
+| `riattivazione` | cron settimanale | ospiti "dormienti" senza prenotazioni future | win-back con sconto diretto |
+
+I parametri (giorni, testi, mittente, link recensioni) stanno nella tabella
+`settings` — modificabili senza toccare il codice.
+
+### Setup automazioni (una tantum)
+1. **Schema** — riesegui `supabase/schema.sql` nel SQL Editor (idempotente:
+   aggiunge i flag `promemoria_inviato`/`recensione_inviata`, le tabelle
+   `settings`, `riattivazioni`, `liste_attesa` e i valori di default).
+2. **Resend** — crea un account su resend.com, genera una API key e impostala:
+   ```
+   supabase secrets set RESEND_API_KEY="re_..."
+   ```
+   Finché il dominio non è verificato su Resend, il mittente resta
+   `onboarding@resend.dev` e Resend consegna **solo all'email dell'account**
+   (utile per i test). Quando `casatolomea.it` è attivo: verifica il dominio su
+   Resend e aggiorna `settings.email_mittente` a `info@casatolomea.it`.
+3. **Deploy:**
+   ```
+   supabase functions deploy promemoria
+   supabase functions deploy recensione
+   supabase functions deploy riattivazione
+   ```
+   (tutte con Verify JWT OFF: sono innescate da cron, non dal pubblico.)
+4. **Cron** (SQL Editor, richiede `pg_cron` + `pg_net` attivi):
+   ```sql
+   select cron.schedule('promemoria-casa','0 9 * * *',
+     $$ select net.http_post(url:='https://<project-ref>.functions.supabase.co/promemoria',
+        headers:='{"Content-Type":"application/json"}'::jsonb) $$);
+   select cron.schedule('recensione-casa','30 10 * * *',
+     $$ select net.http_post(url:='https://<project-ref>.functions.supabase.co/recensione',
+        headers:='{"Content-Type":"application/json"}'::jsonb) $$);
+   select cron.schedule('winback-casa','0 10 * * 1',
+     $$ select net.http_post(url:='https://<project-ref>.functions.supabase.co/riattivazione',
+        headers:='{"Content-Type":"application/json"}'::jsonb) $$);
+   ```
+5. **Link recensioni** — imposta `settings.recensioni_url` con il link Google/Booking
+   dove far lasciare la recensione (se vuoto, l'email invita a rispondere).
+
+### Sincronizzazione multi-canale (Booking + Airbnb + VRBO)
+La function `disponibilita` legge già i tre feed OTA. Imposta i secret:
+```
+supabase secrets set BOOKING_ICAL_URL="https://ical.booking.com/…"
+supabase secrets set AIRBNB_ICAL_URL="https://www.airbnb.it/calendar/ical/…"
+supabase secrets set VRBO_ICAL_URL="https://www.vrbo.com/icalendar/…"
+```
+Poi incolla l'URL di `site-availability-ical` nell'import calendario di **tutti e
+tre** gli OTA. Consigliato: fai importare a ogni OTA anche i feed export degli
+altri due (Booking↔Airbnb↔VRBO), così il sync OTA-OTA non dipende solo dal sito.
+
+## Pannello — tab "Incassi"
+`gestione.html` ha una terza tab **Incassi**: prenotazioni dirette confermate,
+notti vendute, incassato stimato e **provvigione** (default 10%, in
+`config.js → gestione.provvigionePct`), più il valore delle richieste ancora da
+confermare (pipeline).
