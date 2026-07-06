@@ -46,7 +46,7 @@ window.SITE = {
     telDisplay:   "+39 339 429 0856",
     telHref:      "+393394290856",
     whatsapp:     "393394290856",        // solo cifre, con prefisso internazionale
-    email:        "info@casatolomea.it",
+    email:        "casa.tolomea@tiscali.it",
     // Tempo di risposta dichiarato (mostrato vicino al form)
     rispostaEntro: { it: "24 ore", en: "24 hours" },
     // Mappa: query indirizzo (fallback) oppure URL embed diretto (pb=...)
