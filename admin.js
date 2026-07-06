@@ -122,7 +122,19 @@
   }
 
   /* ══ STATO APP ══ */
-  const state = { rows: [], bookingBusy: new Set(), blocchi: [], calMonth: new Date(), tab: "richieste", filtro: "tutte" };
+  const state = { rows: [], bookingBusy: new Set(), blocchi: [], listeAttesa: [], calMonth: new Date(), tab: "richieste", filtro: "tutte" };
+
+  function demoAttesa() {
+    const d1 = new Date(); d1.setDate(d1.getDate() + 8);
+    const d2 = new Date(d1); d2.setDate(d2.getDate() + 5);
+    return [{ id: 1, nome: "Elena Russo", email: "elena@example.com", telefono: "348 5552211", dal: isoOf(d1), al: isoOf(d2), ospiti: 4, avvisato: false, creato: new Date().toISOString() }];
+  }
+  async function fetchListeAttesa() {
+    if (!sb) return demoAttesa();
+    const { data, error } = await sb.from("liste_attesa").select("id,nome,email,telefono,dal,al,ospiti,avvisato,creato").order("creato", { ascending: false });
+    if (error) throw error;
+    return data || [];
+  }
 
   /* ── LOGIN ─────────────────────────────────────────────────────────── */
   function renderLogin() {
@@ -160,6 +172,7 @@
           <button class="adm-tab" data-tab="richieste">Richieste</button>
           <button class="adm-tab" data-tab="calendario">Calendario</button>
           <button class="adm-tab" data-tab="incassi">Incassi</button>
+          <button class="adm-tab" data-tab="attesa">Lista d'attesa</button>
         </div>
         <div class="adm-bar-right">
           <button class="adm-btn adm-btn-ghost" id="admRefresh">Aggiorna</button>
@@ -184,6 +197,7 @@
   function renderView() {
     if (state.tab === "richieste") renderRichieste();
     else if (state.tab === "incassi") renderIncassi();
+    else if (state.tab === "attesa") renderAttesa();
     else renderCalendario();
   }
 
@@ -348,6 +362,73 @@
       <p class="adm-muted adm-cal-foot">Gli importi usano il totale stimato di ogni prenotazione (config prezzi). La provvigione è calcolata al ${pct}% sulle sole prenotazioni dirette confermate.</p>`;
   }
 
+  /* ── VISTA LISTA D'ATTESA ──────────────────────────────────────────── */
+  function renderAttesa() {
+    const view = $("#admView");
+    const rows = (state.listeAttesa || []).slice();
+    const attivi = rows.filter((r) => !r.avvisato).length;
+
+    const card = (r) => {
+      const periodo = r.dal && r.al ? `${fmtItaliano(r.dal)} → ${fmtItaliano(r.al)}` : "Date flessibili";
+      const contatti = [
+        r.email ? `<a href="mailto:${r.email}">${r.email}</a>` : "",
+        r.telefono ? `<a href="tel:${String(r.telefono).replace(/\s/g, "")}">${r.telefono}</a>` : "",
+      ].filter(Boolean).join(" · ") || "—";
+      const badge = r.avvisato ? `<span class="adm-badge ok">Avvisato</span>` : `<span class="adm-badge wait">In attesa</span>`;
+      const azione = r.avvisato
+        ? `<button class="adm-btn adm-btn-ghost adm-btn-sm" data-unavv="${r.id}">Segna in attesa</button>`
+        : `<button class="adm-btn adm-btn-primary adm-btn-sm" data-avv="${r.id}">Segna avvisato</button>`;
+      return `
+        <div class="adm-card">
+          <div class="adm-card-main">
+            <div class="adm-card-head"><strong>${r.nome || "Ospite"}</strong> ${badge}</div>
+            <div class="adm-card-dates">${periodo}${r.ospiti ? `<span class="adm-dot">·</span> ${r.ospiti} osp.` : ""}</div>
+            <div class="adm-card-contacts">${contatti}</div>
+          </div>
+          <div class="adm-card-actions">
+            ${azione}
+            <button class="adm-btn adm-btn-ghost adm-btn-sm" data-delattesa="${r.id}">Rimuovi</button>
+          </div>
+        </div>`;
+    };
+
+    view.innerHTML = `
+      <div class="adm-stats">
+        <div class="adm-stat"><b>${rows.length}</b><span>In lista d'attesa</span></div>
+        <div class="adm-stat"><b>${attivi}</b><span>Ancora da avvisare</span></div>
+        <div class="adm-stat"><b>${rows.length - attivi}</b><span>Già avvisati</span></div>
+      </div>
+      <p class="adm-muted" style="margin:0 0 14px">Chi ti ha lasciato un contatto per essere avvisato se si libera un periodo. Quando una data si libera, l'automazione <em>posto-libero</em> avvisa da sola chi combacia; qui puoi gestirli anche a mano.</p>
+      <div class="adm-list">${rows.length ? rows.map(card).join("") : `<p class="adm-empty">Nessuno in lista d'attesa.</p>`}</div>`;
+
+    view.querySelectorAll("[data-avv]").forEach((b) => b.onclick = () => setAvvisato(Number(b.dataset.avv), true));
+    view.querySelectorAll("[data-unavv]").forEach((b) => b.onclick = () => setAvvisato(Number(b.dataset.unavv), false));
+    view.querySelectorAll("[data-delattesa]").forEach((b) => b.onclick = () => removeAttesa(Number(b.dataset.delattesa)));
+  }
+
+  async function setAvvisato(id, value) {
+    const row = (state.listeAttesa || []).find((r) => r.id === id);
+    if (!sb) { if (row) row.avvisato = value; renderAttesa(); toast(value ? "Segnato avvisato (demo)" : "Rimesso in attesa (demo)"); return; }
+    try {
+      const { error } = await sb.from("liste_attesa").update({ avvisato: value }).eq("id", id);
+      if (error) throw error;
+      if (row) row.avvisato = value;
+      renderAttesa();
+      toast(value ? "Segnato come avvisato" : "Rimesso in attesa");
+    } catch (_) { toast("Operazione non riuscita", "err"); }
+  }
+
+  async function removeAttesa(id) {
+    if (!sb) { state.listeAttesa = state.listeAttesa.filter((r) => r.id !== id); renderAttesa(); toast("Rimosso (demo)"); return; }
+    try {
+      const { error } = await sb.from("liste_attesa").delete().eq("id", id);
+      if (error) throw error;
+      state.listeAttesa = state.listeAttesa.filter((r) => r.id !== id);
+      renderAttesa();
+      toast("Rimosso dalla lista");
+    } catch (_) { toast("Rimozione non riuscita", "err"); }
+  }
+
   /* ── VISTA CALENDARIO UNICO ────────────────────────────────────────── */
   function siteBusySet() {
     const set = new Set();
@@ -465,10 +546,11 @@
     const view = $("#admView");
     if (view) view.innerHTML = `<p class="adm-muted">Caricamento…</p>`;
     try {
-      const [rows, busy, blocchi] = await Promise.all([fetchRichieste(), fetchBookingBusy(), fetchBlocchi()]);
+      const [rows, busy, blocchi, attesa] = await Promise.all([fetchRichieste(), fetchBookingBusy(), fetchBlocchi(), fetchListeAttesa()]);
       state.rows = rows;
       state.bookingBusy = busy;
       state.blocchi = blocchi;
+      state.listeAttesa = attesa;
       renderView();
     } catch (_) {
       if (view) view.innerHTML = `<p class="adm-empty">Impossibile caricare i dati. Riprova con "Aggiorna".</p>`;

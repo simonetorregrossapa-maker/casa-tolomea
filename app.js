@@ -600,6 +600,74 @@
     }
   }
 
+  /* ── Lista d'attesa / last-minute ──────────────────────────────────── */
+  async function submitWaitlist(e) {
+    e.preventDefault();
+    const form = e.target, msg = $("#waitMsg");
+    const nome = $("#waitNome").value.trim(), email = $("#waitEmail").value.trim();
+    // Se l'utente ha già scelto delle date nel form principale, le eredito.
+    const isoRe = /^\d{4}-\d{2}-\d{2}$/;
+    let dal = $("#waitDal").value, al = $("#waitAl").value;
+    if (!dal && isoRe.test($("#checkin")?.value || "")) dal = $("#checkin").value;
+    if (!al && isoRe.test($("#checkout")?.value || "")) al = $("#checkout").value;
+
+    if (!nome || !email) {
+      msg.className = "form-msg err";
+      msg.textContent = currentLang === "en" ? "Enter name and email." : "Inserisci nome ed email.";
+      return;
+    }
+    if (!$("#waitPrivacy")?.checked) {
+      msg.className = "form-msg err";
+      msg.textContent = currentLang === "en" ? "Please accept the privacy policy." : "Devi accettare l'informativa privacy.";
+      return;
+    }
+    if (dal && al && al <= dal) {
+      msg.className = "form-msg err";
+      msg.textContent = currentLang === "en" ? "The end date must be after the start date." : "La data 'Al' deve essere dopo 'Dal'.";
+      return;
+    }
+    const btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true; const prev = btn.textContent; btn.textContent = currentLang === "en" ? "Sending…" : "Invio in corso…";
+
+    const payload = {
+      nome, email, telefono: $("#waitTel").value.trim() || null,
+      dal: dal || null, al: al || null,
+      ospiti: $("#ospiti")?.value ? Number($("#ospiti").value) : null,
+      creato: new Date().toISOString(),
+    };
+
+    let saved = false;
+    const ig = S.integrazioni || {};
+    try {
+      if (ig.supabaseUrl && ig.supabaseAnonKey) {
+        const r = await fetch(`${ig.supabaseUrl}/rest/v1/liste_attesa`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", apikey: ig.supabaseAnonKey, Authorization: `Bearer ${ig.supabaseAnonKey}`, Prefer: "return=minimal" },
+          body: JSON.stringify(payload),
+        });
+        if (r.ok) saved = true;
+      }
+    } catch (_) { /* rete assente → fallback WhatsApp sotto */ }
+
+    btn.disabled = false; btn.textContent = prev;
+
+    if (saved) {
+      msg.className = "form-msg ok";
+      msg.textContent = currentLang === "en"
+        ? "You're on the list! We'll write to you the moment those dates free up."
+        : "Sei in lista! Ti scriviamo appena quelle date si liberano.";
+      form.reset();
+    } else {
+      const periodo = dal && al ? ` dal ${dal} al ${al}` : "";
+      const wa = waLink(`Salve, vorrei essere avvisato se si libera un periodo${periodo} a ${S.casa?.nome || "la casa"}. Nome: ${nome}`);
+      msg.className = "form-msg ok";
+      msg.innerHTML = currentLang === "en"
+        ? `Send your request on <a href="${wa}" target="_blank" rel="noopener"><b>WhatsApp</b></a> and we'll add you to the waitlist.`
+        : `Inviaci la richiesta su <a href="${wa}" target="_blank" rel="noopener"><b>WhatsApp</b></a> e ti mettiamo in lista d'attesa.`;
+      window.open(wa, "_blank", "noopener");
+    }
+  }
+
   /* ── Lightbox ──────────────────────────────────────────────────────── */
   function initLightbox() {
     const lb = $("#lightbox"), img = $("#lbImg");
@@ -809,6 +877,7 @@
     });
     updateWhatsAppLinks();
     const form = $("#bookForm"); if (form) form.addEventListener("submit", submitForm);
+    const wform = $("#waitForm"); if (wform) wform.addEventListener("submit", submitWaitlist);
     loadAvailability().then(initDatePicker);
 
     const langBtn = $("#langToggle");

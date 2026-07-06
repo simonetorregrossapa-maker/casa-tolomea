@@ -223,6 +223,29 @@
           <p class="form-note"><span data-it="Nessun pagamento ora · Richiesta senza impegno" data-en="No payment now · No-obligation request">Nessun pagamento ora · Richiesta senza impegno</span></p>
           <div class="form-msg" id="formMsg" role="alert" aria-live="polite"></div>
         </form>
+
+        <!-- LISTA D'ATTESA / LAST-MINUTE -->
+        <details class="waitlist" id="waitlist">
+          <summary data-it="Le date che cerchi sono occupate? Avvisami se si liberano →" data-en="Are your dates taken? Notify me if they free up →">Le date che cerchi sono occupate? Avvisami se si liberano →</summary>
+          <form id="waitForm" class="waitlist-form" novalidate>
+            <p class="waitlist-intro" data-it="Lasciaci un contatto: se si libera un periodo che combacia con le tue date, sei il primo a saperlo — con il miglior prezzo diretto." data-en="Leave us a contact: if a stay matching your dates frees up, you'll be the first to know — at the best direct price.">Lasciaci un contatto: se si libera un periodo che combacia con le tue date, sei il primo a saperlo — con il miglior prezzo diretto.</p>
+            <div class="field-row">
+              <div class="field"><label for="waitDal" data-it="Dal" data-en="From">Dal</label><input type="date" id="waitDal" name="waitDal"></div>
+              <div class="field"><label for="waitAl" data-it="Al" data-en="To">Al</label><input type="date" id="waitAl" name="waitAl"></div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label for="waitNome" data-it="Nome" data-en="Name">Nome</label><input type="text" id="waitNome" name="waitNome" autocomplete="name" required></div>
+              <div class="field"><label for="waitTel" data-it="Telefono" data-en="Phone">Telefono</label><input type="tel" id="waitTel" name="waitTel" autocomplete="tel"></div>
+            </div>
+            <div class="field"><label for="waitEmail" data-it="Email" data-en="Email">Email</label><input type="email" id="waitEmail" name="waitEmail" autocomplete="email" required></div>
+            <label class="check">
+              <input type="checkbox" id="waitPrivacy" name="waitPrivacy" required>
+              <span data-html data-it="Accetto l'<a href=&quot;privacy.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;>informativa privacy</a> per essere ricontattato." data-en="I accept the <a href=&quot;privacy.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;>privacy policy</a> to be contacted.">Accetto l'<a href="privacy.html" target="_blank" rel="noopener">informativa privacy</a> per essere ricontattato.</span>
+            </label>
+            <button type="submit" class="btn btn--ghost" style="width:100%; justify-content:center;" data-it="Avvisami se si libera" data-en="Notify me if it frees up">Avvisami se si libera</button>
+            <div class="form-msg" id="waitMsg" role="alert" aria-live="polite"></div>
+          </form>
+        </details>
       </div>
     </div>
   </section>

@@ -340,6 +340,14 @@ html.cap-hero .hero { min-height: 680px; height: 680px; }
 .form-msg.ok { display: block; background: #e7f0e6; color: #2f5230; }
 .form-msg.err { display: block; background: #f6e2de; color: #8a2f1c; }
 
+/* ── Lista d'attesa / last-minute ──────────────────────────────────── */
+.waitlist { margin-top: 18px; border-top: 1px solid var(--c-line); padding-top: 16px; }
+.waitlist > summary { cursor: pointer; font-size: .92rem; color: var(--c-accent); font-weight: 600; list-style: none; padding: 4px 0; }
+.waitlist > summary::-webkit-details-marker { display: none; }
+.waitlist > summary:hover { text-decoration: underline; text-underline-offset: 3px; }
+.waitlist[open] > summary { margin-bottom: 14px; }
+.waitlist-intro { font-size: .88rem; color: var(--c-muted); margin: 0 0 16px; line-height: 1.5; }
+
 /* ── Recensioni ────────────────────────────────────────────────────── */
 .reviews { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
 .review { background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--radius-lg); padding: clamp(26px,3vw,34px); display: flex; flex-direction: column; gap: 16px; }
