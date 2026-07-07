@@ -86,7 +86,7 @@ function template(s: Record<string, string>, r: any): { subject: string; html: s
 <tr><td style="padding:24px 26px 20px">
   <h1 style="margin:0 0 12px;font-family:Georgia,serif;font-weight:normal;font-size:23px;color:#a8472f">Com'è andata${nome ? ", " + nome : ""}?</h1>
   <p style="margin:0 0 14px;font-size:15px;line-height:1.62;color:#3a352d">Grazie per aver scelto <b>${casa}</b>. Speriamo che Mondello ti abbia regalato giorni belli, con il mare a due passi.</p>
-  <p style="margin:0 0 4px;font-size:15px;line-height:1.62;color:#3a352d"><b>Ci lasceresti una recensione?</b> Siamo una casa gestita da una famiglia: il tuo giudizio fa una differenza enorme e aiuta altri ospiti a sceglierci con fiducia.</p>
+  <p style="margin:0 0 4px;font-size:15px;line-height:1.62;color:#3a352d"><b>Ci lasceresti una recensione?</b> Il tuo giudizio fa una differenza enorme e aiuta altri ospiti a sceglierci con fiducia.</p>
   ${btn}
   <div style="border-top:1px solid #e7dccd;margin:22px 0 16px"></div>
   <p style="margin:0 0 14px;font-size:14px;line-height:1.6;color:#6d685d">C'è qualcosa che non è andato come speravi? <b>Rispondi a questa email</b>: ci teniamo a sistemarlo di persona.</p>
@@ -94,7 +94,7 @@ function template(s: Record<string, string>, r: any): { subject: string; html: s
   <p style="margin:16px 0 2px;font-size:15px;color:#3a352d">Un caro saluto,</p><p style="margin:0;font-family:Georgia,serif;font-size:16px;color:#a8472f">Alessandro e Marcella · ${casa}</p>
   <div style="border-top:1px solid #e7dccd;margin:22px 0 16px"></div>
   <h2 style="margin:0 0 10px;font-family:Georgia,serif;font-weight:normal;font-size:19px;color:#a8472f">How was your stay${nome ? ", " + nome : ""}?</h2>
-  <p style="margin:0 0 12px;font-size:14.5px;line-height:1.6;color:#3a352d">Thank you for choosing ${casa}. If you enjoyed it, <b>would you leave us a review?</b> ${url ? "Just tap the button above — it takes 30 seconds and means the world to a family-run home." : "Simply reply to this email with a few words."} Something not quite right? <b>Reply to this email</b> and we'll make it right.</p>
+  <p style="margin:0 0 12px;font-size:14.5px;line-height:1.6;color:#3a352d">Thank you for choosing ${casa}. If you enjoyed it, <b>would you leave us a review?</b> ${url ? "Just tap the button above — it takes 30 seconds and helps other guests choose us with confidence." : "Simply reply to this email with a few words."} Something not quite right? <b>Reply to this email</b> and we'll make it right.</p>
   <p style="margin:12px 0 2px;font-size:14.5px;color:#3a352d">Warm regards,</p><p style="margin:0;font-family:Georgia,serif;font-size:15px;color:#a8472f">Alessandro &amp; Marcella · ${casa}</p>
 </td></tr>
 <tr><td style="border-top:1px solid #e7dccd;background:#f4ede2;padding:15px 26px;font-size:12px;color:#8a8478">${foot}${site ? ` · <a href="${site}" style="color:#a8472f">${site.replace(/^https?:\/\//, "")}</a>` : ""}</td></tr>

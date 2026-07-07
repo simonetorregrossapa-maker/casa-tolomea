@@ -96,7 +96,7 @@ Deno.serve(async (req) => {
       if (!overlaps(w.dal, w.al, ci, co)) continue;
       const primo = w.nome ? String(w.nome).split(" ")[0] : "";
       const periodo = fmtIt(ci) ? ` (${fmtIt(ci)} → ${fmtIt(co)})` : "";
-      const subject = `Si è liberato un periodo a ${casa}! 🌊`;
+      const subject = `Si è liberato un periodo a ${casa}${periodo}! 🌊`;
       const html = `
         <div style="font-family:Georgia,serif;max-width:560px;margin:auto;color:#2b2b28;line-height:1.6">
           <h2 style="color:#b5654a;font-weight:normal">Buone notizie${primo ? ", " + primo : ""}!</h2>
