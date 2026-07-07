@@ -27,12 +27,16 @@ window.SITE = {
     mq:         85,
     // Frase di benvenuto (sezione "La casa")
     intro: {
-      it: "Una casa indipendente a Mondello, a 700 metri dalla spiaggia. Due camere da letto, " +
-          "soggiorno, cucina attrezzata e una grande veranda con giardino e patio per stare all'aperto. " +
-          "Aria condizionata, parcheggio gratuito e animali ammessi. Il posto giusto per una vacanza in Sicilia.",
-      en: "A detached house in Mondello, 700 metres from the beach. Two bedrooms, a living room, " +
-          "a fully equipped kitchen and a large veranda with garden and patio for outdoor living. " +
-          "Air conditioning, free parking and pets allowed. The right place for a holiday in Sicily.",
+      it: "Una casa indipendente al piano terra di una villa a Mondello, a 700 metri dalla spiaggia. " +
+          "Due camere matrimoniali e un ampio soggiorno con divani letto: fino a 6 ospiti. Cucina attrezzata " +
+          "e una grande veranda con giardino, patio e barbecue per stare all'aperto. Aria condizionata, " +
+          "parcheggio gratuito e animali ammessi. Alessandro e Marcella abitano nella stessa villa e vi " +
+          "accolgono di persona; davanti casa c'è una navetta che porta al mare.",
+      en: "A detached ground-floor home in a villa in Mondello, 700 metres from the beach. Two double bedrooms " +
+          "and a large living room with sofa beds: up to 6 guests. Fully equipped kitchen and a big veranda with " +
+          "garden, patio and barbecue for outdoor living. Air conditioning, free parking and pets allowed. " +
+          "Alessandro and Marcella live in the same villa and welcome you in person; a shuttle to the sea stops " +
+          "right in front of the house.",
     },
     cin:        "IT082053C2RJGS9XGX",   // Codice Identificativo Nazionale (obbligatorio dal 2024, va esposto)
     cir:        "19082053C226757",      // Codice Identificativo Regionale (Sicilia)
@@ -121,11 +125,14 @@ window.SITE = {
     { icon: "wifi",     label: { it: "Wi-Fi gratuito",        en: "Free Wi-Fi" } },
     { icon: "ac",       label: { it: "Aria condizionata",     en: "Air conditioning" } },
     { icon: "kitchen",  label: { it: "Cucina attrezzata",     en: "Fully equipped kitchen" } },
-    { icon: "tv",       label: { it: "TV",                    en: "TV" } },
+    { icon: "washer",   label: { it: "Lavatrice",             en: "Washing machine" } },
+    { icon: "tv",       label: { it: "TV HD in ogni stanza",  en: "HD TV in every room" } },
     { icon: "parking",  label: { it: "Parcheggio gratuito",   en: "Free parking" } },
     { icon: "pets",     label: { it: "Animali ammessi",       en: "Pets allowed" } },
     { icon: "garden",   label: { it: "Giardino e patio",      en: "Garden and patio" } },
+    { icon: "bbq",      label: { it: "Barbecue",              en: "Barbecue" } },
     { icon: "heating",  label: { it: "Riscaldamento",         en: "Heating" } },
+    { icon: "crib",     label: { it: "Culla su richiesta",    en: "Cot on request" } },
     { icon: "plane",    label: { it: "Navetta aeroportuale",  en: "Airport shuttle" } },
     { icon: "sea",      label: { it: "Spiaggia a 700 m",      en: "Beach 700 m away" } },
   ],
@@ -133,17 +140,47 @@ window.SITE = {
   /* ── SPAZI / CAMERE ────────────────────────────────────────────────── */
   spazi: [
     { nome: { it: "Camera matrimoniale", en: "Double bedroom" },
-      descr: { it: "Letto matrimoniale, armadio e TV.", en: "Double bed, wardrobe and TV." } },
+      descr: { it: "Letto matrimoniale, armadio e TV HD via cavo.", en: "Double bed, wardrobe and HD cable TV." } },
     { nome: { it: "Seconda camera", en: "Second bedroom" },
-      descr: { it: "Letto matrimoniale e armadio.", en: "Double bed and wardrobe." } },
+      descr: { it: "Letto matrimoniale, armadio e TV HD via cavo.", en: "Double bed, wardrobe and HD cable TV." } },
     { nome: { it: "Soggiorno", en: "Living room" },
-      descr: { it: "Divano e TV.", en: "Sofa and TV." } },
+      descr: { it: "Ampio e luminoso, con due divani letto e TV HD: qui dormono il 5° e 6° ospite.", en: "Bright and spacious, with two sofa beds and HD TV: sleeps guests 5 and 6." } },
     { nome: { it: "Cucina", en: "Kitchen" },
-      descr: { it: "Angolo cottura, forno, frigorifero e macchina da caffè.", en: "Hob, oven, fridge and coffee machine." } },
+      descr: { it: "Angolo cottura, forno, piano cottura, frigo e freezer, macchina da caffè, tostapane, tavolo e stoviglie complete.", en: "Kitchenette, oven, hob, fridge-freezer, coffee machine, toaster, dining table and full cookware." } },
     { nome: { it: "Bagno", en: "Bathroom" },
-      descr: { it: "Con doccia e bidet.", en: "With shower and bidet." } },
-    { nome: { it: "Veranda e patio", en: "Veranda and patio" },
-      descr: { it: "Tavolo da pranzo e zona relax all'aperto, con giardino.", en: "Outdoor dining table and lounge area, with garden." } },
+      descr: { it: "Doccia, bidet, WC, lavatrice, asciugacapelli e prodotti da bagno in omaggio.", en: "Shower, bidet, WC, washing machine, hairdryer and complimentary toiletries." } },
+    { nome: { it: "Veranda, patio e giardino", en: "Veranda, patio and garden" },
+      descr: { it: "Tavolo da pranzo all'aperto, barbecue e zona relax, sul giardino comune coi proprietari.", en: "Outdoor dining table, barbecue and lounge area, on the garden shared with the owners." } },
+  ],
+
+  /* ── TUTTI I SERVIZI (lista completa, per categoria) ───────────────────
+     Elenco integrale dei servizi/dotazioni (fonte: annuncio Booking). Mostrato
+     nella sezione servizi come dettaglio esteso, così non manca nulla. */
+  serviziCompleti: [
+    { cat: { it: "Cucina", en: "Kitchen" },
+      voci: { it: "Angolo cottura · Forno · Piano cottura · Frigorifero e freezer · Macchina da caffè · Bollitore · Tostapane · Utensili e stoviglie complete · Tavolo da pranzo · Prodotti per le pulizie",
+              en: "Kitchenette · Oven · Hob · Fridge & freezer · Coffee machine · Kettle · Toaster · Full cookware & tableware · Dining table · Cleaning products" } },
+    { cat: { it: "Camere e riposo", en: "Bedrooms & sleeping" },
+      voci: { it: "2 camere matrimoniali · 2 divani letto in soggiorno (6 posti letto) · Biancheria da letto inclusa · Armadi e guardaroba · 3 TV HD via cavo · Presa elettrica vicino al letto",
+              en: "2 double bedrooms · 2 sofa beds in the living room (sleeps 6) · Bed linen provided · Wardrobes · 3 HD cable TVs · Power socket by the bed" } },
+    { cat: { it: "Bagno", en: "Bathroom" },
+      voci: { it: "Doccia · Bidet · WC · Asciugamani inclusi · Prodotti da bagno in omaggio · Asciugacapelli · Carta igienica",
+              en: "Shower · Bidet · WC · Towels provided · Complimentary toiletries · Hairdryer · Toilet paper" } },
+    { cat: { it: "Comfort", en: "Comfort" },
+      voci: { it: "Aria condizionata · Riscaldamento · Lavatrice · Ferro e asse da stiro · Stendibiancheria · Wi-Fi gratuito",
+              en: "Air conditioning · Heating · Washing machine · Iron & board · Drying rack · Free Wi-Fi" } },
+    { cat: { it: "Spazi all'aperto", en: "Outdoor" },
+      voci: { it: "Giardino · Veranda · Patio · Zona pranzo all'aperto · Barbecue · Area picnic · Arredamento da esterni · Vista giardino e cortile",
+              en: "Garden · Veranda · Patio · Outdoor dining area · Barbecue · Picnic area · Outdoor furniture · Garden & courtyard view" } },
+    { cat: { it: "Accesso e famiglie", en: "Access & families" },
+      voci: { it: "Ingresso indipendente · Intera unità al piano terra · Culla e lettino su richiesta (gratis) · Animali ammessi gratis · Accesso con chiavi",
+              en: "Independent entrance · Entire unit on the ground floor · Cot & child bed on request (free) · Pets allowed free · Key access" } },
+    { cat: { it: "Servizi", en: "Services" },
+      voci: { it: "Navetta per il mare davanti casa · Transfer aeroporto su richiesta · Parcheggio gratuito lungo la via · Reception 24h e concierge · Deposito bagagli · Fattura su richiesta",
+              en: "Beach shuttle in front of the house · Airport transfer on request · Free street parking · 24h reception & concierge · Luggage storage · Invoice on request" } },
+    { cat: { it: "Buono a sapersi", en: "Good to know" },
+      voci: { it: "Struttura interamente non fumatori · Lingue parlate: italiano e inglese · Host residenti che vi accolgono di persona",
+              en: "Entirely non-smoking · Languages: Italian and English · Resident hosts who welcome you in person" } },
   ],
 
   /* ── ZONA / DINTORNI ───────────────────────────────────────────────── */
@@ -154,10 +191,12 @@ window.SITE = {
     },
     // Distanze dall'annuncio Booking del cliente.
     punti: [
-      { nome: { it: "Spiaggia di Mondello",   en: "Mondello Beach" },       distanza: "700 m", icon: "sea" },
-      { nome: { it: "Cattedrale di Palermo",  en: "Palermo Cathedral" },    distanza: "14 km", icon: "town" },
-      { nome: { it: "Fontana Pretoria",       en: "Pretoria Fountain" },    distanza: "16 km", icon: "camera" },
-      { nome: { it: "Aeroporto di Palermo",   en: "Palermo Airport" },      distanza: "21 km", icon: "plane" },
+      { nome: { it: "Spiaggia di Mondello",      en: "Mondello Beach" },        distanza: "700 m",  icon: "sea" },
+      { nome: { it: "Ristoranti e locali",       en: "Restaurants & cafés" },   distanza: "550 m",  icon: "cart" },
+      { nome: { it: "Parco della Favorita",      en: "Favorita Park" },         distanza: "6 km",   icon: "garden" },
+      { nome: { it: "Centro di Palermo",         en: "Palermo city centre" },   distanza: "20 min", icon: "town" },
+      { nome: { it: "San Vito Lo Capo, Scopello", en: "San Vito Lo Capo, Scopello" }, distanza: "1 h", icon: "camera" },
+      { nome: { it: "Aeroporto di Palermo",      en: "Palermo Airport" },       distanza: "21 km",  icon: "plane" },
     ],
   },
 
@@ -199,10 +238,36 @@ window.SITE = {
   // Vuoto finché non ci sono recensioni vere: la sezione si nasconde da sola
   // (vedi renderReviews in app.js). Riempire solo con recensioni reali di
   // ospiti reali (raccolte a mano o importate da Booking/Airbnb).
-  recensioni: [],
+  recensioni: [
+    { stelle: 5, nome: "Antonina", luogo: "Regno Unito",
+      testo: "Spaziosa e con tutto il necessario per una vacanza al mare. Ma la cosa migliore sono i proprietari: Alessandro e Marcella hanno fatto di tutto per farci stare bene, ci hanno perfino organizzato due transfer per l'aeroporto. 7 minuti a piedi dalla spiaggia." },
+    { stelle: 5, nome: "Fulvia", luogo: "Italia",
+      testo: "Appartamento perfetto, in ottima posizione. Dotato di tutto il necessario, silenzioso e molto confortevole. I proprietari sono stati eccezionali: accoglienti e pronti a dare consigli utili sulla zona." },
+    { stelle: 5, nome: "Luisella", luogo: "Italia",
+      testo: "Marcella ed Alessandro molto gentili: ci hanno atteso in tarda serata accogliendoci con un cocktail di benvenuto. La casa è grande, comoda e in una posizione strategica ma molto tranquilla." },
+    { stelle: 5, nome: "Salvador", luogo: "Italia",
+      testo: "Struttura luminosa e confortevole. L'accoglienza è familiare, con uno stuzzichino di benvenuto e del buon vino. Il parcheggio è vicinissimo e la spiaggia poco distante. Consiglio vivamente." },
+    { stelle: 5, nome: "Yulnawati", luogo: "Germania",
+      testo: "Host gentilissimi: ci hanno perfino portato la cena! Ci hanno dato informazioni utili su cosa visitare e sul parcheggio. Posizione strategica, vicino alla spiaggia di Mondello e ai negozi." },
+    { stelle: 5, nome: "Elena", luogo: "Italia",
+      testo: "Casa bellissima e molto accogliente. Proprietari gentili e disponibili, posizione perfetta. Veranda e cortile ampi: stare seduti al sole di prima mattina è una carezza." },
+  ],
+  // Punteggio ospiti (sintesi Booking) mostrato accanto alle recensioni.
+  recensioniRating: {
+    voto: "9,3", max: 10, count: 60,
+    etichetta: { it: "Eccellente", en: "Excellent" },
+    categorie: [
+      { n: { it: "Personale",       en: "Staff" },     v: "9,9" },
+      { n: { it: "Posizione",       en: "Location" },  v: "9,7" },
+      { n: { it: "Servizi",         en: "Facilities" }, v: "9,4" },
+      { n: { it: "Pulizia",         en: "Cleanliness" }, v: "9,2" },
+      { n: { it: "Qualità-prezzo",  en: "Value" },     v: "9,2" },
+      { n: { it: "Comfort",         en: "Comfort" },   v: "9,1" },
+    ],
+  },
   // Link al profilo Booking del proprietario, per verificabilità delle recensioni.
   // Se vuoto, il link "Vedi tutte le recensioni su Booking" non viene mostrato.
-  recensioniBookingUrl: "",
+  recensioniBookingUrl: "https://www.booking.com/hotel/it/casa-tolomea-palermo.it.html",
 
   /* ── INTEGRAZIONI (backend opzionale) ──────────────────────────────── */
   // Il sito funziona come demo navigabile anche senza queste chiavi:

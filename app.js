@@ -177,6 +177,20 @@
       `<div class="space" data-reveal="up"><span class="idx num">0${i + 1}</span><b ${bi(s.nome)}>${escAttr(t(s.nome))}</b><p ${bi(s.descr)}>${escAttr(t(s.descr))}</p></div>`).join("");
   }
 
+  // Lista servizi completa, per categoria (S.serviziCompleti). Card con titolo
+  // categoria + elenco voci. Stile inline sui token del tema, così non serve CSS.
+  function renderServizi() {
+    const el = $("#serviziFull"); if (!el) return;
+    const cats = S.serviziCompleti || [];
+    if (!cats.length) { el.style.display = "none"; return; }
+    el.style.cssText = "display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:16px";
+    el.innerHTML = cats.map((c) => `
+      <div class="servizio-cat" data-reveal="up" style="background:var(--c-surface);border:1px solid var(--c-line);border-radius:14px;padding:20px 22px">
+        <b ${bi(c.cat)} style="display:block;font-family:var(--font-display);font-size:1.06rem;color:var(--c-accent);margin-bottom:8px">${escAttr(t(c.cat))}</b>
+        <p ${bi(c.voci)} style="margin:0;font-size:.92rem;line-height:1.62;color:var(--c-muted)">${escAttr(t(c.voci))}</p>
+      </div>`).join("");
+  }
+
   function renderZona() {
     const el = $("#zonaList"); if (el) {
       el.innerHTML = (S.zona?.punti || []).map((p) =>
@@ -249,6 +263,22 @@
 
   function renderReviews() {
     const el = $("#reviewsGrid"); if (!el) return;
+    // Badge punteggio ospiti (S.recensioniRating), sintesi Booking.
+    const scoreEl = $("#reviewScore");
+    const rt = S.recensioniRating;
+    if (scoreEl) {
+      if (rt && rt.voto && (S.recensioni || []).length) {
+        scoreEl.style.cssText = "display:flex;flex-wrap:wrap;align-items:center;gap:16px 26px;justify-content:center;background:var(--c-surface);border:1px solid var(--c-line);border-radius:16px;padding:18px 24px;max-width:780px;margin:0 auto clamp(28px,4vw,44px)";
+        const cats = (rt.categorie || []).map((c) =>
+          `<span style="white-space:nowrap;font-size:.84rem;color:var(--c-muted)" ${bi(c.n)}>${escAttr(t(c.n))}</span>&nbsp;<b style="font-size:.84rem;color:var(--c-ink)">${c.v}</b>`).join('<span style="opacity:.35;padding:0 2px">·</span>');
+        scoreEl.innerHTML = `
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="background:var(--c-accent);color:#fff;font-family:var(--font-display);font-size:1.5rem;font-weight:600;border-radius:12px;padding:7px 14px;line-height:1">${rt.voto}</span>
+            <span style="text-align:left"><b style="display:block;font-size:1rem;color:var(--c-ink)" ${bi(rt.etichetta)}>${escAttr(t(rt.etichetta))}</b><small style="color:var(--c-muted)">${rt.count} ${escAttr(t({ it: "recensioni", en: "reviews" }))} · Booking.com</small></span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center">${cats}</div>`;
+      } else { scoreEl.style.display = "none"; }
+    }
     const recensioni = S.recensioni || [];
     const section = document.getElementById("recensioni");
     const navLink = document.querySelector('a[href="#recensioni"]');
@@ -844,6 +874,7 @@
     renderGallery();
     renderAmenities();
     renderSpaces();
+    renderServizi();
     renderZona();
     renderSeasons();
     renderReviews();
