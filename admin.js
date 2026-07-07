@@ -263,7 +263,7 @@
 
   async function setConfermata(id, value) {
     const row = state.rows.find((r) => r.id === id);
-    if (!sb) { if (row) row.confermata = value; renderRichieste(); if (value) sendGuestConfirmation(row); toast(value ? "Confermata (demo)" : "Conferma annullata (demo)"); return; }
+    if (!sb) { if (row) row.confermata = value; renderRichieste(); toast(value ? "Confermata (demo)" : "Conferma annullata (demo)"); return; }
     try {
       const { error } = await sb.from("richieste").update({ confermata: value }).eq("id", id);
       if (error) throw error;
@@ -271,30 +271,9 @@
       state.bookingBusy = state.bookingBusy; // invariato
       renderRichieste();
       toast(value ? "Confermata — la data verrà bloccata su Booking" : "Conferma annullata");
-      // Email di conferma all'ospite: solo quando si conferma (non nell'annulla),
-      // best-effort — un errore di invio non deve invalidare la conferma già salvata.
-      if (value) sendGuestConfirmation(row);
+      // L'email di conferma (con IBAN) all'ospite parte server-side: l'UPDATE di
+      // confermata → true innesca la Edge Function "conferma" (Resend, via webhook).
     } catch (_) { toast("Operazione non riuscita", "err"); }
-  }
-
-  // Invia all'ospite l'email di conferma prenotazione via EmailJS. Non fa nulla
-  // (in silenzio) se manca la libreria, la config emailjsOspite o l'email ospite:
-  // in quei casi il proprietario avvisa l'ospite a mano, come prima.
-  async function sendGuestConfirmation(row) {
-    const cfg = IG.emailjsOspite || {};
-    if (!row || !row.email || !window.emailjs || !cfg.serviceId || !cfg.templateId || !cfg.publicKey) return;
-    try {
-      await window.emailjs.send(cfg.serviceId, cfg.templateId, {
-        to_email: row.email,
-        to_name: row.nome || "",
-        casa: CFG.casa?.nome || "",
-        checkin: fmtItaliano(row.checkin),
-        checkout: fmtItaliano(row.checkout),
-        ospiti: row.ospiti || "",
-        totale_stimato: euro(row.totale_stimato),
-      }, { publicKey: cfg.publicKey });
-      toast("Email di conferma inviata all'ospite");
-    } catch (_) { toast("Conferma salvata, ma email all'ospite non inviata", "warn"); }
   }
 
   /* ── VISTA INCASSI / PROVVIGIONE ───────────────────────────────────── */

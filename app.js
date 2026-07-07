@@ -551,38 +551,19 @@
         });
         if (r.ok) saved = true;
       }
-      // 2) EmailJS: notifica email al proprietario (template scritto a mano,
-      // niente boilerplate inglese come su Web3Forms free).
-      if (window.emailjs && ig.emailjsProprietario?.serviceId && ig.emailjsProprietario?.templateId && ig.emailjsProprietario?.publicKey) {
-        try {
-          await window.emailjs.send(ig.emailjsProprietario.serviceId, ig.emailjsProprietario.templateId, {
-            nome, email, telefono: $("#tel").value.trim(), note: $("#note").value.trim() || "—",
-            checkin: ci, checkout: co, ospiti: $("#ospiti").value,
-            totale: est ? `${cur}${est.total}` : "—",
-          }, { publicKey: ig.emailjsProprietario.publicKey });
-          saved = true;
-        } catch (_) { /* notifica proprietario opzionale: eventuale errore non interrompe il flusso */ }
-      }
-      // 3) EmailJS (email di conferma all'ospite, best-effort: non blocca il salvataggio)
-      if (saved && window.emailjs && ig.emailjsOspite?.serviceId && ig.emailjsOspite?.templateId && ig.emailjsOspite?.publicKey) {
-        try {
-          await window.emailjs.send(ig.emailjsOspite.serviceId, ig.emailjsOspite.templateId, {
-            to_email: email, to_name: nome, casa: S.casa?.nome,
-            checkin: ci, checkout: co, ospiti: $("#ospiti").value,
-            totale_stimato: est ? `${cur}${est.total}` : "",
-          }, { publicKey: ig.emailjsOspite.publicKey });
-        } catch (_) { /* email di conferma opzionale: eventuale errore non interrompe il flusso */ }
-      }
+      // Email gestite server-side: l'INSERT in "richieste" innesca la Edge
+      // Function "nuova-richiesta" (Resend) che manda la notifica al proprietario
+      // e la conferma di ricezione all'ospite. Niente EmailJS lato client.
     } catch (_) { /* rete assente → fallback sotto */ }
 
     btn.disabled = false; btn.textContent = prev;
 
     const rispostaEntro = t(S.contatti?.rispostaEntro) || (currentLang === "en" ? "24 hours" : "24 ore");
-    // Nessuna integrazione pagamenti nel codice: la caparra viene gestita dal
-    // proprietario con un link Stripe inviato a mano dopo la conferma.
+    // Nessun pagamento online: alla conferma il proprietario invia via email i
+    // dati per il bonifico della caparra (30%); il saldo si versa all'arrivo.
     const depositNote = currentLang === "en"
-      ? "Once we confirm availability, you'll receive a secure payment link for the deposit; the balance is paid on arrival."
-      : "Alla conferma della disponibilità riceverai un link sicuro per la caparra; il saldo si paga all'arrivo.";
+      ? "Once we confirm availability, we'll email you the details to pay the 30% deposit by bank transfer; the balance is paid on arrival, tourist tax included."
+      : "Alla conferma della disponibilità ti invieremo via email i dati per versare la caparra del 30% con bonifico; il saldo si paga all'arrivo, tassa di soggiorno inclusa.";
     if (saved) {
       msg.className = "form-msg ok";
       msg.innerHTML = currentLang === "en"

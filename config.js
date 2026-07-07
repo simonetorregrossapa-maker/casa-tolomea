@@ -21,7 +21,7 @@ window.SITE = {
     provincia:  "PA",
     regione:    "Sicilia",
     // Numeri mostrati come "chip" sotto il titolo (hero)
-    ospiti:     4,
+    ospiti:     6,
     camere:     2,
     bagni:      1,
     mq:         85,
@@ -42,7 +42,7 @@ window.SITE = {
 
   /* ── PROPRIETARIO / CONTATTI ───────────────────────────────────────── */
   contatti: {
-    proprietario: "Alessandro Librizzi",
+    proprietario: "Alessandro Li Brizzi",
     telDisplay:   "+39 339 429 0856",
     telHref:      "+393394290856",
     whatsapp:     "393394290856",        // solo cifre, con prefisso internazionale
@@ -52,6 +52,18 @@ window.SITE = {
     // Mappa: query indirizzo (fallback) oppure URL embed diretto (pb=...)
     mapsQuery:    "Casa Tolomea, Mondello, Palermo",
     mapsEmbed:    "",
+  },
+
+  /* ── PAGAMENTO (caparra via bonifico, saldo all'arrivo) ────────────────
+     Usato nell'email di conferma prenotazione. La caparra è un bonifico
+     SEPA all'IBAN qui sotto; nessun pagamento online. */
+  pagamento: {
+    intestatario: "Alessandro Li Brizzi",
+    iban:         "BE77 9058 0657 7942",
+    bic:          "TRWIBEB1XXX",
+    caparraPct:   30,   // % di caparra da versare con bonifico alla conferma
+    tassaInclusa: true, // le tariffe includono già la tassa di soggiorno
+    transferAeroporto: 50, // € a tratta, transfer da/per l'aeroporto di Palermo
   },
 
   /* ── TEMA (colori + font) ──────────────────────────────────────────── */
@@ -205,14 +217,13 @@ window.SITE = {
     // {{checkin}} {{checkout}} {{ospiti}} {{totale}}. "To Email" è impostato
     // nel template stesso (l'email del proprietario), non passato da qui.
     emailjsProprietario: { serviceId: "service_hxsbg4d", templateId: "template_x22wouw", publicKey: "DxD0grIPLsew2VUP3" },
-    // EmailJS: email di CONFERMA all'ospite, inviata dal pannello gestione
-    // quando il proprietario clicca "Conferma" su una richiesta. Riusa lo
-    // stesso servizio e la stessa publicKey della notifica proprietario: per
-    // attivarla basta incollare qui il templateId di un NUOVO template EmailJS
-    // (di conferma all'ospite). Il template deve avere "To Email" = {{to_email}}
-    // e usare: {{to_name}}, {{casa}}, {{checkin}}, {{checkout}}, {{ospiti}},
-    // {{totale_stimato}}. Finché templateId è vuoto, la conferma non manda email
-    // (il flag confermata viene comunque aggiornato).
+    // EmailJS: email di CONFERMA all'ospite (con IBAN per la caparra), inviata
+    // dal pannello gestione quando il proprietario clicca "Conferma". Piano
+    // gratuito = 2 template, quindi questo slot è dedicato alla conferma (non
+    // all'auto-risposta d'invio, che è disattivata in app.js). Incolla il
+    // contenuto di email-templates/3-ospite-prenotazione-confermata.html.
+    // Variabili: {{to_name}} {{casa}} {{checkin}} {{checkout}} {{ospiti}}
+    // {{totale_stimato}} {{caparra}}. "To Email" = {{to_email}}.
     emailjsOspite: { serviceId: "service_hxsbg4d", templateId: "template_0j880i1", publicKey: "DxD0grIPLsew2VUP3" },
   },
 
@@ -223,8 +234,8 @@ window.SITE = {
       en: "Casa Tolomea — Vacation home in Mondello",
     },
     descrizione: {
-      it: "Casa vacanze per 4 persone a Mondello, a 700 m dal mare. Prenota direttamente col proprietario: nessuna commissione, miglior prezzo.",
-      en: "Vacation home for 4 guests in Mondello, 700 m from the sea. Book directly with the owner: no commission, best price.",
+      it: "Casa vacanze per 6 persone a Mondello, a 700 m dal mare. Prenota direttamente col proprietario: nessuna commissione, miglior prezzo.",
+      en: "Vacation home for 6 guests in Mondello, 700 m from the sea. Book directly with the owner: no commission, best price.",
     },
     dominio:     "https://www.casatolomea.it",
   },
