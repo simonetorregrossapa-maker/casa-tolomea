@@ -161,7 +161,6 @@
       <figure class="gallery__item" style="aspect-ratio:${g.ar || "3/2"}" data-lb="${i}" role="button" tabindex="0" aria-label="${escAttr(g.alt || "")} — foto ${i + 1} di ${tot}">
         <img src="${photo(g, 1400)}" alt="${g.alt || ""}" loading="${i < 3 ? "eager" : "lazy"}">
         <span class="gallery__num">${i + 1} / ${tot}</span>
-        <figcaption>${g.alt || ""}</figcaption>
       </figure>`).join("");
   }
 
@@ -689,7 +688,7 @@
       idx = (i + items.length) % items.length;
       img.src = photo(items[idx], 1800); img.alt = items[idx].alt || "";
       if (counter) counter.textContent = `${idx + 1} / ${items.length}`;
-      if (caption) caption.textContent = items[idx].alt || "";
+      if (caption) caption.textContent = "";
     };
     const open = (i) => { show(i); lb.classList.add("open"); lb.setAttribute("aria-hidden", "false"); };
     const close = () => { lb.classList.remove("open"); lb.setAttribute("aria-hidden", "true"); };
