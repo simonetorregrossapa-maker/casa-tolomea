@@ -72,7 +72,7 @@ function template(s: Record<string, string>, r: any): { subject: string; html: s
       <h2 style="color:#b5654a;font-weight:normal">Ci siamo quasi${nome ? ", " + nome : ""}!</h2>
       <p>Manca poco al tuo soggiorno a <strong>${casa}</strong>. Ecco il riepilogo:</p>
       <table style="border-collapse:collapse;margin:14px 0">
-        <tr><td style="padding:4px 12px 4px 0;color:#8a8172">Check-in</td><td><strong>${fmtIt(r.checkin)}</strong> (dalle 15:00)</td></tr>
+        <tr><td style="padding:4px 12px 4px 0;color:#8a8172">Check-in</td><td><strong>${fmtIt(r.checkin)}</strong> (dalle ${s.checkin_ora || "16:00"})</td></tr>
         <tr><td style="padding:4px 12px 4px 0;color:#8a8172">Check-out</td><td><strong>${fmtIt(r.checkout)}</strong> (entro le 10:00)</td></tr>
         <tr><td style="padding:4px 12px 4px 0;color:#8a8172">Ospiti</td><td>${r.ospiti || "—"}</td></tr>
       </table>

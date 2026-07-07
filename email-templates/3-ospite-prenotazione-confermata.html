@@ -1,0 +1,59 @@
+<!-- ═══════════════════════════════════════════════════════════════════
+     EmailJS · Template NUOVO "Prenotazione confermata" (da CREARE su emailjs.com)
+     Dopo averlo creato, copia il suo Template ID e mettilo in config.js →
+     integrazioni.emailjsOspiteConferma.templateId
+     Variabili: {{to_name}} {{checkin}} {{checkout}} {{ospiti}}
+                {{totale_stimato}} {{caparra}}
+     Impostazioni su EmailJS:
+       • To Email:  {{to_email}}
+       • From Name: Casa Tolomea
+       • Subject:   La tua prenotazione a Casa Tolomea è confermata
+     L'IBAN è fisso, scritto direttamente qui sotto. Bilingue IT + EN.
+     ═══════════════════════════════════════════════════════════════════ -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#faf6f0;padding:24px 0;font-family:Arial,Helvetica,sans-serif;color:#1f1d18;">
+  <tr><td align="center">
+    <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#faf6f0;border:1px solid #e7dccd;border-radius:10px;overflow:hidden;">
+      <tr><td style="background:#a8472f;padding:16px 26px;color:#f6e7df;font-family:Georgia,serif;font-size:18px;">
+        Casa Tolomea
+        <div style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#e9c9bb;margin-top:2px;">Mondello · Sicilia</div>
+      </td></tr>
+      <tr><td style="padding:24px 26px 20px;">
+        <h1 style="margin:0 0 10px;font-family:Georgia,serif;font-weight:normal;font-size:23px;color:#a8472f;">La tua prenotazione è confermata</h1>
+        <p style="margin:0 0 14px;font-size:15px;line-height:1.62;color:#3a352d;">Ciao {{to_name}}, ottime notizie: le date sono disponibili e Casa Tolomea è tua. Ecco come bloccarla.</p>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff;border:1px solid #e7dccd;border-radius:9px;font-size:14px;">
+          <tr><td style="padding:10px 16px;color:#6d685d;border-bottom:1px solid #f0e7d9;">Soggiorno</td><td style="padding:10px 16px;text-align:right;font-weight:bold;border-bottom:1px solid #f0e7d9;">{{checkin}} &rarr; {{checkout}}</td></tr>
+          <tr><td style="padding:10px 16px;color:#6d685d;border-bottom:1px solid #f0e7d9;">Ospiti</td><td style="padding:10px 16px;text-align:right;font-weight:bold;border-bottom:1px solid #f0e7d9;">{{ospiti}}</td></tr>
+          <tr><td style="padding:10px 16px;color:#6d685d;border-bottom:1px solid #f0e7d9;">Totale</td><td style="padding:10px 16px;text-align:right;font-family:Georgia,serif;font-size:18px;color:#a8472f;border-bottom:1px solid #f0e7d9;">{{totale_stimato}}</td></tr>
+          <tr><td style="padding:10px 16px;color:#6d685d;">Caparra da versare (30%)</td><td style="padding:10px 16px;text-align:right;font-family:Georgia,serif;font-size:18px;color:#a8472f;">{{caparra}}</td></tr>
+        </table>
+        <p style="margin:16px 0 6px;font-size:15px;line-height:1.62;color:#3a352d;"><b>Per bloccare le date</b>, versa la caparra con un bonifico:</p>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#4d5340;border-radius:9px;color:#eef0e8;">
+          <tr><td style="padding:16px 18px;font-size:14px;line-height:1.5;">
+            <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#c3cbb2;">Intestatario</div>
+            <div style="font-size:16px;font-weight:bold;margin-bottom:10px;">Alessandro Li Brizzi</div>
+            <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#c3cbb2;">IBAN</div>
+            <div style="font-size:16px;font-weight:bold;letter-spacing:.03em;margin-bottom:10px;">BE77 9058 0657 7942</div>
+            <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#c3cbb2;">BIC / SWIFT</div>
+            <div style="font-size:16px;font-weight:bold;margin-bottom:10px;">TRWIBEB1XXX</div>
+            <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#c3cbb2;">Causale</div>
+            <div style="font-size:14px;font-weight:bold;">Caparra Casa Tolomea &ndash; {{to_name}} &ndash; {{checkin}}</div>
+          </td></tr>
+        </table>
+        <p style="margin:16px 0 14px;font-size:15px;line-height:1.62;color:#3a352d;">Il <b>saldo</b> lo versi il giorno dell'arrivo. Le tariffe includono già la <b>tassa di soggiorno</b>. Il check-in è dalle <b>15:00</b>: qualche giorno prima ti scriviamo con le indicazioni per arrivare e ritirare le chiavi.</p>
+        <p style="margin:0 0 2px;font-size:15px;line-height:1.62;color:#4d5340;">Vuoi arrivare senza pensieri? Organizziamo il <b>transfer da/per l'aeroporto di Palermo a 50 € a tratta</b> — chiedici pure.</p>
+        <p style="margin:18px 0 2px;font-size:15px;color:#3a352d;">Non vediamo l'ora di ospitarti,</p>
+        <p style="margin:0;font-family:Georgia,serif;font-size:16px;color:#a8472f;">Alessandro · Casa Tolomea</p>
+
+        <div style="border-top:1px solid #e7dccd;margin:22px 0 18px;"></div>
+
+        <h2 style="margin:0 0 10px;font-family:Georgia,serif;font-weight:normal;font-size:20px;color:#a8472f;">Your booking is confirmed</h2>
+        <p style="margin:0 0 14px;font-size:15px;line-height:1.62;color:#3a352d;">Hi {{to_name}}, great news: your dates are available and Casa Tolomea is yours. Here's how to secure it.</p>
+        <p style="margin:0 0 6px;font-size:15px;line-height:1.62;color:#3a352d;"><b>To lock the dates</b>, pay the 30% deposit ({{caparra}}) by bank transfer to the account above (holder: Alessandro Li Brizzi · IBAN BE77 9058 0657 7942 · BIC TRWIBEB1XXX). Reference: <i>Deposit Casa Tolomea &ndash; {{to_name}} &ndash; {{checkin}}</i>.</p>
+        <p style="margin:12px 0 14px;font-size:15px;line-height:1.62;color:#3a352d;">The <b>balance</b> is paid on arrival, and rates already include the <b>tourist tax</b>. Check-in is from <b>3:00 pm</b>; a few days before, we'll send you directions and key pick-up details. Need an airport transfer? We offer it to/from Palermo airport for <b>€50 each way</b> — just ask.</p>
+        <p style="margin:16px 0 2px;font-size:15px;color:#3a352d;">We can't wait to host you,</p>
+        <p style="margin:0;font-family:Georgia,serif;font-size:16px;color:#a8472f;">Alessandro · Casa Tolomea</p>
+      </td></tr>
+      <tr><td style="border-top:1px solid #e7dccd;background:#f4ede2;padding:15px 26px;font-size:12px;color:#8a8478;">Casa Tolomea · Mondello (PA) · casa.tolomea@tiscali.it · +39 339 429 0856</td></tr>
+    </table>
+  </td></tr>
+</table>

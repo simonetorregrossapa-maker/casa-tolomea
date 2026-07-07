@@ -1,0 +1,38 @@
+<!-- ═══════════════════════════════════════════════════════════════════
+     EmailJS · Template "Notifica proprietario" (template_x22wouw)
+     Incolla questo nel campo "Content" (vista HTML) del template su emailjs.com.
+     Variabili usate: {{nome}} {{email}} {{telefono}} {{note}}
+                      {{checkin}} {{checkout}} {{ospiti}} {{totale}}
+     Impostazioni template su EmailJS:
+       • To Email:  casa.tolomea@tiscali.it
+       • From Name: Casa Tolomea (sito)
+       • Reply To:  {{email}}   (così rispondi all'ospite con un clic)
+       • Subject:   Nuova richiesta di prenotazione — {{nome}}
+     ═══════════════════════════════════════════════════════════════════ -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#faf6f0;padding:24px 0;font-family:Arial,Helvetica,sans-serif;color:#1f1d18;">
+  <tr><td align="center">
+    <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#faf6f0;border:1px solid #e7dccd;border-radius:10px;overflow:hidden;">
+      <tr><td style="background:#a8472f;padding:16px 26px;color:#f6e7df;font-family:Georgia,'Times New Roman',serif;font-size:18px;">
+        Casa Tolomea
+        <div style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#e9c9bb;margin-top:2px;">Notifica dal sito</div>
+      </td></tr>
+      <tr><td style="padding:24px 26px 8px;">
+        <h1 style="margin:0 0 10px;font-family:Georgia,serif;font-weight:normal;font-size:23px;color:#a8472f;">Nuova richiesta di prenotazione</h1>
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#3a352d;">Hai ricevuto una richiesta diretta dal sito. Ecco i dettagli per rispondere.</p>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff;border:1px solid #e7dccd;border-radius:9px;font-size:14px;">
+          <tr><td style="padding:10px 16px;color:#6d685d;border-bottom:1px solid #f0e7d9;">Ospite</td><td style="padding:10px 16px;text-align:right;font-weight:bold;border-bottom:1px solid #f0e7d9;">{{nome}}</td></tr>
+          <tr><td style="padding:10px 16px;color:#6d685d;border-bottom:1px solid #f0e7d9;">Date</td><td style="padding:10px 16px;text-align:right;font-weight:bold;border-bottom:1px solid #f0e7d9;">{{checkin}} &rarr; {{checkout}}</td></tr>
+          <tr><td style="padding:10px 16px;color:#6d685d;border-bottom:1px solid #f0e7d9;">Ospiti</td><td style="padding:10px 16px;text-align:right;font-weight:bold;border-bottom:1px solid #f0e7d9;">{{ospiti}}</td></tr>
+          <tr><td style="padding:10px 16px;color:#6d685d;border-bottom:1px solid #f0e7d9;">Totale stimato</td><td style="padding:10px 16px;text-align:right;font-family:Georgia,serif;font-size:18px;color:#a8472f;border-bottom:1px solid #f0e7d9;">{{totale}}</td></tr>
+          <tr><td style="padding:10px 16px;color:#6d685d;border-bottom:1px solid #f0e7d9;">Email</td><td style="padding:10px 16px;text-align:right;font-weight:bold;border-bottom:1px solid #f0e7d9;">{{email}}</td></tr>
+          <tr><td style="padding:10px 16px;color:#6d685d;border-bottom:1px solid #f0e7d9;">Telefono</td><td style="padding:10px 16px;text-align:right;font-weight:bold;border-bottom:1px solid #f0e7d9;">{{telefono}}</td></tr>
+          <tr><td style="padding:10px 16px;color:#6d685d;">Note</td><td style="padding:10px 16px;text-align:right;font-weight:bold;">{{note}}</td></tr>
+        </table>
+        <div style="background:#f6e7df;border-radius:9px;padding:14px 16px;margin:18px 0 6px;font-size:13.5px;line-height:1.55;color:#7a3b28;">
+          <b>Rispondi entro 24 ore</b> per non perdere la prenotazione. Contatta l'ospite via email o WhatsApp, poi segna la richiesta come <b>confermata</b> nel pannello: solo così le date si bloccano anche su Booking.
+        </div>
+      </td></tr>
+      <tr><td style="border-top:1px solid #e7dccd;background:#f4ede2;padding:15px 26px;font-size:12px;color:#8a8478;">Casa Tolomea · Mondello (PA) · richiesta ricevuta dal sito casatolomea.it</td></tr>
+    </table>
+  </td></tr>
+</table>
