@@ -166,9 +166,9 @@ window.SITE = {
   // prenotare diretto invece che da un portale. Prezzi indicativi €/notte
   // per lo stesso periodo, mostrati come confronto nel badge del form.
   incentivo: {
-    percentuale:    10,    // % di risparmio dichiarato prenotando diretto
+    percentuale:    18,    // % di risparmio dichiarato prenotando diretto (250 vs 306)
     prezzoPortale:  306,   // €/notte su Booking in alta stagione (dato reale annuncio)
-    prezzoDiretto:  275,   // €/notte prenotando diretto (~10% in meno)
+    prezzoDiretto:  250,   // €/notte prenotando diretto in alta stagione (Lug–Ago)
   },
 
   /* ── GESTIONE (solo pannello, non mostrato sul sito pubblico) ───────── */
@@ -185,7 +185,7 @@ window.SITE = {
   stagioni: [
     { nome: { it: "Bassa stagione", en: "Low season" },  periodo: { it: "Ott – Mar", en: "Oct – Mar" }, prezzoNotte: 162, minNotti: 2, dal: "10-01", al: "03-31" },
     { nome: { it: "Media stagione", en: "Mid season" },  periodo: { it: "Apr – Giu, Set", en: "Apr – Jun, Sep" }, prezzoNotte: 172, minNotti: 3, dal: "04-01", al: "06-30" },
-    { nome: { it: "Alta stagione",  en: "High season" }, periodo: { it: "Lug – Ago", en: "Jul – Aug" }, prezzoNotte: 306, minNotti: 7, dal: "07-01", al: "08-31" },
+    { nome: { it: "Alta stagione",  en: "High season" }, periodo: { it: "Lug – Ago", en: "Jul – Aug" }, prezzoNotte: 250, minNotti: 7, dal: "07-01", al: "08-31" },
   ],
   // Costi extra mostrati nella stima
   extra: {
