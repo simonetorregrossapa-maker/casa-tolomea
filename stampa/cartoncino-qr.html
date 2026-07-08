@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Casa Tolomea — Cartoncino prenota diretto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf6f0; --surface:#ffffff; --ink:#1f1d18; --muted:#6d685d;
+    --line:#e7dccd; --accent:#a8472f; --accent-bg:#f6e7df; --olive:#4d5340;
+    --display:'Fraunces',Georgia,serif; --body:'Karla',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#e9e2d6}
+  body{font-family:var(--body);color:var(--ink);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+  /* A5 verticale */
+  .card{
+    width:148mm; height:210mm; margin:12mm auto; background:var(--bg);
+    position:relative; overflow:hidden; display:flex; flex-direction:column;
+    padding:12mm 14mm; box-shadow:0 8px 40px rgba(0,0,0,.14);
+  }
+  .card::before{content:"";position:absolute;top:0;left:0;right:0;height:8mm;background:var(--accent)}
+
+  .brand{display:flex;align-items:center;gap:9px;margin-top:3mm}
+  .brand .mono{width:30px;height:30px;border-radius:7px;background:var(--accent);display:grid;place-items:center;flex-shrink:0}
+  .brand .mono svg{width:19px;height:19px}
+  .brand b{font-family:var(--display);font-weight:600;font-size:1.15rem;letter-spacing:.01em}
+  .brand small{display:block;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:1px}
+
+  .kicker{margin-top:8mm;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h1{font-family:var(--display);font-weight:500;font-size:2.05rem;line-height:1.08;margin-top:2mm;letter-spacing:-.01em}
+  .h1-en{font-family:var(--display);font-style:italic;font-weight:400;font-size:1.15rem;color:var(--muted);margin-top:2mm}
+  .lead{font-size:.86rem;line-height:1.5;color:var(--muted);margin-top:4mm;max-width:30em}
+
+  .qr-wrap{display:flex;align-items:center;gap:7mm;margin-top:auto;padding:3mm 0}
+  .qr{width:38mm;height:38mm;flex-shrink:0;background:#fff;border:1px solid var(--line);border-radius:10px;padding:3mm}
+  .qr img{width:100%;height:100%;display:block;image-rendering:pixelated}
+  .qr-txt b{display:block;font-family:var(--display);font-size:1.25rem;line-height:1.15}
+  .qr-txt .url{display:inline-block;margin-top:2mm;font-weight:700;color:var(--accent);font-size:.98rem}
+  .qr-txt .scan{font-size:.72rem;color:var(--muted);margin-top:1.5mm}
+
+  ul{list-style:none;margin-top:4mm;border-top:1px solid var(--line);padding-top:4mm;display:flex;flex-direction:column;gap:2.5mm}
+  li{display:flex;align-items:flex-start;gap:8px;font-size:.9rem;font-weight:600}
+  li svg{width:17px;height:17px;color:var(--accent);flex-shrink:0;margin-top:1px}
+  li .en{display:block;font-weight:400;font-size:.72rem;color:var(--muted);font-style:italic}
+
+  .sign{margin-top:4mm;display:flex;justify-content:space-between;align-items:flex-end}
+  .sign .by{font-family:var(--display);font-style:italic;font-size:1.05rem}
+  .sign .loc{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+  @page{size:A5;margin:0}
+  @media print{ html,body{background:#fff} .card{margin:0;box-shadow:none;width:148mm;height:210mm} }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand">
+      <span class="mono"><svg viewBox="0 0 32 32" fill="none"><path d="M5 15 16 5l11 10" stroke="#faf6f0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 14v12h18V14" stroke="#faf6f0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 26v-7h6v7" stroke="#faf6f0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span><b>Casa Tolomea</b><small>Mondello · Sicilia</small></span>
+    </div>
+
+    <p class="kicker">Grazie di essere stato nostro ospite</p>
+    <h1>La prossima volta,<br>prenota diretto.</h1>
+    <p class="h1-en">Next time, book direct.</p>
+    <p class="lead">Se tornerai a Mondello, prenota Casa Tolomea dal nostro sito: eviti le commissioni dei portali, hai il miglior prezzo e ci parli direttamente.<br><span style="font-style:italic;opacity:.85">If you come back, book straight from our website: no platform fees, best price, and you talk to us directly.</span></p>
+
+    <div class="qr-wrap">
+      <span class="qr"><img src="data:image/png;base64,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" alt="QR Casa Tolomea"></span>
+      <span class="qr-txt">
+        <b>Inquadra<br>e prenota</b>
+        <span class="scan">Scan me · apri la fotocamera</span>
+        <span class="url">www.casatolomea.it</span>
+      </span>
+    </div>
+
+    <ul>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Miglior prezzo, senza commissioni<span class="en">Best price, no commissions</span></span></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Ci parli direttamente, senza intermediari<span class="en">Talk to us directly, no middleman</span></span></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Ti rispondiamo entro 24 ore<span class="en">We reply within 24 hours</span></span></li>
+    </ul>
+
+    <div class="sign">
+      <span class="by">— Alessandro e Marcella</span>
+      <span class="loc">Casa Tolomea</span>
+    </div>
+  </div>
+</body>
+</html>
