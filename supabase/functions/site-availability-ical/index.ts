@@ -1,24 +1,35 @@
-// Espone come feed iCal (.ics) le date da bloccare su Booking.com:
-//   • le prenotazioni ricevute dal sito e CONFERMATE (richieste.confermata = true)
-//   • i blocchi manuali inseriti dal proprietario (tabella "blocchi")
-// Da importare nell'extranet di Booking (Calendario → Sincronizza calendari →
-// Importa calendario) così Booking blocca automaticamente quelle date. È il
-// verso opposto della function "disponibilita" (Booking → sito): insieme
-// coprono la sincronizzazione a due vie e riducono il rischio di doppie
-// prenotazioni sullo stesso giorno.
+// Feed iCal (.ics) HUB della casa: espone in UN SOLO calendario TUTTE le date
+// occupate, da qualunque canale:
+//   • prenotazioni di Booking.com   (feed iCal extranet, BOOKING_ICAL_URL)
+//   • prenotazioni di Airbnb        (feed iCal, AIRBNB_ICAL_URL)
+//   • prenotazioni di Vrbo          (feed iCal, VRBO_ICAL_URL)
+//   • prenotazioni ricevute dal sito e CONFERMATE (richieste.confermata = true)
+//   • blocchi manuali del proprietario (tabella "blocchi")
 //
-// Solo le richieste confermate bloccano Booking: una richiesta non ancora
-// verificata (o spam) non deve occupare inutilmente il calendario.
+// Va importato UNA VOLTA nell'extranet di OGNI OTA (Calendario → Importa /
+// Sincronizza calendari): così ciascuna piattaforma vede le prenotazioni di
+// TUTTE le altre passando dal sito come unica fonte di verità (hub & spoke),
+// senza dover collegare a mano ogni OTA con ogni altra. Reimportare in Booking
+// anche le proprie date è innocuo (blocco idempotente).
+//
+// IMPORTANTE (sicurezza anti-overbooking): questo feed viene importato da altri
+// sistemi per BLOCCARE date. Se una sorgente OTA è momentaneamente irraggiungibile
+// NON serviamo un feed parziale (farebbe "liberare" date in realtà occupate):
+// propaghiamo l'errore e serviamo semmai l'ultima cache buona (stale).
+//
+// I nomi degli ospiti NON vengono esposti: ogni evento è etichettato in modo
+// generico "Non disponibile".
 //
 // SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY sono iniettate automaticamente da
-// Supabase in ogni Edge Function: non serve configurarle come secret.
+// Supabase; BOOKING_ICAL_URL / AIRBNB_ICAL_URL / VRBO_ICAL_URL sono secret.
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
-const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minuti: qui la freschezza conta di più (blocca Booking)
+const BOOKING_ICAL_URL = Deno.env.get("BOOKING_ICAL_URL") ?? "";
+const AIRBNB_ICAL_URL = Deno.env.get("AIRBNB_ICAL_URL") ?? "";
+const VRBO_ICAL_URL = Deno.env.get("VRBO_ICAL_URL") ?? "";
+const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minuti: qui la freschezza conta (blocca le OTA)
 
-// Evento con UID stabile: prefisso diverso per prenotazioni-sito e blocchi
-// manuali, così Booking non confonde due sorgenti con lo stesso id numerico.
 type Evento = { uid: string; start: string; end: string; summary: string };
 
 let cache: string | null = null;
@@ -29,6 +40,53 @@ const todayIso = () => {
   const d = new Date();
   return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
 };
+
+/* ── parsing iCal in ingresso (identico a hyper-responder) ─────────────── */
+function unfold(ics: string): string[] {
+  const raw = ics.split(/\r\n|\n|\r/);
+  const out: string[] = [];
+  for (const line of raw) {
+    if ((line.startsWith(" ") || line.startsWith("\t")) && out.length) out[out.length - 1] += line.slice(1);
+    else out.push(line);
+  }
+  return out;
+}
+function toIsoDate(v: string): string | null {
+  const m = v.match(/^(\d{4})(\d{2})(\d{2})/);
+  return m ? `${m[1]}-${m[2]}-${m[3]}` : null;
+}
+function parseIcs(ics: string): { start: string; end: string }[] {
+  const lines = unfold(ics);
+  const events: { start: string; end: string }[] = [];
+  let inEvent = false, start: string | null = null, end: string | null = null;
+  for (const line of lines) {
+    if (line.startsWith("BEGIN:VEVENT")) { inEvent = true; start = end = null; continue; }
+    if (line.startsWith("END:VEVENT")) { if (inEvent && start && end) events.push({ start, end }); inEvent = false; continue; }
+    if (!inEvent) continue;
+    const idx = line.indexOf(":");
+    if (idx === -1) continue;
+    const key = line.slice(0, idx), value = line.slice(idx + 1).trim();
+    if (key.startsWith("DTSTART")) start = toIsoDate(value);
+    if (key.startsWith("DTEND")) end = toIsoDate(value);
+  }
+  return events;
+}
+
+/* ── sorgenti ──────────────────────────────────────────────────────────── */
+// Feed OTA esterno. URL vuoto = sorgente non configurata → saltata senza errore.
+// Se l'URL è impostato ma la fetch fallisce, PROPAGHIAMO l'errore (vedi nota
+// anti-overbooking in testa): meglio servire stale che un feed monco.
+async function fromIcal(url: string, nome: string, oggi: string): Promise<Evento[]> {
+  if (!url) return [];
+  const res = await fetch(url, { headers: { "User-Agent": "CasaTolomea-Hub/1.0" } });
+  if (!res.ok) throw new Error(`Feed iCal ${nome} non raggiungibile (HTTP ${res.status})`);
+  return parseIcs(await res.text())
+    .filter((e) => e.end >= oggi)
+    .map((e) => ({
+      uid: `ota-${nome.toLowerCase()}-${e.start}-${e.end}@casalibrizzi`,
+      start: e.start, end: e.end, summary: "Non disponibile",
+    }));
+}
 
 async function query(path: string): Promise<any[]> {
   const res = await fetch(`${SUPABASE_URL.replace(/\/$/, "")}/rest/v1/${path}`, {
@@ -43,11 +101,17 @@ async function fetchEventi(): Promise<Evento[]> {
     throw new Error("SUPABASE_URL o SUPABASE_SERVICE_ROLE_KEY mancanti");
   }
   const oggi = todayIso();
-  const [righe, blocchi] = await Promise.all([
+  // In parallelo. Se un feed OTA impostato fallisce, Promise.all rigetta e il
+  // chiamante serve la cache stale (non un feed parziale).
+  const [booking, airbnb, vrbo, righe, blocchi] = await Promise.all([
+    fromIcal(BOOKING_ICAL_URL, "Booking", oggi),
+    fromIcal(AIRBNB_ICAL_URL, "Airbnb", oggi),
+    fromIcal(VRBO_ICAL_URL, "Vrbo", oggi),
     query(`richieste?select=id,checkin,checkout&confermata=eq.true&checkout=gte.${oggi}`),
     query(`blocchi?select=id,dal,al&al=gte.${oggi}`),
   ]);
   return [
+    ...booking, ...airbnb, ...vrbo,
     ...righe.map((r: any) => ({
       uid: `sito-${r.id}@casalibrizzi`, start: r.checkin, end: r.checkout,
       summary: "Non disponibile (prenotato sul sito diretto)",
@@ -59,8 +123,7 @@ async function fetchEventi(): Promise<Evento[]> {
   ];
 }
 
-// DTEND è il giorno di check-out (esclusivo), stessa convenzione usata da
-// disponibilita per interpretare il feed di Booking.
+// DTEND è il giorno di check-out (esclusivo), stessa convenzione dei feed OTA.
 function toIcsDate(iso: string): string {
   return iso.replaceAll("-", "");
 }
@@ -70,7 +133,7 @@ function buildIcs(eventi: Evento[]): string {
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Casa Li Brizzi//Disponibilita Sito//IT",
+    "PRODID:-//Casa Tolomea//Disponibilita Hub//IT",
     "METHOD:PUBLISH",
     "CALSCALE:GREGORIAN",
   ];
