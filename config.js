@@ -47,6 +47,8 @@ window.SITE = {
   /* ── PROPRIETARIO / CONTATTI ───────────────────────────────────────── */
   contatti: {
     proprietario: "Alessandro Li Brizzi",
+    // Nomi mostrati nel blocco fiducia accanto al form (host residenti).
+    host: { it: "Alessandro e Marcella", en: "Alessandro & Marcella" },
     telDisplay:   "+39 339 429 0856",
     telHref:      "+393394290856",
     whatsapp:     "393394290856",        // solo cifre, con prefisso internazionale

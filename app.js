@@ -335,6 +335,31 @@
       </details>`).join("");
   }
 
+  function renderBookTrust() {
+    const el = $("#bookTrust"); if (!el) return;
+    const host = S.contatti?.host || S.contatti?.proprietario || "";
+    const hostStr = tIt(host); // per le iniziali del monogramma
+    // Iniziali dai nomi propri (parole >2 lettere: salta "e"/"and"), es. "A&M".
+    const iniz = hostStr.split(/\s+/).filter((w) => w.length > 2).map((w) => w[0].toUpperCase()).join("&") || "★";
+    const rt = S.recensioniRating;
+    const rating = (rt && rt.voto && (S.recensioni || []).length)
+      ? `<div class="bt-rating">
+           <span class="bt-stars" aria-hidden="true">${star.repeat(5)}</span>
+           <span class="bt-score"><b>${rt.voto}</b>/${rt.max || 10}</span>
+           <span class="bt-count" ${bi({ it: `${rt.count} recensioni`, en: `${rt.count} reviews` })}>${rt.count} ${t({ it: "recensioni", en: "reviews" })}</span>
+         </div>`
+      : "";
+    el.innerHTML = `
+      <div class="bt-host">
+        <span class="bt-avatar" aria-hidden="true">${iniz}</span>
+        <div class="bt-host-txt">
+          <b><span ${bi({ it: "Ti rispondono", en: "You'll hear back from" })}>${t({ it: "Ti rispondono", en: "You'll hear back from" })}</span> <span ${bi(host)}>${escAttr(t(host))}</span></b>
+          <small ${bi({ it: `Host residenti · di persona, di solito entro ${tIt(S.contatti?.rispostaEntro) || "24 ore"}`, en: `Resident hosts · in person, usually within ${tEn(S.contatti?.rispostaEntro) || "24 hours"}` })}>Host residenti · di persona, di solito entro ${tIt(S.contatti?.rispostaEntro) || "24 ore"}</small>
+        </div>
+      </div>
+      ${rating}`;
+  }
+
   function fillGuests() {
     const sel = $("#ospiti"); if (!sel) return;
     const max = S.casa?.ospiti || 6;
@@ -911,6 +936,7 @@
     renderSeasons();
     renderReviews();
     renderFaq();
+    renderBookTrust();
     fillGuests();
     bind();
 
