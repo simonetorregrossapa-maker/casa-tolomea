@@ -28,12 +28,12 @@ window.SITE = {
     // Frase di benvenuto (sezione "La casa")
     intro: {
       it: "Una casa indipendente al piano terra di una villa a Mondello, a 700 metri dalla spiaggia. " +
-          "Due camere matrimoniali e un ampio soggiorno con divani letto: fino a 6 ospiti. Cucina attrezzata " +
+          "Due camere matrimoniali e un ampio soggiorno con divano letto matrimoniale: fino a 6 ospiti. Cucina attrezzata " +
           "e una grande veranda con giardino, patio e barbecue per stare all'aperto. Aria condizionata, " +
           "parcheggio gratuito e animali ammessi. Alessandro e Marcella abitano nella stessa villa e vi " +
           "accolgono di persona; davanti casa c'è una navetta che porta al mare.",
       en: "A detached ground-floor home in a villa in Mondello, 700 metres from the beach. Two double bedrooms " +
-          "and a large living room with sofa beds: up to 6 guests. Fully equipped kitchen and a big veranda with " +
+          "and a large living room with a double sofa bed: up to 6 guests. Fully equipped kitchen and a big veranda with " +
           "garden, patio and barbecue for outdoor living. Air conditioning, free parking and pets allowed. " +
           "Alessandro and Marcella live in the same villa and welcome you in person; a shuttle to the sea stops " +
           "right in front of the house.",
@@ -126,7 +126,7 @@ window.SITE = {
     { icon: "ac",       label: { it: "Aria condizionata",     en: "Air conditioning" } },
     { icon: "kitchen",  label: { it: "Cucina attrezzata",     en: "Fully equipped kitchen" } },
     { icon: "washer",   label: { it: "Lavatrice",             en: "Washing machine" } },
-    { icon: "tv",       label: { it: "3 TV HD via cavo",       en: "3 HD cable TVs" } },
+    { icon: "tv",       label: { it: "3 TV via cavo",          en: "3 cable TVs" } },
     { icon: "parking",  label: { it: "Parcheggio gratuito",   en: "Free parking" } },
     { icon: "pets",     label: { it: "Animali ammessi",       en: "Pets allowed" } },
     { icon: "garden",   label: { it: "Giardino e patio",      en: "Garden and patio" } },
@@ -140,17 +140,17 @@ window.SITE = {
   /* ── SPAZI / CAMERE ────────────────────────────────────────────────── */
   spazi: [
     { nome: { it: "Camera matrimoniale", en: "Double bedroom" },
-      descr: { it: "Letto matrimoniale, armadio e TV HD via cavo.", en: "Double bed, wardrobe and HD cable TV." } },
+      descr: { it: "Letto matrimoniale, armadio e TV via cavo.", en: "Double bed, wardrobe and cable TV." } },
     { nome: { it: "Seconda camera", en: "Second bedroom" },
-      descr: { it: "Letto matrimoniale, armadio e TV HD via cavo.", en: "Double bed, wardrobe and HD cable TV." } },
+      descr: { it: "Letto matrimoniale, armadio e TV via cavo.", en: "Double bed, wardrobe and cable TV." } },
     { nome: { it: "Soggiorno", en: "Living room" },
-      descr: { it: "Ampio e luminoso, con due divani letto e TV HD: qui dormono il 5° e 6° ospite.", en: "Bright and spacious, with two sofa beds and HD TV: sleeps guests 5 and 6." } },
+      descr: { it: "Ampio e luminoso, con un divano letto matrimoniale e TV: qui dormono il 5° e 6° ospite.", en: "Bright and spacious, with a double sofa bed and TV: sleeps guests 5 and 6." } },
     { nome: { it: "Cucina", en: "Kitchen" },
       descr: { it: "Angolo cottura, forno, piano cottura, frigo e freezer, macchina da caffè, tostapane, tavolo e stoviglie complete.", en: "Kitchenette, oven, hob, fridge-freezer, coffee machine, toaster, dining table and full cookware." } },
     { nome: { it: "Bagno", en: "Bathroom" },
       descr: { it: "Doccia, bidet, WC, lavatrice, asciugacapelli e prodotti da bagno in omaggio.", en: "Shower, bidet, WC, washing machine, hairdryer and complimentary toiletries." } },
     { nome: { it: "Veranda, patio e giardino", en: "Veranda, patio and garden" },
-      descr: { it: "Tavolo da pranzo all'aperto, barbecue e zona relax, sul giardino comune coi proprietari.", en: "Outdoor dining table, barbecue and lounge area, on the garden shared with the owners." } },
+      descr: { it: "Tavolo da pranzo all'aperto, barbecue e zona relax, con giardino indipendente.", en: "Outdoor dining table, barbecue and lounge area, with an independent garden." } },
   ],
 
   /* ── TUTTI I SERVIZI (lista completa, per categoria) ───────────────────
@@ -161,8 +161,8 @@ window.SITE = {
       voci: { it: "Angolo cottura · Forno · Piano cottura · Frigorifero e freezer · Macchina da caffè · Bollitore · Tostapane · Utensili e stoviglie complete · Tavolo da pranzo · Prodotti per le pulizie",
               en: "Kitchenette · Oven · Hob · Fridge & freezer · Coffee machine · Kettle · Toaster · Full cookware & tableware · Dining table · Cleaning products" } },
     { cat: { it: "Camere e riposo", en: "Bedrooms & sleeping" },
-      voci: { it: "2 camere matrimoniali · 2 divani letto in soggiorno (6 posti letto) · Biancheria da letto inclusa · Armadi e guardaroba · 3 TV HD via cavo · Presa elettrica vicino al letto",
-              en: "2 double bedrooms · 2 sofa beds in the living room (sleeps 6) · Bed linen provided · Wardrobes · 3 HD cable TVs · Power socket by the bed" } },
+      voci: { it: "2 camere matrimoniali · 1 divano letto matrimoniale in soggiorno (6 posti letto) · Biancheria da letto inclusa · Armadi e guardaroba · 3 TV via cavo · Presa elettrica vicino al letto",
+              en: "2 double bedrooms · 1 double sofa bed in the living room (sleeps 6) · Bed linen provided · Wardrobes · 3 cable TVs · Power socket by the bed" } },
     { cat: { it: "Bagno", en: "Bathroom" },
       voci: { it: "Doccia · Bidet · WC · Asciugamani inclusi · Prodotti da bagno in omaggio · Asciugacapelli · Carta igienica",
               en: "Shower · Bidet · WC · Towels provided · Complimentary toiletries · Hairdryer · Toilet paper" } },
@@ -205,9 +205,9 @@ window.SITE = {
   // prenotare diretto invece che da un portale. Prezzi indicativi €/notte
   // per lo stesso periodo, mostrati come confronto nel badge del form.
   incentivo: {
-    percentuale:    18,    // % di risparmio dichiarato prenotando diretto (250 vs 306)
+    percentuale:    21,    // % di risparmio dichiarato prenotando diretto (240 vs 306)
     prezzoPortale:  306,   // €/notte su Booking in alta stagione (dato reale annuncio)
-    prezzoDiretto:  250,   // €/notte prenotando diretto in alta stagione (Lug–Ago)
+    prezzoDiretto:  240,   // €/notte prenotando diretto in alta stagione (Lug–Ago)
   },
 
   /* ── GESTIONE (solo pannello, non mostrato sul sito pubblico) ───────── */
@@ -222,15 +222,14 @@ window.SITE = {
   // Il primo periodo che "contiene" il check-in determina la stima nel form.
   valuta: "€",
   stagioni: [
-    { nome: { it: "Bassa stagione", en: "Low season" },  periodo: { it: "Ott – Mar", en: "Oct – Mar" }, prezzoNotte: 162, minNotti: 2, dal: "10-01", al: "03-31" },
-    { nome: { it: "Media stagione", en: "Mid season" },  periodo: { it: "Apr – Giu, Set", en: "Apr – Jun, Sep" }, prezzoNotte: 172, minNotti: 3, dal: "04-01", al: "06-30" },
-    { nome: { it: "Alta stagione",  en: "High season" }, periodo: { it: "Lug – Ago", en: "Jul – Aug" }, prezzoNotte: 250, minNotti: 7, dal: "07-01", al: "08-31" },
+    { nome: { it: "Bassa stagione", en: "Low season" },  periodo: { it: "Ott – Mar", en: "Oct – Mar" }, prezzoNotte: 150, minNotti: 2, dal: "10-01", al: "03-31" },
+    { nome: { it: "Media stagione", en: "Mid season" },  periodo: { it: "Apr – Giu, Set", en: "Apr – Jun, Sep" }, prezzoNotte: 160, minNotti: 3, dal: "04-01", al: "06-30" },
+    { nome: { it: "Alta stagione",  en: "High season" }, periodo: { it: "Lug – Ago", en: "Jul – Aug" }, prezzoNotte: 240, minNotti: 7, dal: "07-01", al: "08-31" },
   ],
-  // Costi extra mostrati nella stima
+  // Costi extra mostrati nella stima. Nessun costo aggiuntivo: pulizia finale e
+  // tassa di soggiorno sono già incluse nel prezzo; nessuna cauzione.
   extra: {
-    pulizie:   60,   // una tantum
-    tassaSoggiorno: 2, // a persona a notte (mostrata come nota, non sempre dovuta)
-    cauzione:  200,  // mostrata come nota
+    tassaSoggiorno: 4, // a persona a notte, GIÀ INCLUSA nel prezzo (mostrata solo come nota)
   },
 
   /* ── RECENSIONI ────────────────────────────────────────────────────── */

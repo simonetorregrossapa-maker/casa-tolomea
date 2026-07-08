@@ -4,7 +4,7 @@
     {
       "name": "casa-tolomea",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "4599", "--directory", "/Users/simonetorregrossa/demo-casa-tolomea"],
+      "runtimeArgs": ["-m", "http.server", "4599", "--directory", "/Users/simonetorregrossa/progetto-casa-tolomea"],
       "port": 4599
     }
   ]

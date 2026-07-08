@@ -223,8 +223,8 @@
     const note = $("#priceNote");
     if (!note || !S.extra) return;
     const cur = S.valuta || "€";
-    const it = `Pulizia finale ${cur}${S.extra.pulizie} una tantum · Cauzione ${cur}${S.extra.cauzione} (restituita) · Tassa di soggiorno ${cur}${S.extra.tassaSoggiorno}/persona a notte ove prevista.`;
-    const en = `Final cleaning ${cur}${S.extra.pulizie} one-time fee · Security deposit ${cur}${S.extra.cauzione} (refunded) · Tourist tax ${cur}${S.extra.tassaSoggiorno}/person per night where applicable.`;
+    const it = `Nessun costo extra: la pulizia finale e la tassa di soggiorno (${cur}${S.extra.tassaSoggiorno}/persona a notte) sono già incluse nel prezzo.`;
+    const en = `No extra fees: final cleaning and tourist tax (${cur}${S.extra.tassaSoggiorno}/person per night) are already included in the price.`;
     note.dataset.it = it; note.dataset.en = en;
     note.textContent = currentLang === "en" ? en : it;
   }
@@ -499,8 +499,7 @@
     }
     const segments = nightsBreakdown(a, b);
     const subtotal = segments.reduce((sum, seg) => sum + seg.st.prezzoNotte * seg.nights, 0);
-    const pulizie = S.extra?.pulizie || 0;
-    const total = subtotal + pulizie;
+    const total = subtotal;
     // Il soggiorno minimo si verifica sulla stagione del check-in, che regola l'intera richiesta.
     const st = segments[0].st;
     let warn = "";
@@ -516,7 +515,6 @@
     ).join("");
     box.innerHTML = `
       ${rows}
-      <div class="est-row"><span>${currentLang === "en" ? "Final cleaning" : "Pulizia finale"}</span><span>${cur}${pulizie}</span></div>
       ${warn}
       <div class="est-total"><span>${currentLang === "en" ? "Estimated total" : "Totale stimato"}</span><b>${cur}${total}</b></div>`;
     return { n, st, total, segments };
