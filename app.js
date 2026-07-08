@@ -250,6 +250,20 @@
       numberOfRooms: S.casa?.camere,
       amenityFeature: (S.dotazioni || []).map((d) => ({ "@type": "LocationFeatureSpecification", name: t(d.label), value: true })),
     };
+    // FAQPage: rende le domande frequenti idonee ai rich snippet di Google.
+    const faq = (S.faq || []).filter((f) => f && f.q && f.a);
+    const graph = [data];
+    if (faq.length) {
+      graph.push({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faq.map((f) => ({
+          "@type": "Question",
+          name: t(f.q),
+          acceptedAnswer: { "@type": "Answer", text: t(f.a) },
+        })),
+      });
+    }
     let el = document.getElementById("ldJson");
     if (!el) {
       el = document.createElement("script");
@@ -257,7 +271,8 @@
       el.id = "ldJson";
       document.head.appendChild(el);
     }
-    el.textContent = JSON.stringify(data); // JSON.stringify omette da sé le chiavi undefined
+    // Un solo oggetto se non c'è FAQ, altrimenti un @graph con entrambi gli schemi.
+    el.textContent = JSON.stringify(graph.length > 1 ? { "@context": "https://schema.org", "@graph": graph } : data);
   }
 
   function renderReviews() {
@@ -298,6 +313,26 @@
         ? `<a href="${S.recensioniBookingUrl}" target="_blank" rel="noopener" ${bi({ it: "Vedi tutte le recensioni su Booking", en: "See all reviews on Booking" })}>${escAttr(t({ it: "Vedi tutte le recensioni su Booking", en: "See all reviews on Booking" }))}</a>`
         : "";
     }
+  }
+
+  function renderFaq() {
+    const el = $("#faqList"); if (!el) return;
+    const items = S.faq || [];
+    const section = document.getElementById("faq");
+    const navLink = document.querySelector('a[href="#faq"]');
+    if (!items.length) {
+      if (section) section.style.display = "none";
+      if (navLink) navLink.style.display = "none";
+      return;
+    }
+    el.innerHTML = items.map((f) => `
+      <details class="faq-item" data-reveal="up">
+        <summary>
+          <span class="faq-q" ${bi(f.q)}>${escAttr(t(f.q))}</span>
+          <svg class="faq-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="faq-a"><p ${bi(f.a)}>${escAttr(t(f.a))}</p></div>
+      </details>`).join("");
   }
 
   function fillGuests() {
@@ -875,6 +910,7 @@
     renderZona();
     renderSeasons();
     renderReviews();
+    renderFaq();
     fillGuests();
     bind();
 

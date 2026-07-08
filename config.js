@@ -268,6 +268,71 @@ window.SITE = {
   // Se vuoto, il link "Vedi tutte le recensioni su Booking" non viene mostrato.
   recensioniBookingUrl: "https://www.booking.com/hotel/it/casa-tolomea-palermo.it.html",
 
+  /* ── ORARI SOGGIORNO ───────────────────────────────────────────────────
+     Usati nella FAQ (e riutilizzabili nelle email). check-in reale = 16:00
+     (come su Booking). check-out: valore standard, MODIFICALO se diverso. */
+  soggiorno: {
+    checkIn:  { it: "dalle 16:00", en: "from 4:00 PM" },
+    checkOut: { it: "entro le 10:00", en: "by 10:00 AM" },
+  },
+
+  /* ── FAQ ───────────────────────────────────────────────────────────────
+     Domande che, se restano senza risposta, rimandano l'ospite a prenotare
+     sulla OTA "dove si sente protetto". Risposte basate sui dati REALI della
+     casa (caparra, animali, parcheggio, transfer, servizi inclusi). Bilingue.
+     Vengono anche pubblicate come structured data FAQPage (rich snippet su
+     Google). Modifica/aggiungi voci liberamente: la sezione si popola da qui. */
+  faq: [
+    {
+      q: { it: "Come funziona la prenotazione? Devo pagare online?",
+           en: "How does booking work? Do I pay online?" },
+      a: { it: "Nessun pagamento online. Ci invii la richiesta con le tue date dal sito e ti rispondiamo entro 24 ore. Alla conferma versi una caparra del 30% con bonifico; il saldo lo paghi comodamente all'arrivo. Semplice e diretto, senza intermediari.",
+           en: "No online payment. You send us your dates through the site and we reply within 24 hours. On confirmation you pay a 30% deposit by bank transfer; the balance is paid on arrival. Simple and direct, with no middleman." },
+    },
+    {
+      q: { it: "Perché conviene prenotare qui invece che su Booking?",
+           en: "Why book here instead of on Booking?" },
+      a: { it: "Perché prenotando diretto salti le commissioni del portale: paghi meno (fino a circa il 20% in meno rispetto a Booking) e parli direttamente con Alessandro e Marcella, che vivono nella stessa villa e ti accolgono di persona. Stessa casa, miglior prezzo, contatto umano immediato.",
+           en: "Because booking direct skips the platform's commissions: you pay less (up to about 20% less than Booking) and you speak directly with Alessandro and Marcella, who live in the same villa and welcome you in person. Same house, best price, immediate human contact." },
+    },
+    {
+      q: { it: "A che ora sono il check-in e il check-out?",
+           en: "What are the check-in and check-out times?" },
+      a: { it: "Check-in dalle 16:00, check-out entro le 10:00. Sono host residenti: se hai un aereo a orari scomodi scrivici, cerchiamo sempre di venirti incontro con l'arrivo e la partenza.",
+           en: "Check-in from 4:00 PM, check-out by 10:00 AM. We're resident hosts: if your flight times are awkward just write to us — we always try to accommodate your arrival and departure." },
+    },
+    {
+      q: { it: "Come arrivo alla casa e dove parcheggio?",
+           en: "How do I get to the house and where do I park?" },
+      a: { it: "La casa è a Mondello, a 700 m dalla spiaggia; davanti c'è la navetta che porta al mare. Il parcheggio lungo la via è gratuito. Dall'aeroporto di Palermo (21 km) puoi organizzare con noi un transfer privato a 50 € a tratta: lo prenoti insieme al soggiorno.",
+           en: "The house is in Mondello, 700 m from the beach; the shuttle to the sea stops right in front. Street parking is free. From Palermo airport (21 km) we can arrange a private transfer at €50 each way: you book it together with your stay." },
+    },
+    {
+      q: { it: "Sono ammessi gli animali?",
+           en: "Are pets allowed?" },
+      a: { it: "Sì, gli animali domestici sono i benvenuti, gratuitamente. Faccelo sapere nella richiesta così prepariamo tutto.",
+           en: "Yes, pets are welcome, free of charge. Just let us know in your request so we can get everything ready." },
+    },
+    {
+      q: { it: "La casa è adatta alle famiglie con bambini?",
+           en: "Is the house suitable for families with children?" },
+      a: { it: "Assolutamente. La casa ospita fino a 6 persone, è tutta al piano terra con ingresso indipendente, giardino e patio; culla e lettino per bambini sono gratuiti su richiesta. La spiaggia di Mondello, con acqua bassa e sabbia, è a pochi minuti.",
+           en: "Absolutely. The house sleeps up to 6, it's all on the ground floor with an independent entrance, garden and patio; a cot and child bed are free on request. Mondello beach, with shallow water and sand, is a few minutes away." },
+    },
+    {
+      q: { it: "Cosa è incluso nel prezzo? Ci sono costi nascosti o cauzione?",
+           en: "What's included in the price? Any hidden costs or deposit?" },
+      a: { it: "Il prezzo è tutto compreso: pulizia finale, tassa di soggiorno, biancheria e asciugamani, Wi-Fi e aria condizionata sono già inclusi. Nessun costo extra e nessuna cauzione da lasciare.",
+           en: "The price is all-inclusive: final cleaning, tourist tax, bed linen and towels, Wi-Fi and air conditioning are all included. No extra fees and no security deposit to leave." },
+    },
+    {
+      q: { it: "E se devo cancellare o cambiare le date?",
+           en: "What if I need to cancel or change my dates?" },
+      a: { it: "Trattando direttamente con noi siamo molto più flessibili di un portale: scrivici e troviamo una soluzione per spostare le date o gestire la cancellazione nel modo più giusto per te. Le condizioni te le confermiamo per iscritto alla prenotazione.",
+           en: "Dealing directly with us, we're far more flexible than a platform: write to us and we'll find a way to move your dates or handle the cancellation in the fairest way for you. We confirm the terms in writing when you book." },
+    },
+  ],
+
   /* ── INTEGRAZIONI (backend opzionale) ──────────────────────────────── */
   // Il sito funziona come demo navigabile anche senza queste chiavi:
   // la richiesta apre WhatsApp / email precompilata come fallback.
