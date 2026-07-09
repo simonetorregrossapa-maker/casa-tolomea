@@ -225,8 +225,8 @@ window.SITE = {
   valuta: "€",
   stagioni: [
     { nome: { it: "Bassa stagione", en: "Low season" },  periodo: { it: "Ott – Mar", en: "Oct – Mar" }, prezzoNotte: 150, minNotti: 2, dal: "10-01", al: "03-31" },
-    { nome: { it: "Media stagione", en: "Mid season" },  periodo: { it: "Apr – Giu, Set", en: "Apr – Jun, Sep" }, prezzoNotte: 160, minNotti: 3, dal: "04-01", al: "06-30" },
-    { nome: { it: "Alta stagione",  en: "High season" }, periodo: { it: "Lug – Ago", en: "Jul – Aug" }, prezzoNotte: 240, minNotti: 7, dal: "07-01", al: "08-31" },
+    { nome: { it: "Media stagione", en: "Mid season" },  periodo: { it: "Apr – Giu, Set", en: "Apr – Jun, Sep" }, prezzoNotte: 160, minNotti: 2, dal: "04-01", al: "06-30" },
+    { nome: { it: "Alta stagione",  en: "High season" }, periodo: { it: "Lug – Ago", en: "Jul – Aug" }, prezzoNotte: 240, minNotti: 2, dal: "07-01", al: "08-31" },
   ],
   // Costi extra mostrati nella stima. Nessun costo aggiuntivo: pulizia finale e
   // tassa di soggiorno sono già incluse nel prezzo; nessuna cauzione.
