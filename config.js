@@ -141,12 +141,10 @@ window.SITE = {
 
   /* ── SPAZI / CAMERE ────────────────────────────────────────────────── */
   spazi: [
-    { nome: { it: "Camera matrimoniale", en: "Double bedroom" },
-      descr: { it: "Letto matrimoniale, armadio e TV via cavo.", en: "Double bed, wardrobe and cable TV." } },
-    { nome: { it: "Seconda camera", en: "Second bedroom" },
-      descr: { it: "Letto matrimoniale, armadio e TV via cavo.", en: "Double bed, wardrobe and cable TV." } },
+    { nome: { it: "Due camere matrimoniali", en: "Two double bedrooms" },
+      descr: { it: "Ognuna con letto matrimoniale, armadio e TV via cavo.", en: "Each with a double bed, wardrobe and cable TV." } },
     { nome: { it: "Soggiorno", en: "Living room" },
-      descr: { it: "Ampio e luminoso, con un divano letto matrimoniale e TV: qui dormono il 5° e 6° ospite.", en: "Bright and spacious, with a double sofa bed and TV: sleeps guests 5 and 6." } },
+      descr: { it: "Ampio e luminoso, con un divano letto matrimoniale e TV.", en: "Bright and spacious, with a double sofa bed and TV." } },
     { nome: { it: "Cucina", en: "Kitchen" },
       descr: { it: "Angolo cottura, forno, piano cottura, frigo e freezer, macchina da caffè, tostapane, tavolo e stoviglie complete.", en: "Kitchenette, oven, hob, fridge-freezer, coffee machine, toaster, dining table and full cookware." } },
     { nome: { it: "Bagno", en: "Bathroom" },
@@ -174,7 +172,7 @@ window.SITE = {
     { cat: { it: "Spazi all'aperto", en: "Outdoor" },
       voci: { it: "Giardino · Veranda · Patio · Zona pranzo all'aperto · Barbecue · Area picnic · Arredamento da esterni · Vista giardino e cortile",
               en: "Garden · Veranda · Patio · Outdoor dining area · Barbecue · Picnic area · Outdoor furniture · Garden & courtyard view" } },
-    { cat: { it: "Accesso e famiglie", en: "Access & families" },
+    { cat: { it: "Ingresso e ospitalità", en: "Entrance & hospitality" },
       voci: { it: "Ingresso indipendente · Intera unità al piano terra · Culla e lettino su richiesta (gratis) · Animali ammessi gratis · Accesso con chiavi",
               en: "Independent entrance · Entire unit on the ground floor · Cot & child bed on request (free) · Pets allowed free · Key access" } },
     { cat: { it: "Servizi", en: "Services" },
