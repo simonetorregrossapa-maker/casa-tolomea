@@ -141,6 +141,66 @@
   }
 
   /* ── Render sezioni ────────────────────────────────────────────────── */
+  /* ── Banner annunci (barra animata in cima) ───────────────────────────
+     Config-driven da S.banner. Ruota i messaggi, è bilingue e chiudibile
+     (memorizza la chiusura per `id`). Espone --banner-h così header e hero
+     restano allineati senza sovrapporsi. */
+  let bannerTimer = null;
+  function renderBanner() {
+    const el = $("#promoBar");
+    const b = S.banner || {};
+    const setH = (px) => document.documentElement.style.setProperty("--banner-h", (px || 0) + "px");
+    if (!el) return;
+    const msgs = (b.messaggi || []).filter((m) => m && m.testo);
+    const chiuso = b.chiudibile !== false && localStorage.getItem("promo-hidden") === (b.id || "");
+    if (!b.attivo || !msgs.length || chiuso) {
+      el.hidden = true; el.innerHTML = ""; setH(0);
+      if (bannerTimer) { clearInterval(bannerTimer); bannerTimer = null; }
+      return;
+    }
+    el.dataset.tono = b.tono || "accent";
+    const slides = msgs.map((m, i) => {
+      const link = m.link ? escAttr(m.link) : "";
+      const cta = m.cta ? `<span class="promo__cta" ${bi(m.cta)}>${escAttr(t(m.cta))}</span>` : "";
+      const inner = `<span class="promo__text" ${bi(m.testo)}>${escAttr(t(m.testo))}</span>${cta}`;
+      return link
+        ? `<a class="promo__msg" href="${link}" data-i="${i}"${i ? ' hidden' : ''}>${inner}</a>`
+        : `<span class="promo__msg" data-i="${i}"${i ? ' hidden' : ''}>${inner}</span>`;
+    }).join("");
+    const closeBtn = b.chiudibile !== false
+      ? `<button class="promo__x" id="promoClose" type="button" aria-label="${currentLang === "en" ? "Dismiss" : "Chiudi"}">&times;</button>`
+      : "";
+    el.innerHTML = `<div class="promo__wrap">${slides}</div>${closeBtn}`;
+    el.hidden = false;
+    // altezza reale della barra → variabile CSS (sincrono per evitare sfasamenti
+    // di layout col fixed header, + un secondo giro dopo il caricamento font).
+    setH(el.offsetHeight);
+    requestAnimationFrame(() => setH(el.offsetHeight));
+    window.addEventListener("load", () => setH(el.offsetHeight), { once: true });
+
+    const close = $("#promoClose");
+    if (close) close.onclick = () => {
+      if (b.id) localStorage.setItem("promo-hidden", b.id);
+      el.classList.add("promo--closing");
+      setH(0);
+      setTimeout(() => { el.hidden = true; el.classList.remove("promo--closing"); }, 350);
+      if (bannerTimer) { clearInterval(bannerTimer); bannerTimer = null; }
+    };
+
+    if (bannerTimer) { clearInterval(bannerTimer); bannerTimer = null; }
+    if (msgs.length > 1 && !reduce) {
+      let idx = 0;
+      const items = $$(".promo__msg", el);
+      bannerTimer = setInterval(() => {
+        items[idx].hidden = true;
+        items[idx].classList.remove("is-in");
+        idx = (idx + 1) % items.length;
+        items[idx].hidden = false;
+        requestAnimationFrame(() => items[idx].classList.add("is-in"));
+      }, Math.max(3, (b.intervallo || 5)) * 1000);
+    }
+  }
+
   function renderTrustbar() {
     const items = [
       [svg("check"), { it: "Senza commissioni",         en: "No commissions" }],
@@ -927,6 +987,7 @@
   function init() {
     if (/[?&]static\b/.test(location.search)) document.documentElement.classList.add("cap-hero");
     applyTheme();
+    renderBanner();
     renderTrustbar();
     renderGallery();
     renderAmenities();

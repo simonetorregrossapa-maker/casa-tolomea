@@ -18,7 +18,9 @@
 
   const CFG = (window.SITE || {});
   const IG = CFG.integrazioni || {};
-  const HAS_SB = !!(IG.supabaseUrl && IG.supabaseAnonKey);
+  // ?demo forza l'anteprima con dati di esempio (utile per mostrare il pannello).
+  const FORCE_DEMO = /[?&]demo\b/.test(location.search);
+  const HAS_SB = !FORCE_DEMO && !!(IG.supabaseUrl && IG.supabaseAnonKey);
 
   let sb = null;
   const $ = (sel, root) => (root || document).querySelector(sel);
@@ -173,6 +175,7 @@
           <button class="adm-tab" data-tab="calendario">Calendario</button>
           <button class="adm-tab" data-tab="incassi">Incassi</button>
           <button class="adm-tab" data-tab="attesa">Lista d'attesa</button>
+          <button class="adm-tab" data-tab="messaggi">Messaggi</button>
         </div>
         <div class="adm-bar-right">
           <button class="adm-btn adm-btn-ghost" id="admRefresh">Aggiorna</button>
@@ -198,6 +201,7 @@
     if (state.tab === "richieste") renderRichieste();
     else if (state.tab === "incassi") renderIncassi();
     else if (state.tab === "attesa") renderAttesa();
+    else if (state.tab === "messaggi") renderMessaggi();
     else renderCalendario();
   }
 
@@ -534,6 +538,168 @@
     } catch (_) {
       if (view) view.innerHTML = `<p class="adm-empty">Impossibile caricare i dati. Riprova con "Aggiorna".</p>`;
     }
+  }
+
+  /* ── VISTA MESSAGGI (email ai clienti) ─────────────────────────────────
+     Il proprietario scrive un messaggio e lo invia ai suoi clienti (ospiti
+     con almeno un soggiorno confermato). Può scegliere un segmento pronto
+     (tutti / ospiti di ritorno / dormienti) o selezionare a mano. L'invio
+     passa dalla Edge Function `messaggio-ospiti` (Resend), protetta dal login
+     del proprietario: la chiave email resta lato server. */
+  const escH = (s) => String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+  function clientiFromRows() {
+    const map = new Map();
+    const today = isoOf(new Date());
+    (state.rows || []).forEach((r) => {
+      if (!r.confermata || !r.email) return;
+      const email = String(r.email).toLowerCase().trim();
+      if (!email) return;
+      const c = map.get(email) || { email, nome: r.nome || "", soggiorni: 0, ultimo: "", futura: false };
+      c.soggiorni += 1;
+      if (r.nome) c.nome = r.nome;
+      if (r.checkout && r.checkout > c.ultimo) c.ultimo = r.checkout;
+      if (r.checkout && r.checkout >= today) c.futura = true;
+      map.set(email, c);
+    });
+    return [...map.values()].sort((a, b) => (b.ultimo || "").localeCompare(a.ultimo || ""));
+  }
+
+  function inSegmento(c, seg) {
+    if (seg === "ritorno") return c.soggiorni >= 2;
+    if (seg === "dormienti") {
+      const soglia = new Date(); soglia.setDate(soglia.getDate() - 180);
+      return !c.futura && c.ultimo && parseIso(c.ultimo) < soglia;
+    }
+    return true;
+  }
+
+  function renderMessaggi() {
+    const view = $("#admView");
+    if (!state.msgSel) state.msgSel = new Set();
+    const clienti = clientiFromRows();
+
+    if (!clienti.length) {
+      view.innerHTML = `<p class="adm-empty">Non ci sono ancora clienti con un soggiorno confermato.<br>
+        Appena confermi le prime richieste, potrai scrivere ai tuoi ospiti da qui.</p>`;
+      return;
+    }
+
+    const tag = (c) => c.futura ? "In arrivo" : (c.soggiorni >= 2 ? "Ritorno"
+      : (inSegmento(c, "dormienti") ? "Dormiente" : ""));
+
+    const rowsHtml = clienti.map((c, i) => `
+      <label class="adm-recip-row">
+        <input type="checkbox" data-email="${escH(c.email)}" ${state.msgSel.has(c.email) ? "checked" : ""}>
+        <span class="adm-recip-main">
+          <b>${escH(c.nome || "Ospite")}</b>
+          <span>${escH(c.email)}${c.ultimo ? " · ultimo soggiorno " + fmtItaliano(c.ultimo) : ""}</span>
+        </span>
+        ${tag(c) ? `<span class="adm-recip-tag">${tag(c)}</span>` : ""}
+      </label>`).join("");
+
+    view.innerHTML = `
+      <div class="adm-msg">
+        <div class="adm-msg-box">
+          <h3>A chi scrivere</h3>
+          <p class="adm-muted">${clienti.length} client${clienti.length === 1 ? "e" : "i"} con soggiorno confermato. Scegli un gruppo o seleziona a mano.</p>
+          <div class="adm-seg">
+            <button class="adm-chip" data-seg="tutti">Tutti</button>
+            <button class="adm-chip" data-seg="ritorno">Ospiti di ritorno</button>
+            <button class="adm-chip" data-seg="dormienti">Dormienti (6+ mesi)</button>
+            <button class="adm-chip" data-seg="nessuno">Deseleziona</button>
+          </div>
+          <div class="adm-recipients" id="admRecipients">${rowsHtml}</div>
+          <p class="adm-msg-count"><b id="admMsgCount">${state.msgSel.size}</b> destinatari selezionati</p>
+        </div>
+
+        <div class="adm-msg-box">
+          <h3>Il messaggio</h3>
+          <p class="adm-muted">Scrivi come parleresti ai tuoi ospiti: lo impaginiamo noi con l'intestazione di ${escH((CFG.casa && CFG.casa.nome) || "Casa Tolomea")}.</p>
+          <div class="adm-msg-form">
+            <label for="admMsgSubject">Oggetto</label>
+            <input id="admMsgSubject" type="text" maxlength="120" placeholder="Es. Un saluto e le date libere di settembre">
+            <label for="admMsgBody">Testo</label>
+            <textarea id="admMsgBody" placeholder="Ciao! Ti scriviamo per…"></textarea>
+          </div>
+          <div class="adm-msg-preview" id="admMsgPreview" hidden></div>
+          <div class="adm-msg-send">
+            <button class="adm-btn adm-btn-primary" id="admMsgSend">Invia ai selezionati</button>
+            <button class="adm-btn adm-btn-ghost adm-btn-sm" id="admMsgPreviewBtn">Anteprima</button>
+          </div>
+        </div>
+      </div>`;
+
+    const countEl = $("#admMsgCount");
+    const updCount = () => { countEl.textContent = String(state.msgSel.size); };
+
+    // checkbox singola
+    view.querySelectorAll("#admRecipients input[type=checkbox]").forEach((cb) => {
+      cb.onchange = () => {
+        const em = cb.dataset.email;
+        if (cb.checked) state.msgSel.add(em); else state.msgSel.delete(em);
+        updCount();
+      };
+    });
+
+    // segmenti
+    view.querySelectorAll(".adm-seg .adm-chip").forEach((chip) => {
+      chip.onclick = () => {
+        const seg = chip.dataset.seg;
+        state.msgSel = new Set();
+        if (seg !== "nessuno") clienti.forEach((c) => { if (inSegmento(c, seg)) state.msgSel.add(c.email); });
+        view.querySelectorAll("#admRecipients input[type=checkbox]").forEach((cb) => {
+          cb.checked = state.msgSel.has(cb.dataset.email);
+        });
+        updCount();
+      };
+    });
+
+    // anteprima
+    const previewEl = $("#admMsgPreview");
+    $("#admMsgPreviewBtn").onclick = () => {
+      const casa = (CFG.casa && CFG.casa.nome) || "Casa Tolomea";
+      const body = ($("#admMsgBody").value || "").trim();
+      if (!body) { previewEl.hidden = true; return toast("Scrivi prima il testo", "warn"); }
+      const paras = body.split(/\n{2,}/).map((p) => `<p style="margin:0 0 10px">${escH(p).replace(/\n/g, "<br>")}</p>`).join("");
+      previewEl.innerHTML = `<div class="pv-h">Ciao [nome ospite],</div>${paras}<div class="pv-sign">Un caro saluto,<br>${escH(casa)}</div>`;
+      previewEl.hidden = false;
+    };
+
+    // invio
+    $("#admMsgSend").onclick = () => {
+      const subject = ($("#admMsgSubject").value || "").trim();
+      const messaggio = ($("#admMsgBody").value || "").trim();
+      if (!subject) return toast("Aggiungi un oggetto", "warn");
+      if (!messaggio) return toast("Scrivi il messaggio", "warn");
+      const destinatari = clienti.filter((c) => state.msgSel.has(c.email)).map((c) => ({ email: c.email, nome: c.nome }));
+      if (!destinatari.length) return toast("Seleziona almeno un cliente", "warn");
+      if (!confirm(`Inviare questa email a ${destinatari.length} client${destinatari.length === 1 ? "e" : "i"}?`)) return;
+      inviaMessaggio(subject, messaggio, destinatari, $("#admMsgSend"));
+    };
+  }
+
+  async function inviaMessaggio(subject, messaggio, destinatari, btn) {
+    if (!sb) { toast(`Inviato a ${destinatari.length} clienti (demo)`, ""); state.msgSel = new Set(); renderMessaggi(); return; }
+    const old = btn.textContent; btn.disabled = true; btn.textContent = "Invio in corso…";
+    try {
+      const { data: sess } = await sb.auth.getSession();
+      const token = sess && sess.session ? sess.session.access_token : null;
+      if (!token) throw new Error("sessione scaduta");
+      const url = `${IG.supabaseUrl.replace(/\/$/, "")}/functions/v1/messaggio-ospiti`;
+      const r = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", apikey: IG.supabaseAnonKey, Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ subject, messaggio, destinatari }),
+      });
+      const out = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(out.error || `HTTP ${r.status}`);
+      toast(`Email inviata a ${out.inviate != null ? out.inviate : destinatari.length} clienti`, "");
+      state.msgSel = new Set(); renderMessaggi();
+    } catch (_) {
+      toast("Invio non riuscito. Riprova.", "err");
+    } finally { btn.disabled = false; btn.textContent = old; }
   }
 
   async function logout() {

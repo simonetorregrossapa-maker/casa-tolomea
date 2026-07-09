@@ -8,6 +8,29 @@
 
 window.SITE = {
 
+  /* ── BANNER ANNUNCI (barra animata in cima al sito) ─────────────────────
+     Banner promozionali animati: offerte last-minute, sconti stagionali,
+     avvisi. Per attivarli metti `attivo: true` e scrivi i messaggi (bilingui).
+     Se ci sono più messaggi ruotano automaticamente. `id`: cambialo quando
+     lanci una NUOVA promo, così ricompare anche a chi aveva chiuso la barra. */
+  banner: {
+    attivo: false,               // true = mostra la barra
+    id: "promo-2026",            // cambia id a ogni nuova campagna
+    chiudibile: true,            // l'ospite può chiudere la barra (ricordata)
+    tono: "accent",              // accent (terracotta) · scuro · chiaro
+    intervallo: 5,               // secondi tra un messaggio e l'altro
+    messaggi: [
+      { testo: { it: "Offerta last-minute: -10% sui soggiorni di questa settimana",
+                 en: "Last-minute deal: -10% on stays this week" },
+        link: "#prenota",
+        cta: { it: "Richiedi le date", en: "Check dates" } },
+      { testo: { it: "Prenoti diretto: miglior prezzo e nessuna commissione",
+                 en: "Book direct: best price and no commission" },
+        link: "#prezzi",
+        cta: { it: "Vedi i prezzi", en: "See rates" } },
+    ],
+  },
+
   /* ── LA CASA ───────────────────────────────────────────────────────── */
   casa: {
     nome:       "Casa Tolomea",

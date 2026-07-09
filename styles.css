@@ -26,6 +26,7 @@
   --maxw: 1240px;
   --gutter: clamp(20px, 5vw, 64px);
   --trust-h: 40px;
+  --banner-h: 0px;   /* impostata da renderBanner quando la barra annunci è attiva */
   --radius: 18px;
   --radius-lg: 28px;
   --shadow-sm: 0 2px 10px rgba(31,29,24,.06);
@@ -109,7 +110,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; line-height
 
 /* ── Header ────────────────────────────────────────────────────────── */
 .header {
-  position: fixed; top: var(--trust-h); left: 0; right: 0; z-index: 100;
+  position: fixed; top: calc(var(--trust-h) + var(--banner-h)); left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
   padding: 18px var(--gutter);
   transition: top .4s var(--ease), background .4s var(--ease), backdrop-filter .4s, box-shadow .4s, padding .4s, color .4s;
@@ -151,7 +152,7 @@ body.menu-open .burger span:nth-child(2){ opacity: 0; }
 body.menu-open .burger span:nth-child(3){ transform: translateY(-8px) rotate(-45deg); }
 
 /* ── Hero ──────────────────────────────────────────────────────────── */
-.hero { position: relative; min-height: calc(100svh - var(--trust-h)); display: flex; align-items: flex-end; overflow: hidden; color: #fff; }
+.hero { position: relative; min-height: calc(100svh - var(--trust-h) - var(--banner-h)); display: flex; align-items: flex-end; overflow: hidden; color: #fff; }
 html.cap-hero .hero { min-height: 680px; height: 680px; }
 .hero__media { position: absolute; inset: 0; z-index: 0; }
 .hero__media img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.12); will-change: transform; }
@@ -178,6 +179,63 @@ html.cap-hero .hero { min-height: 680px; height: 680px; }
 .trustbar__track span { display: inline-flex; align-items: center; gap: .6rem; font-size: .82rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 600; }
 .trustbar__track svg { width: 15px; height: 15px; color: var(--c-accent-soft); }
 @keyframes marquee { to { transform: translateX(-50%); } }
+
+/* ── Banner annunci (barra promo animata) ──────────────────────────────
+   In flusso, primo elemento della pagina: spinge sotto trustbar/header
+   (che leggono --banner-h). Sfondo con leggero sheen animato; i messaggi
+   sfumano in dissolvenza quando ruotano. */
+.promo[hidden] { display: none; }   /* display:flex sotto vincerebbe su [hidden] */
+.promo {
+  position: relative; z-index: 101; overflow: hidden;
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  padding: 9px clamp(48px, 6vw, 64px) 9px clamp(16px, 5vw, 24px);
+  font-family: var(--font-body); font-size: .92rem; line-height: 1.35;
+  background: var(--c-accent); color: #fff;
+  animation: promoDrop .45s var(--ease) both;
+}
+.promo[data-tono="scuro"]  { background: var(--c-ink); color: var(--c-bg); }
+.promo[data-tono="chiaro"] { background: var(--c-bg-2); color: var(--c-ink); }
+.promo::before {   /* sheen che attraversa la barra */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.22) 48%, transparent 66%);
+  background-size: 220% 100%; animation: promoSheen 6.5s linear infinite;
+}
+.promo[data-tono="chiaro"]::before { background: linear-gradient(115deg, transparent 30%, rgba(0,0,0,.06) 48%, transparent 66%); background-size: 220% 100%; }
+.promo--closing { animation: promoDrop .35s var(--ease) reverse both; }
+.promo__wrap { position: relative; display: grid; }
+.promo__msg {
+  grid-area: 1 / 1; display: inline-flex; align-items: center; gap: 12px;
+  justify-content: center; flex-wrap: wrap; text-align: center;
+  color: inherit; text-decoration: none; animation: promoIn .5s var(--ease) both;
+}
+.promo__msg[hidden] { display: none; }
+.promo__text { font-weight: 500; }
+.promo__cta {
+  display: inline-flex; align-items: center; gap: .35em; white-space: nowrap;
+  font-weight: 700; padding: 3px 12px; border-radius: 100px;
+  background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.35);
+}
+.promo[data-tono="chiaro"] .promo__cta { background: var(--c-accent); color: #fff; border-color: transparent; }
+a.promo__msg:hover .promo__cta { background: rgba(255,255,255,.32); }
+.promo[data-tono="chiaro"] a.promo__msg:hover .promo__cta { background: var(--c-accent-soft); }
+.promo__x {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  width: 30px; height: 30px; border-radius: 50%; font-size: 22px; line-height: 1;
+  color: inherit; opacity: .8; display: grid; place-items: center; transition: opacity .2s, background .2s;
+}
+.promo__x:hover { opacity: 1; background: rgba(255,255,255,.16); }
+.promo[data-tono="chiaro"] .promo__x:hover { background: rgba(0,0,0,.08); }
+@keyframes promoDrop { from { margin-top: calc(-1 * var(--banner-h)); opacity: 0; } to { margin-top: 0; opacity: 1; } }
+@keyframes promoIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes promoSheen { to { background-position: -120% 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .promo, .promo__msg { animation: none; }
+  .promo::before { display: none; }
+}
+@media (max-width: 560px) {
+  .promo { font-size: .84rem; padding-left: 14px; }
+  .promo__cta { padding: 2px 10px; }
+}
 
 /* ── Intro / La casa ───────────────────────────────────────────────── */
 .intro-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(32px, 6vw, 90px); align-items: center; }

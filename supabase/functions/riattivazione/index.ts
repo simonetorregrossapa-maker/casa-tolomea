@@ -63,14 +63,15 @@ function template(s: Record<string, string>, nome: string): { subject: string; h
   const site = s.site_url || "";
   const pct = s.incentivo_pct || "10";
   const primo = nome ? nome.split(" ")[0] : "";
-  const subject = `${casa} ti aspetta di nuovo — ${pct}% sul diretto`;
+  const subject = `${casa} ti aspetta di nuovo — ${pct}% di sconto per te`;
   const html = `
     <div style="font-family:Georgia,serif;max-width:560px;margin:auto;color:#2b2b28;line-height:1.6">
       <h2 style="color:#b5654a;font-weight:normal">Ci manchi${primo ? ", " + primo : ""} 🌅</h2>
-      <p>È passato un po' dal tuo soggiorno a <strong>${casa}</strong>, e Mondello è sempre lì che aspetta:
-         il mare a due passi, la casa pronta per te.</p>
-      <p>Se hai voglia di tornare, prenotando <strong>direttamente dal nostro sito</strong> hai il
-         <strong>${pct}% di sconto</strong> rispetto ai portali — nessuna commissione, miglior prezzo garantito.</p>
+      <p>È passato un po' dal tuo soggiorno a <strong>${casa}</strong>, e Mondello ti aspetta:
+         la casa è pronta per accoglierti di nuovo.</p>
+      <p>Se hai voglia di tornare, come <strong>ospite di ritorno</strong> hai un
+         <strong>${pct}% di sconto sul prezzo del nostro sito</strong> — un prezzo riservato solo a te,
+         già più basso di quello dei portali. Scrivici le date e lo applichiamo noi alla tua prenotazione.</p>
       ${site ? `<p style="text-align:center;margin:26px 0">
         <a href="${site}" style="background:#b5654a;color:#fff;text-decoration:none;padding:12px 26px;border-radius:100px;font-family:Arial,sans-serif">Guarda le date libere</a>
       </p>` : ""}

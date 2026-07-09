@@ -85,7 +85,7 @@ function template(s: Record<string, string>, r: any): { subject: string; html: s
 <tr><td style="background:#a8472f;padding:16px 26px;color:#f6e7df;font-family:Georgia,serif;font-size:18px">${casa}<div style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#e9c9bb;margin-top:2px">Mondello · Sicilia</div></td></tr>
 <tr><td style="padding:24px 26px 20px">
   <h1 style="margin:0 0 12px;font-family:Georgia,serif;font-weight:normal;font-size:23px;color:#a8472f">Com'è andata${nome ? ", " + nome : ""}?</h1>
-  <p style="margin:0 0 14px;font-size:15px;line-height:1.62;color:#3a352d">Grazie per aver scelto <b>${casa}</b>. Speriamo che Mondello ti abbia regalato giorni belli, con il mare a due passi.</p>
+  <p style="margin:0 0 14px;font-size:15px;line-height:1.62;color:#3a352d">Grazie per aver scelto <b>${casa}</b>. Speriamo che Mondello ti abbia regalato giorni belli.</p>
   <p style="margin:0 0 4px;font-size:15px;line-height:1.62;color:#3a352d"><b>Ci lasceresti una recensione?</b> Il tuo giudizio fa una differenza enorme e aiuta altri ospiti a sceglierci con fiducia.</p>
   ${btn}
   <div style="border-top:1px solid #e7dccd;margin:22px 0 16px"></div>

@@ -95,7 +95,7 @@ Deno.serve(async (req) => {
     if (r.email) {
       const inner = `
         <h1 style="margin:0 0 10px;font-family:Georgia,serif;font-weight:normal;font-size:23px;color:#a8472f">Ciao ${esc(String(r.nome || "").split(" ")[0])},</h1>
-        <p style="margin:0 0 14px;font-size:15px;line-height:1.62;color:#3a352d">grazie per aver scelto di prenotare <b>direttamente con noi</b>. Abbiamo ricevuto la tua richiesta per Casa Tolomea, a 700 m dal mare di Mondello, e la stiamo verificando.</p>
+        <p style="margin:0 0 14px;font-size:15px;line-height:1.62;color:#3a352d">grazie per aver scelto di prenotare <b>direttamente con noi</b>. Abbiamo ricevuto la tua richiesta per Casa Tolomea a Mondello e la stiamo verificando.</p>
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#fff;border:1px solid #e7dccd;border-radius:9px;font-size:14px">
         ${row("Il tuo soggiorno", date)}${row("Ospiti", esc(r.ospiti))}<tr><td style="padding:10px 16px;color:#6d685d">Totale stimato</td><td style="padding:10px 16px;text-align:right;font-family:Georgia,serif;font-size:18px;color:#a8472f">${euro(r.totale_stimato)}</td></tr></table>
         <p style="margin:16px 0 14px;font-size:15px;line-height:1.62;color:#3a352d">Ti rispondiamo <b>entro 24 ore</b> con la conferma della disponibilità. Alla conferma ti invieremo i dati per versare la <b>caparra del 30% con bonifico</b>; il saldo lo paghi comodamente all'arrivo, tassa di soggiorno inclusa.</p>
