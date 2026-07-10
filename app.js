@@ -290,6 +290,11 @@
   }
 
   function renderJsonLd() {
+    // Se in index.html c'è già uno structured data STATICO (id="ldJson" data-static),
+    // quello vince: è più completo e i crawler (Google, Bing, crawler AI/GEO) lo
+    // leggono senza eseguire JS. Non sovrascriverlo con la versione JS più snella.
+    const statico = document.getElementById("ldJson");
+    if (statico && statico.hasAttribute("data-static")) return;
     const dominio = (S.seo?.dominio || "").replace(/\/$/, "");
     const data = {
       "@context": "https://schema.org",

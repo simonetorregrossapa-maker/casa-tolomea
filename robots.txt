@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
+Disallow: /gestione.html
+Disallow: /admin.js
+Disallow: /_test-8prompt.html
+Disallow: /stampa/
 
 Sitemap: https://www.casatolomea.it/sitemap.xml
