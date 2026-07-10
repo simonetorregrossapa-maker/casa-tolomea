@@ -34,16 +34,19 @@
 <!-- ============================================================================
      STRUCTURED DATA (schema.org / JSON-LD)
      Statico e in italiano: i crawler di Google lo leggono senza eseguire JS.
-     Descrive la casa vacanza, le FAQ e le recensioni. Se cambi prezzi, ospiti,
-     indirizzo o recensioni in config.js, aggiorna anche i valori qui sotto.
-     Validalo su https://search.google.com/test/rich-results
+     Tipo LodgingBusiness (struttura ricettiva) + FAQPage. NON usare VacationRental:
+     è un programma partner di Google con requisiti rigidi (checkinTime, 8+ foto,
+     identifier, containsPlace...) che un sito indipendente non soddisfa → errori.
+     Niente markup recensioni/aggregateRating: Google ignora le recensioni
+     self-serving (attività che recensisce se stessa). Se cambi prezzi/indirizzo
+     in config.js, aggiorna anche qui. Valida su search.google.com/test/rich-results
 ============================================================================ -->
 <script type="application/ld+json" id="ldJson" data-static>
 {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": ["VacationRental", "LodgingBusiness"],
+      "@type": "LodgingBusiness",
       "@id": "https://www.casatolomea.it/#casa",
       "name": "Casa Tolomea",
       "description": "Casa vacanze indipendente al piano terra a Mondello, a 700 m dal mare. Fino a 6 ospiti, 2 camere matrimoniali, cucina attrezzata, giardino e patio. Prenoti diretto col proprietario: nessuna commissione e miglior prezzo.",
@@ -66,14 +69,11 @@
         "longitude": 13.3184001
       },
       "hasMap": "https://www.google.com/maps?q=Casa+Tolomea,+Mondello,+Palermo",
-      "telephone": "+39",
-      "priceRange": "€€",
+      "priceRange": "€150–€240",
       "currenciesAccepted": "EUR",
       "numberOfRooms": 2,
       "petsAllowed": true,
       "smokingAllowed": false,
-      "floorSize": { "@type": "QuantitativeValue", "value": 85, "unitCode": "MTK" },
-      "occupancy": { "@type": "QuantitativeValue", "maxValue": 6, "unitText": "ospiti" },
       "knowsLanguage": ["it", "en"],
       "amenityFeature": [
         { "@type": "LocationFeatureSpecification", "name": "Wi-Fi", "value": true },
@@ -83,47 +83,6 @@
         { "@type": "LocationFeatureSpecification", "name": "Parcheggio gratuito", "value": true },
         { "@type": "LocationFeatureSpecification", "name": "Animali ammessi", "value": true },
         { "@type": "LocationFeatureSpecification", "name": "Ingresso indipendente", "value": true }
-      ],
-      "makesOffer": {
-        "@type": "Offer",
-        "priceCurrency": "EUR",
-        "price": "150",
-        "priceSpecification": {
-          "@type": "UnitPriceSpecification",
-          "price": "150",
-          "priceCurrency": "EUR",
-          "minPrice": "150",
-          "maxPrice": "240",
-          "unitText": "notte"
-        },
-        "availability": "https://schema.org/InStock"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "5",
-        "bestRating": "5",
-        "ratingCount": "6",
-        "reviewCount": "6"
-      },
-      "review": [
-        {
-          "@type": "Review",
-          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-          "author": { "@type": "Person", "name": "Antonina" },
-          "reviewBody": "Spaziosa e con tutto il necessario per una vacanza al mare. La cosa migliore sono i proprietari: Alessandro e Marcella hanno fatto di tutto per farci stare bene. 7 minuti a piedi dalla spiaggia."
-        },
-        {
-          "@type": "Review",
-          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-          "author": { "@type": "Person", "name": "Fulvia" },
-          "reviewBody": "Appartamento perfetto, in ottima posizione. Dotato di tutto il necessario, silenzioso e molto confortevole. I proprietari sono stati eccezionali."
-        },
-        {
-          "@type": "Review",
-          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-          "author": { "@type": "Person", "name": "Luisella" },
-          "reviewBody": "Marcella ed Alessandro molto gentili: ci hanno accolto con un cocktail di benvenuto. La casa è grande, comoda e in una posizione strategica ma molto tranquilla."
-        }
       ]
     },
     {
