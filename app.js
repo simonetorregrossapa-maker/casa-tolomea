@@ -12,6 +12,12 @@
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
     || /[?&]static\b/.test(location.search);
 
+  // Campagna "ospite di ritorno": attivata dal link ?bentornato (o ?rientro)
+  // che Alessandro incolla nei messaggi WhatsApp agli ex-ospiti. Mostra un
+  // saluto in cima e tagga la richiesta come campagna (nel campo note), così
+  // le prenotazioni recuperate sono contabili nel pannello e nelle email.
+  const RITORNO = /[?&](bentornato|rientro|ritorno)\b/i.test(location.search);
+
   /* ── i18n (IT/EN) ─────────────────────────────────────────────────── */
   let currentLang = localStorage.getItem("lang") === "en" ? "en" : "it";
   const tIt = (v) => (v && typeof v === "object") ? (v.it ?? v.en ?? "") : (v ?? "");
@@ -126,6 +132,9 @@
       incentivoPct: S.incentivo?.percentuale,
       incentivoPortale: `${S.valuta || "€"}${S.incentivo?.prezzoPortale}`,
       incentivoDiretto: `${S.valuta || "€"}${S.incentivo?.prezzoDiretto}`,
+      // Risparmio in euro a notte (loss-framing): differenza portale − diretto.
+      // Calcolato qui così resta in sync se cambi i prezzi in config.js.
+      incentivoRisparmio: `${S.valuta || "€"}${Math.max(0, (S.incentivo?.prezzoPortale || 0) - (S.incentivo?.prezzoDiretto || 0))}`,
     };
     $$("[data-bind]").forEach((el) => {
       const v = map[el.getAttribute("data-bind")];
@@ -151,6 +160,21 @@
     const b = S.banner || {};
     const setH = (px) => document.documentElement.style.setProperty("--banner-h", (px || 0) + "px");
     if (!el) return;
+
+    // Campagna ospite di ritorno: il saluto "bentornato" ha la precedenza sul
+    // banner promo standard e non è chiudibile (è il contesto di tutta la visita).
+    if (RITORNO && S.ritorno?.banner) {
+      el.dataset.tono = "accent";
+      const cta = S.ritorno.cta ? `<span class="promo__cta" ${bi(S.ritorno.cta)}>${escAttr(t(S.ritorno.cta))}</span>` : "";
+      el.innerHTML = `<div class="promo__wrap"><a class="promo__msg" href="#prenota"><span class="promo__text" ${bi(S.ritorno.banner)}>${escAttr(t(S.ritorno.banner))}</span>${cta}</a></div>`;
+      el.hidden = false;
+      setH(el.offsetHeight);
+      requestAnimationFrame(() => setH(el.offsetHeight));
+      window.addEventListener("load", () => setH(el.offsetHeight), { once: true });
+      if (bannerTimer) { clearInterval(bannerTimer); bannerTimer = null; }
+      return;
+    }
+
     const msgs = (b.messaggi || []).filter((m) => m && m.testo);
     const chiuso = b.chiudibile !== false && localStorage.getItem("promo-hidden") === (b.id || "");
     if (!b.attivo || !msgs.length || chiuso) {
@@ -649,6 +673,7 @@
     const ci = $("#checkin").value, co = $("#checkout").value, g = $("#ospiti").value;
     const est = updateEstimate();
     let s = `Richiesta prenotazione — ${S.casa?.nome}\n`;
+    if (RITORNO && S.ritorno?.tag) s += `(${S.ritorno.tag})\n`;
     s += `Check-in: ${ci || "—"}\nCheck-out: ${co || "—"}\nOspiti: ${g}\n`;
     if (est) s += `Totale stimato: ${cur}${est.total} (${est.n} notti)\n`;
     const nome = $("#nome").value, email = $("#email").value, tel = $("#tel").value, note = $("#note").value;
@@ -685,9 +710,17 @@
     const btn = form.querySelector('button[type="submit"]');
     btn.disabled = true; const prev = btn.textContent; btn.textContent = currentLang === "en" ? "Sending…" : "Invio in corso…";
 
+    // Tag campagna ospiti-di-ritorno: prependiamo il marcatore alle note (colonna
+    // già esistente, così non alteriamo lo schema né la Edge Function che invia le
+    // email). Resta visibile nel pannello gestione e nell'email al proprietario.
+    const rawNote = $("#note").value.trim();
+    const note = (RITORNO && S.ritorno?.tag)
+      ? `[${S.ritorno.tag}]${rawNote ? " " + rawNote : ""}`
+      : rawNote;
+
     const payload = {
       casa: S.casa?.nome, checkin: ci, checkout: co, ospiti: $("#ospiti").value,
-      nome, email, telefono: $("#tel").value.trim(), note: $("#note").value.trim(),
+      nome, email, telefono: $("#tel").value.trim(), note,
       totale_stimato: est ? est.total : null, creato: new Date().toISOString(),
     };
 

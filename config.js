@@ -31,6 +31,23 @@ window.SITE = {
     ],
   },
 
+  /* ── CAMPAGNA "OSPITE DI RITORNO" ───────────────────────────────────────
+     Attivata dal link ?bentornato (o ?rientro) che Alessandro incolla nei
+     messaggi WhatsApp agli ex-ospiti. Quando è attiva:
+       • in cima al sito compare un saluto "bentornato" con CTA al form;
+       • la richiesta viene taggata con `tag` nel campo note, così nel pannello
+         gestione (e nelle email) vedi quali prenotazioni arrivano dalla campagna
+         → sono quelle su cui calcolare la provvigione recuperata.
+     Nessun perk extra: si comunica solo che il diretto costa meno della OTA. */
+  ritorno: {
+    tag: "Ospite di ritorno · campagna WhatsApp",
+    banner: {
+      it: "Bentornato a Casa Tolomea. Prenota di nuovo diretto: stessa casa, prezzo più basso di Booking, nessuna commissione.",
+      en: "Welcome back to Casa Tolomea. Book direct again: same house, lower than Booking, no commission.",
+    },
+    cta: { it: "Vedi le date libere", en: "See available dates" },
+  },
+
   /* ── LA CASA ───────────────────────────────────────────────────────── */
   casa: {
     nome:       "Casa Tolomea",

@@ -337,6 +337,7 @@ a.promo__msg:hover .promo__cta { background: rgba(255,255,255,.32); }
 .incentive__body p { font-size: .9rem; color: var(--c-muted); margin-top: 2px; }
 .incentive__body s { opacity: .7; }
 .incentive__body b:last-child, .incentive__body p b { color: var(--c-accent); font-weight: 700; }
+.incentive__body p.incentive__save { margin-top: 6px; color: var(--c-ink); font-weight: 500; }
 .book-perks { list-style: none; padding: 0; margin-top: 1.6rem; display: flex; flex-direction: column; gap: 14px; }
 .book-perks li { display: flex; align-items: center; gap: 12px; font-weight: 600; }
 .book-perks svg { width: 22px; height: 22px; color: var(--c-accent); flex: none; }
@@ -537,8 +538,88 @@ a.promo__msg:hover .promo__cta { background: rgba(255,255,255,.32); }
 .bt-score { color: var(--c-ink); } .bt-score b { font-size: 1rem; }
 
 /* ── Reduced motion ────────────────────────────────────────────────── */
+/* ============================================================================
+   MOTION KIT — vocabolario di movimento "stile 21st.dev" in palette calda.
+   Layer puramente presentazionale e additivo: niente markup nuovo obbligatorio,
+   niente React. Effetti: border-beam sui CTA grandi, sheen all'hover, spotlight
+   che segue il cursore sulle card, aurora dietro la CTA finale. Le variabili
+   --mx/--my e la classe .is-magnetic sono impostate da motion-kit.js.
+   Tutto si spegne da solo sotto prefers-reduced-motion (blocco in fondo).
+============================================================================ */
+
+/* Angolo animabile per il border-beam. Se il browser non supporta @property,
+   il beam resta statico (nessuna rottura). */
+@property --beam-angle { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+@keyframes beam-rotate { to { --beam-angle: 360deg; } }
+@keyframes mk-sheen   { to { left: 130%; } }
+@keyframes mk-aurora  {
+  0%   { transform: translate(-8%, -6%) scale(1);   }
+  50%  { transform: translate(8%, 6%)  scale(1.15); }
+  100% { transform: translate(-8%, -6%) scale(1);   }
+}
+
+/* I CTA primari ospitano beam + sheen: serve contenimento e stacking. */
+.btn--primary { position: relative; overflow: hidden; isolation: isolate; }
+
+/* Sheen: un riflesso obliquo che attraversa il bottone all'hover. */
+.btn--primary::before {
+  content: ""; position: absolute; top: 0; left: -120%; width: 55%; height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.38), transparent);
+  transform: skewX(-18deg); pointer-events: none; z-index: 2;
+}
+.btn--primary:hover::before { animation: mk-sheen .8s ease; }
+
+/* Border-beam: luce oro che circola sul bordo dei CTA grandi (i "money button":
+   hero, invio richiesta, CTA finale — tutti .btn--lg, così non tocco l'HTML). */
+.btn--primary.btn--lg::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px;
+  background: conic-gradient(from var(--beam-angle),
+    transparent 0 68%, rgba(232,192,125,.55) 80%, #fff 88%,
+    rgba(232,192,125,.55) 96%, transparent 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: beam-rotate 4.5s linear infinite; pointer-events: none; z-index: 1;
+}
+
+/* Movimento magnetico: JS possiede l'intero transform su questi bottoni,
+   quindi disattivo il translateY dell'hover per evitare conflitti. */
+.btn--primary.is-magnetic { transition: transform .18s var(--ease); }
+.btn--primary.is-magnetic:hover { transform: none; }
+
+/* Spotlight: bagliore terracotta che segue il cursore sulle card chiave. */
+.book-card, .review, .season { position: relative; }
+.book-card::after, .review::after, .season::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(340px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(196,106,77,.12), transparent 62%);
+  opacity: 0; transition: opacity .4s var(--ease); z-index: 0;
+}
+.book-card:hover::after, .review:hover::after, .season:hover::after { opacity: 1; }
+/* Sulla card scura dei prezzi il glow vira su oro caldo per restare visibile. */
+.season.is-high::after {
+  background: radial-gradient(340px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(232,192,125,.16), transparent 62%);
+}
+/* Il contenuto delle card resta sopra al glow. */
+.book-card > *, .review > *, .season > * { position: relative; z-index: 1; }
+
+/* Aurora: masse di colore sfocate e lente dietro la CTA finale (sezione oliva). */
+.final { position: relative; overflow: hidden; isolation: isolate; }
+.final::before {
+  content: ""; position: absolute; inset: -30%; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(38% 46% at 25% 30%, rgba(196,106,77,.42), transparent 70%),
+    radial-gradient(34% 42% at 78% 68%, rgba(232,192,125,.32), transparent 70%),
+    radial-gradient(30% 40% at 60% 20%, rgba(124,132,102,.40), transparent 72%);
+  filter: blur(46px); opacity: .9; animation: mk-aurora 16s ease-in-out infinite;
+}
+.final > * { position: relative; z-index: 1; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
   .hero__media img { transform: scale(1); }
   .gsap-ready [data-reveal] { opacity: 1 !important; transform: none !important; }
+  .btn--primary.is-magnetic { transform: none !important; }
+  .final::before { animation: none; }
 }
