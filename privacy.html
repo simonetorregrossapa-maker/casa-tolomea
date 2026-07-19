@@ -6,25 +6,30 @@
 <title>Informativa privacy — Casa Tolomea</title>
 <meta name="robots" content="noindex, follow">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
 <style>
+  :root { --bg: #f6efe4; --ink: #211d16; --muted: #6f695c; --line: #e2d4c0; --accent: #a8472f; --gutter: clamp(20px, 5vw, 72px); --font-display: "Fraunces", Georgia, serif; --font-body: "Karla", system-ui, sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); color: var(--ink); background: var(--bg); }
   .legal { max-width: 74ch; margin-inline: auto; padding: clamp(90px,10vw,140px) var(--gutter) clamp(80px,8vw,120px); }
-  .legal h1 { font-size: clamp(2rem,4.5vw,3rem); margin-bottom: .3em; }
-  .legal h2 { font-size: 1.25rem; margin-top: 2.2em; margin-bottom: .5em; }
-  .legal p, .legal li { color: var(--c-muted); line-height: 1.75; }
+  .legal h1 { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem,4.5vw,3rem); margin-bottom: .3em; }
+  .legal h2 { font-family: var(--font-display); font-weight: 500; font-size: 1.25rem; margin-top: 2.2em; margin-bottom: .5em; }
+  .legal p, .legal li { color: var(--muted); line-height: 1.75; }
   .legal ul { padding-left: 1.2em; margin-top: .4em; }
-  .legal a.back { display: inline-block; margin-bottom: 2em; font-weight: 700; color: var(--c-accent); }
+  .legal a { color: var(--accent); }
+  .legal a.back { display: inline-block; margin-bottom: 2em; font-weight: 700; text-decoration: none; }
 </style>
 </head>
 <body>
 <main class="legal">
-  <a class="back" href="index.html">← Torna al sito</a>
+  <a class="back" href="./">← Torna al sito</a>
   <h1>Informativa sulla privacy</h1>
   <p>Ultimo aggiornamento: <span id="updated"></span></p>
 
   <h2>Titolare del trattamento</h2>
-  <p><span id="titolare">Il proprietario di Casa Tolomea</span>, contattabile via email all'indirizzo <a id="mailLink" href="#"><span id="mailText"></span></a>.</p>
+  <p>Alessandro Li Brizzi (Casa Tolomea), contattabile via email all'indirizzo <a href="mailto:casa.tolomea@tiscali.it">casa.tolomea@tiscali.it</a>.</p>
 
   <h2>Dati raccolti</h2>
   <p>Attraverso il form "Richiedi date" raccogliamo: nome e cognome, email, telefono (facoltativo), date di check-in/check-out, numero di ospiti ed eventuali note lasciate volontariamente.</p>
@@ -38,24 +43,15 @@
   <h2>Servizi terzi utilizzati per l'invio della richiesta</h2>
   <ul>
     <li>Supabase (hosting del database delle richieste)</li>
-    <li>Web3Forms (notifica email al proprietario)</li>
-    <li>EmailJS (email di conferma all'ospite)</li>
+    <li>Resend (invio delle email di notifica e conferma)</li>
   </ul>
   <p>Questi servizi agiscono in qualità di responsabili del trattamento limitatamente alle operazioni tecniche necessarie all'invio e alla conservazione della richiesta.</p>
 
   <h2>Diritti dell'interessato</h2>
   <p>In qualsiasi momento puoi richiedere l'accesso, la rettifica, la cancellazione o la limitazione del trattamento dei tuoi dati, oltre a opporti al trattamento e richiederne la portabilità, scrivendo all'indirizzo email sopra indicato. Hai inoltre diritto di proporre reclamo al Garante per la protezione dei dati personali.</p>
 </main>
-<script src="config.js"></script>
 <script>
-  (function () {
-    var S = window.SITE || {};
-    var y = document.getElementById("updated"); if (y) y.textContent = new Date().toLocaleDateString("it-IT");
-    var t = document.getElementById("titolare"); if (t && S.contatti && S.contatti.proprietario) t.textContent = S.contatti.proprietario + " (" + (S.casa && S.casa.nome) + ")";
-    var email = (S.contatti && S.contatti.email) || "";
-    var mailLink = document.getElementById("mailLink"); var mailText = document.getElementById("mailText");
-    if (email) { mailLink.href = "mailto:" + email; mailText.textContent = email; }
-  })();
+  document.getElementById("updated").textContent = new Date().toLocaleDateString("it-IT");
 </script>
 </body>
 </html>

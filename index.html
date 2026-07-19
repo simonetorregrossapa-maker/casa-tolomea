@@ -1,465 +1,126 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Casa Tolomea — Casa vacanze a Mondello</title>
-<meta name="description" content="Casa vacanze per 6 persone a Mondello, a 700 m dal mare. Prenota direttamente col proprietario: nessuna commissione, miglior prezzo.">
-<link rel="canonical" href="https://www.casatolomea.it/">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Casa Tolomea — Casa vacanze a Mondello</title>
+    <meta name="description" content="Casa vacanze per 6 persone a Mondello, a 700 m dal mare. Prenota direttamente col proprietario: nessuna commissione, miglior prezzo." />
+    <!-- Anteprima del sito: canonical al dominio live per evitare contenuti duplicati. -->
+    <link rel="canonical" href="https://www.casatolomea.it/" />
+    <meta name="theme-color" content="#a8472f" />
 
-<!-- Open Graph / Twitter Card: statici in italiano, letti dai crawler senza
-     eseguire JS (per questo NON seguono il toggle lingua lato client). -->
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Casa Tolomea">
-<meta property="og:title" content="Casa Tolomea — Casa vacanze a Mondello">
-<meta property="og:description" content="Casa vacanze per 6 persone a Mondello, a 700 m dal mare. Prenota direttamente col proprietario: nessuna commissione, miglior prezzo.">
-<meta property="og:url" content="https://www.casatolomea.it/">
-<meta property="og:image" content="https://www.casatolomea.it/assets/social/social.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:locale" content="it_IT">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Casa Tolomea — Casa vacanze a Mondello">
-<meta name="twitter:description" content="Casa vacanze per 6 persone a Mondello, a 700 m dal mare. Prenota direttamente col proprietario: nessuna commissione, miglior prezzo.">
-<meta name="twitter:image" content="https://www.casatolomea.it/assets/social/social.jpg">
+    <!-- Open Graph / Twitter Card: statici in italiano, immagini sul dominio live (URL assoluti). -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Casa Tolomea" />
+    <meta property="og:title" content="Casa Tolomea — Casa vacanze a Mondello" />
+    <meta property="og:description" content="Casa vacanze per 6 persone a Mondello, a 700 m dal mare. Prenota direttamente col proprietario: nessuna commissione, miglior prezzo." />
+    <meta property="og:url" content="https://www.casatolomea.it/" />
+    <meta property="og:image" content="https://www.casatolomea.it/assets/social/social.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="it_IT" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Casa Tolomea — Casa vacanze a Mondello" />
+    <meta name="twitter:description" content="Casa vacanze per 6 persone a Mondello, a 700 m dal mare. Prenota direttamente col proprietario: nessuna commissione, miglior prezzo." />
+    <meta name="twitter:image" content="https://www.casatolomea.it/assets/social/social.jpg" />
 
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
-
-<!-- ============================================================================
-     STRUCTURED DATA (schema.org / JSON-LD)
-     Statico e in italiano: i crawler di Google lo leggono senza eseguire JS.
-     Tipo LodgingBusiness (struttura ricettiva) + FAQPage. NON usare VacationRental:
-     è un programma partner di Google con requisiti rigidi (checkinTime, 8+ foto,
-     identifier, containsPlace...) che un sito indipendente non soddisfa → errori.
-     Niente markup recensioni/aggregateRating: Google ignora le recensioni
-     self-serving (attività che recensisce se stessa). Se cambi prezzi/indirizzo
-     in config.js, aggiorna anche qui. Valida su search.google.com/test/rich-results
-============================================================================ -->
-<script type="application/ld+json" id="ldJson" data-static>
-{
-  "@context": "https://schema.org",
-  "@graph": [
+    <!-- Dati strutturati: LodgingBusiness + FAQPage (rich snippet su Google).
+         Descrivono la struttura reale al dominio live, letti dai crawler. -->
+    <script type="application/ld+json">
     {
-      "@type": "LodgingBusiness",
-      "@id": "https://www.casatolomea.it/#casa",
-      "name": "Casa Tolomea",
-      "description": "Casa vacanze indipendente al piano terra a Mondello, a 700 m dal mare. Fino a 6 ospiti, 2 camere matrimoniali, cucina attrezzata, giardino e patio. Prenoti diretto col proprietario: nessuna commissione e miglior prezzo.",
-      "url": "https://www.casatolomea.it/",
-      "image": [
-        "https://www.casatolomea.it/assets/galleria/hero.webp",
-        "https://www.casatolomea.it/assets/social/social.jpg"
-      ],
-      "brand": { "@type": "Brand", "name": "Casa Tolomea" },
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Mondello",
-        "addressRegion": "Sicilia",
-        "addressCountry": "IT",
-        "postalCode": "90151"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": 38.2067673,
-        "longitude": 13.3184001
-      },
-      "hasMap": "https://www.google.com/maps?q=Casa+Tolomea,+Mondello,+Palermo",
-      "priceRange": "€150–€240",
-      "currenciesAccepted": "EUR",
-      "numberOfRooms": 2,
-      "petsAllowed": true,
-      "smokingAllowed": false,
-      "knowsLanguage": ["it", "en"],
-      "amenityFeature": [
-        { "@type": "LocationFeatureSpecification", "name": "Wi-Fi", "value": true },
-        { "@type": "LocationFeatureSpecification", "name": "Aria condizionata", "value": true },
-        { "@type": "LocationFeatureSpecification", "name": "Cucina attrezzata", "value": true },
-        { "@type": "LocationFeatureSpecification", "name": "Giardino e patio", "value": true },
-        { "@type": "LocationFeatureSpecification", "name": "Parcheggio gratuito", "value": true },
-        { "@type": "LocationFeatureSpecification", "name": "Animali ammessi", "value": true },
-        { "@type": "LocationFeatureSpecification", "name": "Ingresso indipendente", "value": true }
-      ]
-    },
-    {
-      "@type": "FAQPage",
-      "@id": "https://www.casatolomea.it/#faq",
-      "mainEntity": [
+      "@context": "https://schema.org",
+      "@graph": [
         {
-          "@type": "Question",
-          "name": "Come funziona la prenotazione? Devo pagare online?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Nessun pagamento online. Ci invii la richiesta con le tue date dal sito e ti rispondiamo entro 24 ore. Alla conferma versi una caparra del 30% con bonifico; il saldo lo paghi all'arrivo. Semplice e diretto, senza intermediari." }
+          "@type": "LodgingBusiness",
+          "@id": "https://www.casatolomea.it/#casa",
+          "name": "Casa Tolomea",
+          "description": "Casa vacanze indipendente al piano terra a Mondello, a 700 m dal mare. Fino a 6 ospiti, 2 camere matrimoniali, cucina attrezzata, giardino e patio. Prenoti diretto col proprietario: nessuna commissione e miglior prezzo.",
+          "url": "https://www.casatolomea.it/",
+          "image": [
+            "https://www.casatolomea.it/assets/galleria/hero.webp",
+            "https://www.casatolomea.it/assets/social/social.jpg"
+          ],
+          "brand": { "@type": "Brand", "name": "Casa Tolomea" },
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Mondello",
+            "addressRegion": "Sicilia",
+            "addressCountry": "IT",
+            "postalCode": "90151"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 38.2067673,
+            "longitude": 13.3184001
+          },
+          "hasMap": "https://www.google.com/maps?q=Casa+Tolomea,+Mondello,+Palermo",
+          "priceRange": "€150–€240",
+          "currenciesAccepted": "EUR",
+          "numberOfRooms": 2,
+          "petsAllowed": true,
+          "smokingAllowed": false,
+          "knowsLanguage": ["it", "en"],
+          "amenityFeature": [
+            { "@type": "LocationFeatureSpecification", "name": "Wi-Fi", "value": true },
+            { "@type": "LocationFeatureSpecification", "name": "Aria condizionata", "value": true },
+            { "@type": "LocationFeatureSpecification", "name": "Cucina attrezzata", "value": true },
+            { "@type": "LocationFeatureSpecification", "name": "Giardino e patio", "value": true },
+            { "@type": "LocationFeatureSpecification", "name": "Parcheggio gratuito", "value": true },
+            { "@type": "LocationFeatureSpecification", "name": "Animali ammessi", "value": true },
+            { "@type": "LocationFeatureSpecification", "name": "Ingresso indipendente", "value": true }
+          ]
         },
         {
-          "@type": "Question",
-          "name": "Perché conviene prenotare qui invece che su Booking?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Prenotando diretto salti le commissioni del portale: paghi fino a circa il 20% in meno rispetto a Booking e parli direttamente con Alessandro e Marcella, che vivono nella stessa villa e ti accolgono di persona." }
-        },
-        {
-          "@type": "Question",
-          "name": "A che ora sono il check-in e il check-out?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Check-in dalle 16:00, check-out entro le 10:00. Siamo host residenti: se hai un aereo a orari scomodi scrivici, cerchiamo sempre di venirti incontro con arrivo e partenza." }
-        },
-        {
-          "@type": "Question",
-          "name": "Come arrivo alla casa e dove parcheggio?",
-          "acceptedAnswer": { "@type": "Answer", "text": "La casa è a Mondello, a 700 m dalla spiaggia; davanti c'è la navetta per il mare. Il parcheggio lungo la via è gratuito. Dall'aeroporto di Palermo (21 km) puoi organizzare con noi un transfer privato a 50 € a tratta." }
-        },
-        {
-          "@type": "Question",
-          "name": "Sono ammessi gli animali?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Sì, gli animali domestici sono i benvenuti, gratuitamente. Faccelo sapere nella richiesta così prepariamo tutto." }
-        },
-        {
-          "@type": "Question",
-          "name": "La casa è adatta alle famiglie con bambini?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Assolutamente. La casa ospita fino a 6 persone, è tutta al piano terra con ingresso indipendente, giardino e patio; culla e lettino sono gratuiti su richiesta. La spiaggia di Mondello, con acqua bassa e sabbia, è a pochi minuti." }
-        },
-        {
-          "@type": "Question",
-          "name": "Cosa è incluso nel prezzo? Ci sono costi nascosti o cauzione?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Il prezzo è tutto compreso: pulizia finale, tassa di soggiorno, biancheria e asciugamani, Wi-Fi e aria condizionata sono già inclusi. Nessun costo extra e nessuna cauzione." }
+          "@type": "FAQPage",
+          "@id": "https://www.casatolomea.it/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Come funziona la prenotazione? Devo pagare online?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Nessun pagamento online. Ci invii la richiesta con le tue date dal sito e ti rispondiamo entro 24 ore. Alla conferma versi una caparra del 30% con bonifico; il saldo lo paghi all'arrivo. Semplice e diretto, senza intermediari." }
+            },
+            {
+              "@type": "Question",
+              "name": "Perché conviene prenotare qui invece che su Booking?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Prenotando diretto salti le commissioni del portale: paghi fino a circa il 20% in meno rispetto a Booking e parli direttamente con Alessandro e Marcella, che vivono nella stessa villa e ti accolgono di persona." }
+            },
+            {
+              "@type": "Question",
+              "name": "A che ora sono il check-in e il check-out?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Check-in dalle 16:00, check-out entro le 10:00. Siamo host residenti: se hai un aereo a orari scomodi scrivici, cerchiamo sempre di venirti incontro con arrivo e partenza." }
+            },
+            {
+              "@type": "Question",
+              "name": "Come arrivo alla casa e dove parcheggio?",
+              "acceptedAnswer": { "@type": "Answer", "text": "La casa è a Mondello, a 700 m dalla spiaggia; davanti c'è la navetta per il mare. Il parcheggio lungo la via è gratuito. Dall'aeroporto di Palermo (21 km) puoi organizzare con noi un transfer privato a 50 € a tratta." }
+            },
+            {
+              "@type": "Question",
+              "name": "Sono ammessi gli animali?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Sì, gli animali domestici sono i benvenuti, gratuitamente. Faccelo sapere nella richiesta così prepariamo tutto." }
+            },
+            {
+              "@type": "Question",
+              "name": "La casa è adatta alle famiglie con bambini?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Assolutamente. La casa ospita fino a 6 persone, è tutta al piano terra con ingresso indipendente, giardino e patio; culla e lettino sono gratuiti su richiesta. La spiaggia di Mondello, con acqua bassa e sabbia, è a pochi minuti." }
+            },
+            {
+              "@type": "Question",
+              "name": "Cosa è incluso nel prezzo? Ci sono costi nascosti o cauzione?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Il prezzo è tutto compreso: pulizia finale, tassa di soggiorno, biancheria e asciugamani, Wi-Fi e aria condizionata sono già inclusi. Nessun costo extra e nessuna cauzione." }
+            }
+          ]
         }
       ]
     }
-  ]
-}
-</script>
-</head>
-<body>
-
-<!-- Banner annunci (barra animata, renderizzata da renderBanner) -->
-<div class="promo" id="promoBar" role="region" aria-label="Annunci" hidden></div>
-
-<!-- Trust bar -->
-<div class="trustbar" aria-hidden="true">
-  <div class="trustbar__track" id="trustTrack"></div>
-</div>
-
-<!-- Header -->
-<header class="header" id="header">
-  <a href="#top" class="brand">
-    <svg class="mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-      <circle cx="16" cy="16" r="12.5" stroke-width="1.1" opacity="0.5"/>
-      <path d="M7 15.5 L16 7 L25 15.5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M10 14 V23 H22 V14" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M8.5 26.5 q2.5 -2.5 5 0 t5 0 t5 0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    <span data-bind="brand">Casa Tolomea</span>
-  </a>
-  <nav class="nav" aria-label="Principale">
-    <div class="nav-links" id="navLinks">
-      <a href="#casa" data-it="La casa" data-en="The house">La casa</a>
-      <a href="#galleria" data-it="Galleria" data-en="Gallery">Galleria</a>
-      <a href="#servizi" data-it="Servizi" data-en="Amenities">Servizi</a>
-      <a href="#zona" data-it="La zona" data-en="The area">La zona</a>
-      <a href="#prezzi" data-it="Prezzi" data-en="Rates">Prezzi</a>
-      <a href="#recensioni" data-it="Recensioni" data-en="Reviews">Recensioni</a>
-      <a href="#prenota" class="nav-links__cta" data-it="Richiedi date" data-en="Check dates">Richiedi date</a>
-    </div>
-    <button type="button" class="lang-toggle" id="langToggle" aria-label="Switch to English">EN</button>
-    <a href="#prenota" class="btn btn--primary" data-it="Richiedi date" data-en="Check dates">Richiedi date</a>
-    <button class="burger" id="burger" aria-label="Apri menu" aria-expanded="false"><span></span><span></span><span></span></button>
-  </nav>
-</header>
-
-<main id="top">
-
-  <!-- HERO -->
-  <section class="hero" id="hero">
-    <div class="hero__media">
-      <img id="heroImg" src="assets/galleria/hero.webp" alt="Casa vacanze a Mondello — la veranda di Casa Tolomea" fetchpriority="high" loading="eager">
-    </div>
-    <div class="hero__inner wrap">
-      <p class="kicker kicker--light" data-hero-rise data-it="Mondello · Sicilia" data-en="Mondello · Sicily">Mondello · Sicilia</p>
-      <h1 class="display" data-hero-title>Casa Tolomea</h1>
-      <p class="hero__sub" data-hero-rise data-bind="claim">Casa vacanze a Mondello, a 700 m dal mare</p>
-      <div class="hero__cta" data-hero-rise>
-        <a href="#prenota" class="btn btn--primary btn--lg" data-it="Verifica disponibilità" data-en="Check availability">Verifica disponibilità</a>
-        <a href="#" class="btn btn--on-dark btn--lg" data-whatsapp>
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.82 11.82 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zM6.597 20.13c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.599 5.39l-.999 3.648 3.89-.001zM17.5 14.382c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
-          WhatsApp
-        </a>
-      </div>
-      <div class="hero__facts" data-hero-rise>
-        <div class="hero__fact"><b class="num" data-bind="ospiti">6</b><span data-it="Ospiti" data-en="Guests">Ospiti</span></div>
-        <div class="hero__fact"><b class="num" data-bind="camere">2</b><span data-it="Camere" data-en="Bedrooms">Camere</span></div>
-        <div class="hero__fact"><b class="num" data-bind="bagni">1</b><span data-it="Bagni" data-en="Bathrooms">Bagni</span></div>
-        <div class="hero__fact"><b class="num"><span data-bind="mq">85</span> m²</b><span data-it="Superficie" data-en="Size">Superficie</span></div>
-      </div>
-    </div>
-    <div class="scroll-hint" aria-hidden="true"><span class="line"></span><span data-it="Scorri" data-en="Scroll">Scorri</span></div>
-  </section>
-
-  <!-- LA CASA -->
-  <section class="section" id="casa">
-    <div class="wrap intro-grid">
-      <div class="intro-copy">
-        <p class="kicker" data-reveal="up" data-it="Benvenuti" data-en="Welcome">Benvenuti</p>
-        <h2 class="display" data-reveal="up" data-bind="claim">Casa vacanze a Mondello</h2>
-        <p class="lead" data-reveal="up" data-bind="intro"></p>
-        <div class="stats" id="statsRow">
-          <div class="stat" data-reveal="up"><b class="num" data-count data-bind="ospiti">6</b><span data-it="Posti letto" data-en="Beds">Posti letto</span></div>
-          <div class="stat" data-reveal="up"><b class="num" data-count data-bind="camere">2</b><span data-it="Camere" data-en="Bedrooms">Camere</span></div>
-          <div class="stat" data-reveal="up"><b class="num" data-count data-bind="mq">85</b><span data-it="Metri quadri" data-en="Square metres">Metri quadri</span></div>
-          <div class="stat" data-reveal="up"><b class="num">700<small> m</small></b><span data-it="Dal mare" data-en="From the sea">Dal mare</span></div>
-        </div>
-      </div>
-      <figure class="intro-figure" data-reveal="fade">
-        <img id="introImg" src="assets/galleria/g03.webp" alt="Soggiorno e zona pranzo nella veranda luminosa della casa vacanze a Mondello" loading="lazy">
-        <div class="tag">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <div><b data-it="Prenotazione diretta" data-en="Direct booking">Prenotazione diretta</b><small data-it="Nessuna commissione di intermediari" data-en="No middleman commission">Nessuna commissione di intermediari</small></div>
-        </div>
-      </figure>
-    </div>
-  </section>
-
-  <!-- GALLERIA (horizontal pin) -->
-  <section class="section gallery" id="galleria">
-    <div class="section-head">
-      <p class="kicker" data-reveal="up" data-it="Galleria" data-en="Gallery">Galleria</p>
-      <h2 class="display" data-reveal="up" data-it="Ogni angolo, una vista" data-en="Every corner, a view">Ogni angolo, una vista</h2>
-    </div>
-    <div class="gallery__hint" data-reveal="fade">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span data-it="Tocca una foto per ingrandirla" data-en="Tap a photo to enlarge">Tocca una foto per ingrandirla</span>
-    </div>
-    <div class="gallery__viewport" id="galleryViewport">
-      <div class="gallery__grid" id="galleryTrack"></div>
-    </div>
-  </section>
-
-  <!-- SERVIZI -->
-  <section class="section section--alt" id="servizi">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="kicker" data-reveal="up" data-it="Dotazioni" data-en="Amenities">Dotazioni</p>
-        <h2 class="display" data-reveal="up" data-it="Tutto quello che serve, e di più" data-en="Everything you need, and more">Tutto quello che serve, e di più</h2>
-      </div>
-      <div class="amenities" id="amenitiesGrid"></div>
-
-      <div class="section-head" style="margin-top:clamp(56px,8vw,100px)">
-        <p class="kicker" data-reveal="up" data-it="Gli spazi" data-en="The spaces">Gli spazi</p>
-        <h2 class="display" data-reveal="up" data-it="Due camere e una grande veranda" data-en="Two bedrooms and a large veranda">Due camere e una grande veranda</h2>
-      </div>
-      <div class="spaces" id="spacesGrid"></div>
-
-      <div class="section-head" style="margin-top:clamp(56px,8vw,100px)">
-        <p class="kicker" data-reveal="up" data-it="Tutti i servizi" data-en="All amenities">Tutti i servizi</p>
-        <h2 class="display" data-reveal="up" data-it="Ogni dettaglio, nulla escluso" data-en="Every detail, nothing left out">Ogni dettaglio, nulla escluso</h2>
-      </div>
-      <div class="servizi-full" id="serviziFull"></div>
-    </div>
-  </section>
-
-  <!-- ZONA -->
-  <section class="section" id="zona">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="kicker" data-reveal="up" data-it="La zona" data-en="The area">La zona</p>
-        <h2 class="display" data-reveal="up" data-it="Mondello e Palermo" data-en="Mondello and Palermo">Mondello e Palermo</h2>
-        <p class="lead" data-reveal="up" data-bind="zonaIntro"></p>
-      </div>
-      <div class="zona-grid">
-        <div class="zona-list" id="zonaList" data-reveal="up"></div>
-        <div class="zona-map" data-reveal="fade"><iframe id="mapFrame" loading="lazy" title="Mappa della zona" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PREZZI -->
-  <section class="section section--alt" id="prezzi">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="kicker" data-reveal="up" data-it="Tariffe" data-en="Rates">Tariffe</p>
-        <h2 class="display" data-reveal="up" data-it="Prezzi trasparenti, per l'intera casa" data-en="Transparent pricing, for the whole house">Prezzi trasparenti, per l'intera casa</h2>
-      </div>
-      <div class="seasons" id="seasonsGrid"></div>
-      <p class="price-note" data-reveal="fade" id="priceNote"></p>
-    </div>
-  </section>
-
-  <!-- PRENOTA -->
-  <section class="section book" id="prenota">
-    <div class="wrap book-grid">
-      <div class="book-copy">
-        <p class="kicker" data-reveal="up" data-it="Richiesta di prenotazione" data-en="Booking request">Richiesta di prenotazione</p>
-        <h2 class="display" data-reveal="up" data-html data-it="Prenota diretta.<br>Senza commissioni." data-en="Book direct.<br>No commissions.">Prenota diretta.<br>Senza commissioni.</h2>
-        <p class="lead" data-reveal="up"><span data-it="Scegli le date e inviaci la richiesta: ti rispondiamo entro" data-en="Choose your dates and send us the request: we'll reply within">Scegli le date e inviaci la richiesta: ti rispondiamo entro</span> <b data-bind="rispostaEntro">24 ore</b> <span data-it="con la conferma e i dettagli per il soggiorno." data-en="with confirmation and the stay details.">con la conferma e i dettagli per il soggiorno.</span></p>
-        <div class="incentive" data-reveal="up">
-          <span class="incentive__pct">-<span data-bind="incentivoPct">10</span>%</span>
-          <div class="incentive__body">
-            <b data-it="Prenota diretto e risparmia" data-en="Book direct and save">Prenota diretto e risparmia</b>
-            <p><span data-it="Su Booking" data-en="On Booking">Su Booking</span> <s data-bind="incentivoPortale">€200</s> · <span data-it="Qui" data-en="Here">Qui</span> <b data-bind="incentivoDiretto">€180</b> <span data-it="a notte" data-en="per night">a notte</span></p>
-            <p class="incentive__save"><span data-it="Prenotando su Booking paghi" data-en="Booking here would cost you">Prenotando su Booking paghi</span> <b data-bind="incentivoRisparmio">€60</b> <span data-it="in più a notte, per la stessa casa." data-en="more per night, for the same house.">in più a notte, per la stessa casa.</span></p>
-          </div>
-        </div>
-        <ul class="book-perks" data-reveal="up">
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-it="Miglior prezzo, nessun intermediario" data-en="Best price, no middleman">Miglior prezzo, nessun intermediario</span></li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-it="Contatto diretto col proprietario" data-en="Direct contact with the owner">Contatto diretto col proprietario</span></li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-it="Caparra sicura, saldo all'arrivo" data-en="Secure deposit, balance on arrival">Caparra sicura, saldo all'arrivo</span></li>
-        </ul>
-      </div>
-      <div class="book-card" data-reveal="fade">
-        <h3 data-it="Verifica le date" data-en="Check the dates">Verifica le date</h3>
-        <form id="bookForm" novalidate>
-          <div class="field-row" id="dateFieldRow">
-            <div class="field"><label for="checkin" data-it="Check-in" data-en="Check-in">Check-in</label><input type="text" id="checkin" name="checkin" placeholder="Seleziona data" data-it-ph="Seleziona data" data-en-ph="Select date" autocomplete="off" required readonly></div>
-            <div class="field"><label for="checkout" data-it="Check-out" data-en="Check-out">Check-out</label><input type="text" id="checkout" name="checkout" placeholder="Seleziona data" data-it-ph="Seleziona data" data-en-ph="Select date" autocomplete="off" required readonly></div>
-            <div class="datepicker" id="datePicker" aria-hidden="true"></div>
-          </div>
-          <div class="field">
-            <label for="ospiti" data-it="Ospiti" data-en="Guests">Ospiti</label>
-            <select id="ospiti" name="ospiti"></select>
-          </div>
-          <div class="estimate empty" id="estimate" data-it="Inserisci le date per vedere il preventivo." data-en="Enter dates to see the estimate.">Inserisci le date per vedere il preventivo.</div>
-          <div class="field-row">
-            <div class="field"><label for="nome" data-it="Nome e cognome" data-en="Full name">Nome e cognome</label><input type="text" id="nome" name="nome" autocomplete="name" required></div>
-            <div class="field"><label for="tel" data-it="Telefono" data-en="Phone">Telefono</label><input type="tel" id="tel" name="tel" autocomplete="tel"></div>
-          </div>
-          <div class="field"><label for="email" data-it="Email" data-en="Email">Email</label><input type="email" id="email" name="email" autocomplete="email" required></div>
-          <div class="field"><label for="note" data-it="Messaggio (facoltativo)" data-en="Message (optional)">Messaggio (facoltativo)</label><textarea id="note" name="note" placeholder="Numero di bambini, orario di arrivo, richieste particolari…" data-it-ph="Numero di bambini, orario di arrivo, richieste particolari…" data-en-ph="Number of children, arrival time, special requests…"></textarea></div>
-          <label class="check">
-            <input type="checkbox" id="privacy" name="privacy" required>
-            <span data-html data-it="Ho letto e accetto l'<a href=&quot;privacy.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;>informativa privacy</a> e acconsento al trattamento dei miei dati per gestire la richiesta." data-en="I have read and accept the <a href=&quot;privacy.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;>privacy policy</a> and consent to the processing of my data to handle this request.">Ho letto e accetto l'<a href="privacy.html" target="_blank" rel="noopener">informativa privacy</a> e acconsento al trattamento dei miei dati per gestire la richiesta.</span>
-          </label>
-          <button type="submit" class="btn btn--primary btn--lg" style="width:100%; justify-content:center;" data-it="Invia richiesta" data-en="Send request">Invia richiesta</button>
-          <p class="form-note"><span data-it="Nessun pagamento ora · Richiesta senza impegno" data-en="No payment now · No-obligation request">Nessun pagamento ora · Richiesta senza impegno</span></p>
-          <div class="form-msg" id="formMsg" role="alert" aria-live="polite"></div>
-        </form>
-
-        <!-- BLOCCO FIDUCIA (host + prova sociale, nel punto di decisione) -->
-        <div class="book-trust" id="bookTrust"></div>
-
-        <!-- LISTA D'ATTESA / LAST-MINUTE -->
-        <details class="waitlist" id="waitlist">
-          <summary data-it="Le date che cerchi sono occupate? Avvisami se si liberano →" data-en="Are your dates taken? Notify me if they free up →">Le date che cerchi sono occupate? Avvisami se si liberano →</summary>
-          <form id="waitForm" class="waitlist-form" novalidate>
-            <p class="waitlist-intro" data-it="Lasciaci un contatto: se si libera un periodo che combacia con le tue date, sei il primo a saperlo — con il miglior prezzo diretto." data-en="Leave us a contact: if a stay matching your dates frees up, you'll be the first to know — at the best direct price.">Lasciaci un contatto: se si libera un periodo che combacia con le tue date, sei il primo a saperlo — con il miglior prezzo diretto.</p>
-            <div class="field-row">
-              <div class="field"><label for="waitDal" data-it="Dal" data-en="From">Dal</label><input type="date" id="waitDal" name="waitDal"></div>
-              <div class="field"><label for="waitAl" data-it="Al" data-en="To">Al</label><input type="date" id="waitAl" name="waitAl"></div>
-            </div>
-            <div class="field-row">
-              <div class="field"><label for="waitNome" data-it="Nome" data-en="Name">Nome</label><input type="text" id="waitNome" name="waitNome" autocomplete="name" required></div>
-              <div class="field"><label for="waitTel" data-it="Telefono" data-en="Phone">Telefono</label><input type="tel" id="waitTel" name="waitTel" autocomplete="tel"></div>
-            </div>
-            <div class="field"><label for="waitEmail" data-it="Email" data-en="Email">Email</label><input type="email" id="waitEmail" name="waitEmail" autocomplete="email" required></div>
-            <label class="check">
-              <input type="checkbox" id="waitPrivacy" name="waitPrivacy" required>
-              <span data-html data-it="Accetto l'<a href=&quot;privacy.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;>informativa privacy</a> per essere ricontattato." data-en="I accept the <a href=&quot;privacy.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;>privacy policy</a> to be contacted.">Accetto l'<a href="privacy.html" target="_blank" rel="noopener">informativa privacy</a> per essere ricontattato.</span>
-            </label>
-            <button type="submit" class="btn btn--ghost" style="width:100%; justify-content:center;" data-it="Avvisami se si libera" data-en="Notify me if it frees up">Avvisami se si libera</button>
-            <div class="form-msg" id="waitMsg" role="alert" aria-live="polite"></div>
-          </form>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- RECENSIONI -->
-  <section class="section" id="recensioni">
-    <div class="wrap">
-      <div class="section-head center">
-        <p class="kicker" data-reveal="up" data-it="Recensioni" data-en="Reviews">Recensioni</p>
-        <h2 class="display" data-reveal="up" data-it="Chi è stato qui" data-en="What our guests say">Chi è stato qui</h2>
-      </div>
-      <div class="review-score" id="reviewScore" data-reveal="up"></div>
-      <div class="reviews" id="reviewsGrid"></div>
-      <p class="reviews-more" data-reveal="fade" id="reviewsMore"></p>
-    </div>
-  </section>
-
-  <!-- FAQ -->
-  <section class="section section--alt" id="faq">
-    <div class="wrap">
-      <div class="section-head center">
-        <p class="kicker" data-reveal="up" data-it="Domande frequenti" data-en="FAQ">Domande frequenti</p>
-        <h2 class="display" data-reveal="up" data-it="Le risposte, prima di prenotare" data-en="Answers, before you book">Le risposte, prima di prenotare</h2>
-      </div>
-      <div class="faq" id="faqList"></div>
-      <p class="faq-more" data-reveal="fade">
-        <span data-it="Hai un'altra domanda?" data-en="Any other question?">Hai un'altra domanda?</span>
-        <a href="#" data-whatsapp data-it="Scrivici su WhatsApp →" data-en="Message us on WhatsApp →">Scrivici su WhatsApp →</a>
-      </p>
-    </div>
-  </section>
-
-  <!-- CTA FINALE -->
-  <section class="section section--olive final">
-    <div class="wrap">
-      <p class="kicker kicker--light" data-reveal="up" data-it="La tua estate in Sicilia" data-en="Your summer in Sicily">La tua estate in Sicilia</p>
-      <h2 class="display" data-reveal="up" style="color:#fff" data-it="Ci sono ancora date libere" data-en="There are still dates available">Ci sono ancora date libere</h2>
-      <p class="lead" data-reveal="up" style="color:rgba(255,255,255,.85)" data-it="Scrivici oggi: ti diciamo subito se la casa è disponibile per le tue date." data-en="Write to us today: we'll tell you right away if the house is available for your dates.">Scrivici oggi: ti diciamo subito se la casa è disponibile per le tue date.</p>
-      <div class="final-cta" data-reveal="up">
-        <a href="#prenota" class="btn btn--primary btn--lg" data-it="Richiedi le date" data-en="Request dates">Richiedi le date</a>
-        <a href="#" class="btn btn--on-dark btn--lg" data-whatsapp><span data-it="Scrivi su WhatsApp" data-en="Message on WhatsApp">Scrivi su WhatsApp</span></a>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<!-- FOOTER -->
-<footer class="footer">
-  <div class="wrap">
-    <div class="footer-top">
-      <div>
-        <a href="#top" class="brand">
-          <svg class="mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-            <circle cx="16" cy="16" r="12.5" stroke-width="1.1" opacity="0.5"/>
-            <path d="M7 15.5 L16 7 L25 15.5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M10 14 V23 H22 V14" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M8.5 26.5 q2.5 -2.5 5 0 t5 0 t5 0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span data-bind="brand">Casa Tolomea</span>
-        </a>
-        <p style="max-width:34ch; opacity:.8; margin-top:.4rem"><span data-bind="localitaFull">Mondello (PA), Sicilia</span></p>
-      </div>
-      <div>
-        <h4 data-it="Contatti" data-en="Contact">Contatti</h4>
-        <a data-bind-href="tel">+39 333 123 4567</a>
-        <a data-bind-href="email">casa.tolomea@tiscali.it</a>
-        <a href="#" data-whatsapp>WhatsApp</a>
-      </div>
-      <div>
-        <h4 data-it="Naviga" data-en="Explore">Naviga</h4>
-        <a href="#galleria" data-it="Galleria" data-en="Gallery">Galleria</a>
-        <a href="#prezzi" data-it="Prezzi" data-en="Rates">Prezzi</a>
-        <a href="#prenota" data-it="Prenota" data-en="Book">Prenota</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© <span id="year">2026</span> <span data-bind="brand">Casa Tolomea</span> · CIN <span data-bind="cin">—</span> · CIR <span data-bind="cir">—</span></span>
-      <span data-it="Prenotazione diretta · Nessuna commissione" data-en="Direct booking · No commission">Prenotazione diretta · Nessuna commissione</span>
-    </div>
-  </div>
-</footer>
-
-<a class="fab" href="#" data-whatsapp aria-label="Scrivici su WhatsApp">
-  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.82 11.82 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zM6.597 20.13c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.599 5.39l-.999 3.648 3.89-.001zM17.5 14.382c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
-</a>
-
-<!-- Lightbox -->
-<div class="lightbox" id="lightbox" aria-hidden="true">
-  <button class="lightbox__close" id="lbClose" aria-label="Chiudi">×</button>
-  <span class="lightbox__counter" id="lbCount"></span>
-  <button class="lightbox__nav prev" id="lbPrev" aria-label="Precedente">‹</button>
-  <img id="lbImg" src="" alt="">
-  <button class="lightbox__nav next" id="lbNext" aria-label="Successiva">›</button>
-  <span class="lightbox__caption" id="lbCaption"></span>
-</div>
-
-<script src="config.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
-<script src="app.js"></script>
-</body>
+    </script>
+    <script type="module" crossorigin src="/assets/index-DRy9djXG.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-CC4IUrVI.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
 </html>
