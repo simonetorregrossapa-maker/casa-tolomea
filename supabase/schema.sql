@@ -89,7 +89,8 @@ create policy "blocchi_titolare_all" on public.blocchi
 -- ════════════════════════════════════════════════════════════════════════
 
 -- Flag anti-doppio-invio sulle prenotazioni confermate.
-alter table public.richieste add column if not exists promemoria_inviato boolean not null default false;
+alter table public.richieste add column if not exists promemoria_inviato boolean not null default false;        -- promemoria della vigilia (1 giorno prima)
+alter table public.richieste add column if not exists promemoria_arrivo_inviato boolean not null default false; -- promemoria dell'arrivo (giorno stesso, ~3h prima)
 alter table public.richieste add column if not exists recensione_inviata boolean not null default false;
 
 -- Parametri regolabili senza toccare il codice (chiave/valore).
@@ -111,8 +112,8 @@ insert into public.settings (chiave, valore) values
   ('email_titolare',       'casa.tolomea@tiscali.it'),
   ('site_url',             'https://www.casatolomea.it'),
   ('telefono',             '+39 339 429 0856'),
-  ('giorni_promemoria',    '3'),    -- giorni PRIMA del check-in per il promemoria
-  ('giorni_recensione',    '1'),    -- giorni DOPO il check-out per la richiesta recensione
+  ('giorni_promemoria',    '3'),    -- (non più usato: i promemoria sono a giorno fisso, vigilia + arrivo)
+  ('giorni_recensione',    '1'),    -- giorni DOPO il check-out per la richiesta recensione (email la sera dopo)
   ('recensioni_url',       ''),     -- link dove lasciare la recensione (Google/Booking)
   ('incentivo_pct',        '10'),   -- sconto prenotazione diretta (win-back)
   ('giorni_dormiente',     '300'),  -- un ospite è "dormiente" dopo N giorni dall'ultimo soggiorno

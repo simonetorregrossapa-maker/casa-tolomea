@@ -1,17 +1,27 @@
-// PROMEMORIA PRE-CHECK-IN — Edge Function su cron (giornaliero).
-// Manda all'ospite un'email qualche giorno prima dell'arrivo con le info utili
-// e un piccolo upsell (richieste speciali, arrivo anticipato). Riduce i no-show
-// e migliora l'esperienza → più recensioni positive e più prenotazioni dirette.
+// PROMEMORIA PRE-CHECK-IN — Edge Function su cron.
+// Manda all'ospite due promemoria prima dell'arrivo, secondo il parametro ?tipo:
+//   • tipo=vigilia (default) → 1 GIORNO PRIMA: riepilogo + upsell (richieste
+//     speciali, arrivo anticipato, transfer). Riduce i no-show, migliora
+//     l'esperienza → più recensioni positive e più prenotazioni dirette.
+//   • tipo=arrivo → il GIORNO STESSO del check-in (cron ~3h prima dell'orario di
+//     arrivo): messaggio breve "oggi ti aspettiamo" con l'ora del check-in.
 //
-// Invia SOLO per prenotazioni CONFERMATE non ancora "promemoria_inviato", con
-// check-in tra oggi e oggi+giorni_promemoria. Marca il flag dopo l'invio, così
-// non parte due volte. È idempotente: se gira più volte nello stesso giorno non
-// duplica gli invii.
+// Invia SOLO per prenotazioni CONFERMATE non ancora avvisate per quel tipo, con
+// il check-in nel giorno preciso (domani per la vigilia, oggi per l'arrivo).
+// Ogni tipo ha il suo flag anti-doppio-invio, quindi i due promemoria non si
+// escludono a vicenda. Idempotente: rigirando lo stesso giorno non duplica.
 //
-// Cron consigliato (SQL Editor Supabase, pg_cron): una volta al giorno.
-//   select cron.schedule('promemoria-casa', '0 9 * * *',
+// Cron consigliato (SQL Editor Supabase, pg_cron). ATTENZIONE: pg_cron gira in
+// UTC. D'estate l'Italia è UTC+2, quindi togli 2 ore all'orario italiano.
+//   -- vigilia: ~18:00 IT (16:00 UTC), un giorno prima
+//   select cron.schedule('promemoria-vigilia-tolomea', '0 16 * * *',
 //     $$ select net.http_post(
-//          url:='https://<project-ref>.functions.supabase.co/promemoria',
+//          url:='https://<project-ref>.functions.supabase.co/promemoria?tipo=vigilia',
+//          headers:='{"Content-Type":"application/json"}'::jsonb) $$);
+//   -- arrivo: ~13:00 IT (11:00 UTC), 3h prima del check-in delle 16:00
+//   select cron.schedule('promemoria-arrivo-tolomea', '0 11 * * *',
+//     $$ select net.http_post(
+//          url:='https://<project-ref>.functions.supabase.co/promemoria?tipo=arrivo',
 //          headers:='{"Content-Type":"application/json"}'::jsonb) $$);
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
@@ -61,16 +71,17 @@ async function sendEmail(from: string, to: string, subject: string, html: string
   return res.ok;
 }
 
-function template(s: Record<string, string>, r: any): { subject: string; html: string } {
+// Promemoria della VIGILIA (1 giorno prima): riepilogo completo + upsell.
+function templateVigilia(s: Record<string, string>, r: any): { subject: string; html: string } {
   const casa = s.nome_casa || "Casa Tolomea";
   const tel = s.telefono || "";
   const site = s.site_url || "";
   const nome = r.nome ? r.nome.split(" ")[0] : "";
-  const subject = `${casa} · il tuo arrivo si avvicina 🌿`;
+  const subject = `${casa} · domani si arriva 🌿`;
   const html = `
     <div style="font-family:Georgia,serif;max-width:560px;margin:auto;color:#2b2b28;line-height:1.6">
-      <h2 style="color:#b5654a;font-weight:normal">Ci siamo quasi${nome ? ", " + nome : ""}!</h2>
-      <p>Manca poco al tuo soggiorno a <strong>${casa}</strong>. Ecco il riepilogo:</p>
+      <h2 style="color:#b5654a;font-weight:normal">Ci siamo${nome ? ", " + nome : ""} — si parte domani!</h2>
+      <p>Manca un giorno al tuo soggiorno a <strong>${casa}</strong>. Ecco il riepilogo:</p>
       <table style="border-collapse:collapse;margin:14px 0">
         <tr><td style="padding:4px 12px 4px 0;color:#8a8172">Check-in</td><td><strong>${fmtIt(r.checkin)}</strong> (dalle ${s.checkin_ora || "16:00"})</td></tr>
         <tr><td style="padding:4px 12px 4px 0;color:#8a8172">Check-out</td><td><strong>${fmtIt(r.checkout)}</strong> (entro le 10:00)</td></tr>
@@ -78,22 +89,43 @@ function template(s: Record<string, string>, r: any): { subject: string; html: s
       </table>
       <p>Hai <strong>richieste speciali</strong>? Arrivo anticipato, culla, consigli su spiagge e ristoranti,
          o il transfer dall'aeroporto: rispondi a questa email o scrivici${tel ? ` su WhatsApp al <strong>${tel}</strong>` : ""}, faremo il possibile.</p>
-      <p style="color:#8a8172;font-size:.92em">A presto,<br>${casa}${site ? `<br><a href="${site}" style="color:#b5654a">${site.replace(/^https?:\/\//, "")}</a>` : ""}</p>
+      <p style="color:#8a8172;font-size:.92em">A domani,<br>${casa}${site ? `<br><a href="${site}" style="color:#b5654a">${site.replace(/^https?:\/\//, "")}</a>` : ""}</p>
     </div>`;
   return { subject, html };
 }
 
-Deno.serve(async () => {
+// Promemoria dell'ARRIVO (giorno stesso, ~3h prima): breve e caloroso.
+function templateArrivo(s: Record<string, string>, r: any): { subject: string; html: string } {
+  const casa = s.nome_casa || "Casa Tolomea";
+  const tel = s.telefono || "";
+  const ora = s.checkin_ora || "16:00";
+  const nome = r.nome ? r.nome.split(" ")[0] : "";
+  const subject = `${casa} · ti aspettiamo oggi 🔑`;
+  const html = `
+    <div style="font-family:Georgia,serif;max-width:560px;margin:auto;color:#2b2b28;line-height:1.6">
+      <h2 style="color:#b5654a;font-weight:normal">Oggi ti aspettiamo${nome ? ", " + nome : ""}!</h2>
+      <p>Tra poche ore ci vediamo a <strong>${casa}</strong>. Il <strong>check-in è dalle ${ora}</strong>:
+         ti accogliamo noi di persona per consegnarti le chiavi e mostrarti la casa.</p>
+      <p>Se sei in ritardo, in anticipo o hai bisogno di indicazioni, scrivici pure${tel ? ` su WhatsApp al <strong>${tel}</strong>` : " rispondendo a questa email"} — restiamo in contatto.</p>
+      <p style="color:#8a8172;font-size:.92em">A tra poco,<br>${casa}</p>
+    </div>`;
+  return { subject, html };
+}
+
+Deno.serve(async (req) => {
   try {
+    const tipo = new URL(req.url).searchParams.get("tipo") === "arrivo" ? "arrivo" : "vigilia";
     const s = await getSettings();
-    const giorni = parseInt(s.giorni_promemoria || "3", 10);
-    const oggi = isoPlusDays(0);
-    const limite = isoPlusDays(giorni);
     const mittente = `${s.nome_casa || "Casa Tolomea"} <${s.email_mittente || "onboarding@resend.dev"}>`;
 
-    // Confermate, non ancora avvisate, con check-in nella finestra [oggi, oggi+giorni].
+    // vigilia → check-in di DOMANI, flag promemoria_inviato.
+    // arrivo  → check-in di OGGI,   flag promemoria_arrivo_inviato.
+    const giorno = tipo === "arrivo" ? isoPlusDays(0) : isoPlusDays(1);
+    const flag = tipo === "arrivo" ? "promemoria_arrivo_inviato" : "promemoria_inviato";
+    const tmpl = tipo === "arrivo" ? templateArrivo : templateVigilia;
+
     const res = await rest(
-      `richieste?select=id,nome,email,checkin,checkout,ospiti&confermata=eq.true&promemoria_inviato=eq.false&checkin=gte.${oggi}&checkin=lte.${limite}`,
+      `richieste?select=id,nome,email,checkin,checkout,ospiti&confermata=eq.true&${flag}=eq.false&checkin=eq.${giorno}`,
     );
     if (!res.ok) throw new Error(`Query richieste fallita (HTTP ${res.status})`);
     const righe = await res.json();
@@ -101,18 +133,18 @@ Deno.serve(async () => {
     let inviati = 0;
     for (const r of righe) {
       if (!r.email) continue;
-      const { subject, html } = template(s, r);
+      const { subject, html } = tmpl(s, r);
       const ok = await sendEmail(mittente, r.email, subject, html);
       if (ok) {
         await rest(`richieste?id=eq.${r.id}`, {
           method: "PATCH",
           headers: { Prefer: "return=minimal" },
-          body: JSON.stringify({ promemoria_inviato: true }),
+          body: JSON.stringify({ [flag]: true }),
         });
         inviati++;
       }
     }
-    return new Response(JSON.stringify({ inviati, candidati: righe.length }), {
+    return new Response(JSON.stringify({ tipo, inviati, candidati: righe.length }), {
       headers: { "Content-Type": "application/json" },
     });
   } catch (err) {
