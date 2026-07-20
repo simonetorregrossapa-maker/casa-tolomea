@@ -37,6 +37,12 @@
         {
           "@type": ["LodgingBusiness", "VacationRental"],
           "@id": "https://www.casatolomea.it/#casa",
+          "additionalType": "https://schema.org/Apartment",
+          "identifier": {
+            "@type": "PropertyValue",
+            "propertyID": "casatolomea.it",
+            "value": "casa-tolomea-mondello"
+          },
           "name": "Casa Tolomea",
           "alternateName": "Casa vacanze Casa Tolomea Mondello",
           "description": "Casa vacanze a Mondello (Palermo): appartamento indipendente al piano terra, a 700 m dal mare. Fino a 6 ospiti, 2 camere matrimoniali, cucina attrezzata, giardino e patio; ideale per famiglie, animali ammessi e parcheggio gratuito. Prenoti diretto col proprietario: nessuna commissione e miglior prezzo.",
@@ -44,6 +50,14 @@
           "sameAs": ["https://www.booking.com/hotel/it/casa-tolomea-palermo.it.html"],
           "image": [
             "https://www.casatolomea.it/assets/galleria/hero.webp",
+            "https://www.casatolomea.it/assets/galleria/g01.webp",
+            "https://www.casatolomea.it/assets/galleria/g02.webp",
+            "https://www.casatolomea.it/assets/galleria/g03.webp",
+            "https://www.casatolomea.it/assets/galleria/g04.webp",
+            "https://www.casatolomea.it/assets/galleria/g05.webp",
+            "https://www.casatolomea.it/assets/galleria/g06.webp",
+            "https://www.casatolomea.it/assets/galleria/g07.webp",
+            "https://www.casatolomea.it/assets/galleria/g08.webp",
             "https://www.casatolomea.it/assets/social/social.jpg"
           ],
           "brand": { "@type": "Brand", "name": "Casa Tolomea" },
@@ -63,6 +77,43 @@
           "priceRange": "€150–€240",
           "currenciesAccepted": "EUR",
           "numberOfRooms": 2,
+          "checkinTime": "16:00:00",
+          "checkoutTime": "10:00:00",
+          "containsPlace": {
+            "@type": "Accommodation",
+            "@id": "https://www.casatolomea.it/#alloggio",
+            "additionalType": "https://schema.org/Apartment",
+            "name": "Appartamento indipendente Casa Tolomea",
+            "occupancy": {
+              "@type": "QuantitativeValue",
+              "value": 6,
+              "unitCode": "C62"
+            },
+            "numberOfBedrooms": 2,
+            "numberOfBathroomsTotal": 1,
+            "numberOfRooms": 2,
+            "floorSize": {
+              "@type": "QuantitativeValue",
+              "value": 85,
+              "unitCode": "MTK"
+            },
+            "bed": [
+              { "@type": "BedDetails", "typeOfBed": "Double", "numberOfBeds": 2 },
+              { "@type": "BedDetails", "typeOfBed": "Sofa Bed", "numberOfBeds": 1 }
+            ],
+            "petsAllowed": true,
+            "smokingAllowed": false,
+            "amenityFeature": [
+              { "@type": "LocationFeatureSpecification", "name": "Wi-Fi", "value": true },
+              { "@type": "LocationFeatureSpecification", "name": "Aria condizionata", "value": true },
+              { "@type": "LocationFeatureSpecification", "name": "Cucina attrezzata", "value": true },
+              { "@type": "LocationFeatureSpecification", "name": "Giardino e patio", "value": true },
+              { "@type": "LocationFeatureSpecification", "name": "Parcheggio gratuito", "value": true },
+              { "@type": "LocationFeatureSpecification", "name": "Animali ammessi", "value": true },
+              { "@type": "LocationFeatureSpecification", "name": "Ingresso indipendente", "value": true },
+              { "@type": "LocationFeatureSpecification", "name": "Lavatrice", "value": true }
+            ]
+          },
           "petsAllowed": true,
           "smokingAllowed": false,
           "knowsLanguage": ["it", "en", "de", "fr"],
