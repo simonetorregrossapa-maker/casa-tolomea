@@ -3,8 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Casa Tolomea — Casa vacanze a Mondello</title>
-    <meta name="description" content="Casa vacanze per 6 persone a Mondello, a 700 m dal mare. Prenota direttamente col proprietario: nessuna commissione, miglior prezzo." />
+    <title>Casa vacanze a Mondello (Palermo) — Casa Tolomea</title>
+    <meta name="description" content="Casa vacanze a Mondello (Palermo): appartamento indipendente per 6, a 700 m dal mare, con giardino e animali ammessi. Prenoti diretto col proprietario, senza commissioni." />
+    <meta name="keywords" content="casa vacanze Mondello, appartamento Mondello, casa vacanze Palermo mare, affitto Mondello, dove dormire a Mondello, casa vacanze Mondello per famiglie, casa vacanze Mondello con giardino, animali ammessi Mondello, Casa Tolomea" />
     <!-- Anteprima del sito: canonical al dominio live per evitare contenuti duplicati. -->
     <link rel="canonical" href="https://www.casatolomea.it/" />
     <meta name="theme-color" content="#a8472f" />
@@ -12,16 +13,16 @@
     <!-- Open Graph / Twitter Card: statici in italiano, immagini sul dominio live (URL assoluti). -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Casa Tolomea" />
-    <meta property="og:title" content="Casa Tolomea — Casa vacanze a Mondello" />
-    <meta property="og:description" content="Casa vacanze per 6 persone a Mondello, a 700 m dal mare. Prenota direttamente col proprietario: nessuna commissione, miglior prezzo." />
+    <meta property="og:title" content="Casa vacanze a Mondello (Palermo) — Casa Tolomea" />
+    <meta property="og:description" content="Appartamento indipendente per 6 a 700 m dal mare di Mondello, con giardino e animali ammessi. Prenoti diretto col proprietario, senza commissioni." />
     <meta property="og:url" content="https://www.casatolomea.it/" />
     <meta property="og:image" content="https://www.casatolomea.it/assets/social/social.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="it_IT" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Casa Tolomea — Casa vacanze a Mondello" />
-    <meta name="twitter:description" content="Casa vacanze per 6 persone a Mondello, a 700 m dal mare. Prenota direttamente col proprietario: nessuna commissione, miglior prezzo." />
+    <meta name="twitter:title" content="Casa vacanze a Mondello (Palermo) — Casa Tolomea" />
+    <meta name="twitter:description" content="Appartamento indipendente per 6 a 700 m dal mare di Mondello, con giardino e animali ammessi. Prenoti diretto, senza commissioni." />
     <meta name="twitter:image" content="https://www.casatolomea.it/assets/social/social.jpg" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -34,11 +35,13 @@
       "@context": "https://schema.org",
       "@graph": [
         {
-          "@type": "LodgingBusiness",
+          "@type": ["LodgingBusiness", "VacationRentalBusiness"],
           "@id": "https://www.casatolomea.it/#casa",
           "name": "Casa Tolomea",
-          "description": "Casa vacanze indipendente al piano terra a Mondello, a 700 m dal mare. Fino a 6 ospiti, 2 camere matrimoniali, cucina attrezzata, giardino e patio. Prenoti diretto col proprietario: nessuna commissione e miglior prezzo.",
+          "alternateName": "Casa vacanze Casa Tolomea Mondello",
+          "description": "Casa vacanze a Mondello (Palermo): appartamento indipendente al piano terra, a 700 m dal mare. Fino a 6 ospiti, 2 camere matrimoniali, cucina attrezzata, giardino e patio; ideale per famiglie, animali ammessi e parcheggio gratuito. Prenoti diretto col proprietario: nessuna commissione e miglior prezzo.",
           "url": "https://www.casatolomea.it/",
+          "sameAs": ["https://www.booking.com/hotel/it/casa-tolomea-palermo.it.html"],
           "image": [
             "https://www.casatolomea.it/assets/galleria/hero.webp",
             "https://www.casatolomea.it/assets/social/social.jpg"
@@ -62,7 +65,34 @@
           "numberOfRooms": 2,
           "petsAllowed": true,
           "smokingAllowed": false,
-          "knowsLanguage": ["it", "en"],
+          "knowsLanguage": ["it", "en", "de", "fr"],
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "9.3",
+            "bestRating": "10",
+            "worstRating": "1",
+            "reviewCount": 60
+          },
+          "review": [
+            {
+              "@type": "Review",
+              "author": { "@type": "Person", "name": "Antonina" },
+              "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+              "reviewBody": "Spaziosa e con tutto il necessario. La cosa migliore sono i proprietari: Alessandro e Marcella hanno fatto di tutto per farci stare bene."
+            },
+            {
+              "@type": "Review",
+              "author": { "@type": "Person", "name": "Fulvia" },
+              "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+              "reviewBody": "Appartamento perfetto, in ottima posizione. Dotato di tutto il necessario, silenzioso e molto confortevole."
+            },
+            {
+              "@type": "Review",
+              "author": { "@type": "Person", "name": "Elena" },
+              "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+              "reviewBody": "Casa bellissima e molto accogliente. Proprietari gentili e disponibili, posizione perfetta a due passi dal mare di Mondello."
+            }
+          ],
           "amenityFeature": [
             { "@type": "LocationFeatureSpecification", "name": "Wi-Fi", "value": true },
             { "@type": "LocationFeatureSpecification", "name": "Aria condizionata", "value": true },
@@ -117,8 +147,8 @@
       ]
     }
     </script>
-    <script type="module" crossorigin src="/assets/index-oT0kg0-9.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-CC4IUrVI.css">
+    <script type="module" crossorigin src="/assets/index-CW9v8hlv.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-ZJg5rRT2.css">
   </head>
   <body>
     <div id="root"></div>
