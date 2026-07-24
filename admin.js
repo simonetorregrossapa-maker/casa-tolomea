@@ -101,18 +101,23 @@
     return data || [];
   }
 
-  // Date occupate su Booking, lette dalla stessa Edge Function usata dal sito.
+  // Occupazione esterna completa, dalla STESSA fonte unica del sito
+  // (hyper-responder): Booking + Airbnb + VRBO + richieste-sito confermate +
+  // blocchi manuali. Prima leggeva booking-availability (solo Booking), perciò
+  // il pannello ignorava Airbnb/VRBO e risultava "non aggiornato". In
+  // renderCalendario si ricava l'occupato-OTA sottraendo sito e blocchi, che il
+  // pannello colora già a parte.
   async function fetchBookingBusy() {
     const set = new Set();
     if (!sb) return demoBookingBusy();
     if (!IG.supabaseUrl) return set;
     try {
-      const url = `${IG.supabaseUrl.replace(/\/$/, "")}/functions/v1/booking-availability`;
+      const url = `${IG.supabaseUrl.replace(/\/$/, "")}/functions/v1/hyper-responder`;
       const r = await fetch(url, { headers: { apikey: IG.supabaseAnonKey, Authorization: `Bearer ${IG.supabaseAnonKey}` } });
       if (!r.ok) return set;
       const data = await r.json();
       (data.busy || []).forEach(({ start, end }) => addRange(set, start, end));
-    } catch (_) { /* Booking non raggiungibile: il calendario mostra solo il sito */ }
+    } catch (_) { /* fonte non raggiungibile: il calendario mostra solo il sito */ }
     return set;
   }
 
@@ -428,7 +433,7 @@
   function renderCalendario() {
     const view = $("#admView");
     const site = siteBusySet();
-    const booking = state.bookingBusy;
+    const external = state.bookingBusy; // fonte unica: OTA + sito + blocchi
     const blocked = blockSet();
     const m = state.calMonth;
     const year = m.getFullYear(), month = m.getMonth();
@@ -442,13 +447,15 @@
     for (let i = 0; i < startWd; i++) cells += `<div class="adm-cell empty"></div>`;
     for (let d = 1; d <= days; d++) {
       const iso = isoOf(new Date(year, month, d));
-      const onSite = site.has(iso), onBooking = booking.has(iso), onBlock = blocked.has(iso);
+      const onSite = site.has(iso), onBlock = blocked.has(iso);
+      // Occupato-OTA (Booking/Airbnb/VRBO) = nella fonte unica ma NON già
+      // contato come richiesta-sito o blocco manuale (che hanno colore proprio).
+      const onOTA = external.has(iso) && !onSite && !onBlock;
       let cls = "adm-cell";
-      // priorità visiva: blocco manuale (scelta esplicita) > entrambi > singola sorgente
+      // priorità visiva: blocco manuale (scelta esplicita) > sito > OTA
       if (onBlock) cls += " blocco";
-      else if (onSite && onBooking) cls += " both";
       else if (onSite) cls += " site";
-      else if (onBooking) cls += " booking";
+      else if (onOTA) cls += " booking";
       if (iso === todayIso) cls += " today";
       cells += `<div class="${cls}"><span>${d}</span></div>`;
     }
@@ -470,15 +477,14 @@
       </div>
       <div class="adm-legend">
         <span><i class="lg site"></i> Prenotato sul sito</span>
-        <span><i class="lg booking"></i> Occupato su Booking</span>
-        <span><i class="lg both"></i> Su entrambi</span>
+        <span><i class="lg booking"></i> Occupato su OTA (Booking/Airbnb/VRBO)</span>
         <span><i class="lg blocco"></i> Bloccato a mano</span>
       </div>
       <div class="adm-cal">
         ${WD.map((w) => `<div class="adm-wd">${w}</div>`).join("")}
         ${cells}
       </div>
-      <p class="adm-muted adm-cal-foot">Le date "sul sito" sono le richieste che hai confermato; quelle "su Booking" arrivano dal calendario Booking (aggiornato ogni poche ore).</p>
+      <p class="adm-muted adm-cal-foot">Le date "sul sito" sono le richieste che hai confermato; quelle "su OTA" arrivano dai calendari di Booking, Airbnb e VRBO (aggiornati ogni poche ore).</p>
 
       <div class="adm-block-box">
         <h3>Blocca date a mano</h3>
