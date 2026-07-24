@@ -151,3 +151,16 @@ create policy "liste_attesa_insert_pubblico" on public.liste_attesa
 drop policy if exists "liste_attesa_titolare_all" on public.liste_attesa;
 create policy "liste_attesa_titolare_all" on public.liste_attesa
   for all to authenticated using (true) with check (true);
+
+-- Snapshot dell'ultimo dato buono per canale OTA (booking/airbnb/vrbo).
+-- Anti-doppia-prenotazione: se un feed iCal cade o risponde con una pagina
+-- non-iCal, hyper-responder riusa questo snapshot invece di liberare le date
+-- già prenotate su quel canale. Lo popola/aggiorna la function stessa (service
+-- role) a ogni fetch riuscito. RLS attiva senza policy: nessun accesso anon,
+-- solo la service role (che bypassa RLS) legge/scrive.
+create table if not exists public.ota_snapshot (
+  canale  text primary key,
+  busy    jsonb not null default '[]'::jsonb,
+  updated timestamptz not null default now()
+);
+alter table public.ota_snapshot enable row level security;
