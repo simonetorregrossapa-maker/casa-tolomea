@@ -1,0 +1,160 @@
+/* ============================================================================
+   CASA TOLOMEA — pagine di contenuto statiche (SEO locale)
+   Foglio autonomo, NON legato al bundle React: queste pagine sono HTML puro
+   così il testo è nel sorgente servito e non dipende dal rendering JS.
+   Token identici a src/index.css per non spezzare l'identità visiva.
+============================================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600&family=Karla:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg: #f6efe4;
+  --bg-2: #efe4d3;
+  --surface: #fffdf9;
+  --ink: #211d16;
+  --muted: #6f695c;
+  --line: #e2d4c0;
+  --accent: #a8472f;
+  --accent-bg: #f4e5db;
+  --olive: #4d5340;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Karla", system-ui, sans-serif;
+  --maxw: 760px;
+  --gutter: clamp(20px, 5vw, 40px);
+  --radius: 18px;
+  --shadow-md: 0 24px 60px -24px rgba(33, 29, 22, .34);
+}
+
+* { margin: 0; box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.68;
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; height: auto; }
+a { color: var(--accent); text-underline-offset: 3px; }
+
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); }
+
+/* ── Header ──────────────────────────────────────────────────────────── */
+.site-head {
+  position: sticky; top: 0; z-index: 10;
+  background: rgba(246, 239, 228, .92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.site-head .wrap {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; min-height: 62px;
+}
+.brand {
+  font-family: var(--font-display); font-size: 1.16rem; font-weight: 500;
+  letter-spacing: .01em; color: var(--ink); text-decoration: none; white-space: nowrap;
+}
+.brand span { color: var(--accent); }
+
+/* ── Bottoni ─────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 22px; border-radius: 999px; font-weight: 600; font-size: .95rem;
+  text-decoration: none; transition: transform .18s ease, box-shadow .18s ease;
+  line-height: 1.2; text-align: center;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--accent); color: #fff; box-shadow: 0 10px 24px -12px rgba(168, 71, 47, .8); }
+.btn-ghost { border: 1px solid var(--line); color: var(--ink); background: var(--surface); }
+.btn-sm { padding: 9px 16px; font-size: .88rem; }
+
+/* ── Testata articolo ────────────────────────────────────────────────── */
+.crumbs { font-size: .84rem; color: var(--muted); padding-top: 26px; }
+.crumbs a { color: var(--muted); }
+
+h1 {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(2rem, 6.4vw, 3rem); line-height: 1.1;
+  letter-spacing: -.015em; margin: 14px 0 0;
+}
+.lead { font-size: 1.1rem; color: var(--muted); margin-top: 16px; max-width: 62ch; }
+
+.hero-img { margin: 30px 0 8px; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-md); }
+figcaption { font-size: .82rem; color: var(--muted); margin-top: 10px; }
+
+/* ── Corpo ───────────────────────────────────────────────────────────── */
+main section { margin-top: 46px; }
+h2 {
+  font-family: var(--font-display); font-weight: 500;
+  font-size: clamp(1.42rem, 4.2vw, 1.85rem); line-height: 1.22;
+  letter-spacing: -.01em; margin-bottom: 14px;
+}
+h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.14rem; margin: 26px 0 6px; }
+p + p { margin-top: 14px; }
+main ul, main ol { margin: 14px 0 0; padding-left: 22px; }
+main li { margin-bottom: 8px; }
+strong { font-weight: 700; }
+
+/* ── Blocchi ─────────────────────────────────────────────────────────── */
+.card {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 22px 24px; margin-top: 22px;
+}
+.cta-box {
+  background: var(--accent-bg); border: 1px solid #e8cdbe;
+  border-radius: var(--radius); padding: 26px 24px; margin-top: 34px;
+}
+.cta-box h2, .cta-box h3 { margin-top: 0; }
+.cta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.cta-note { font-size: .85rem; color: var(--muted); margin-top: 12px; }
+
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 2px; margin-top: 24px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.facts div { background: var(--surface); padding: 16px 14px; }
+.facts dt { font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.facts dd { font-family: var(--font-display); font-size: 1.32rem; margin: 4px 0 0; }
+
+table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: .96rem; }
+th, td { text-align: left; padding: 12px 12px; border-bottom: 1px solid var(--line); }
+th { font-size: .78rem; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); font-weight: 600; }
+td.price { font-family: var(--font-display); font-size: 1.1rem; white-space: nowrap; }
+.table-scroll { overflow-x: auto; }
+.table-note { font-size: .85rem; color: var(--muted); margin-top: 10px; }
+
+.dl-zone { margin-top: 18px; }
+.dl-zone div { display: flex; justify-content: space-between; gap: 16px; padding: 11px 0; border-bottom: 1px solid var(--line); }
+.dl-zone dt { color: var(--muted); }
+.dl-zone dd { margin: 0; font-weight: 600; white-space: nowrap; }
+
+.quote {
+  border-left: 3px solid var(--accent); padding: 4px 0 4px 18px;
+  margin-top: 20px; font-size: 1.02rem;
+}
+.quote cite { display: block; margin-top: 8px; font-size: .84rem; color: var(--muted); font-style: normal; }
+
+details {
+  border-bottom: 1px solid var(--line); padding: 14px 0;
+}
+summary { cursor: pointer; font-weight: 600; list-style: none; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; float: right; color: var(--accent); font-size: 1.2rem; line-height: 1; }
+details[open] summary::after { content: "–"; }
+details p { margin-top: 10px; color: var(--muted); }
+
+.next-read { display: grid; gap: 12px; margin-top: 20px; }
+.next-read a {
+  display: block; background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 16px 18px; text-decoration: none; color: var(--ink);
+}
+.next-read a:hover { border-color: var(--accent); }
+.next-read strong { display: block; font-family: var(--font-display); font-weight: 500; font-size: 1.06rem; }
+.next-read span { font-size: .9rem; color: var(--muted); }
+
+/* ── Footer ──────────────────────────────────────────────────────────── */
+.site-foot {
+  margin-top: 64px; padding: 34px 0 44px;
+  border-top: 1px solid var(--line); background: var(--bg-2);
+  font-size: .9rem; color: var(--muted);
+}
+.site-foot p + p { margin-top: 8px; }
+.site-foot a { color: var(--olive); }
+.legal { font-size: .8rem; margin-top: 16px; }
