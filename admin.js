@@ -2,13 +2,18 @@
    PANNELLO GESTIONE — Casa Tolomea (gestione.html)
    Area riservata al proprietario. Login via Supabase Auth (email + password).
    Due viste:
-     • Richieste  — elenco prenotazioni dal sito, con bottone "Conferma".
+     • Richieste  — elenco prenotazioni dal sito, con "Conferma" e "Rifiuta".
                     "Conferma" imposta richieste.confermata = true: da quel
                     momento la data viene esposta nel feed iCal e Booking la
                     blocca in automatico (function site-availability-ical).
-     • Calendario — vista mese che unisce le date occupate da Booking (lette
-                    via booking-availability) e quelle confermate sul sito,
-                    così il proprietario vede tutto in un colpo d'occhio.
+                    "Rifiuta" imposta richieste.rifiutata = true e fa partire
+                    l'email di scuse con le date ancora libere (function
+                    rifiuta). Le richieste sovrapposte sono segnalate: vedi il
+                    blocco "CONFLITTI TRA RICHIESTE" più sotto.
+     • Calendario — vista mese che unisce le date occupate dalle OTA (lette da
+                    hyper-responder: Booking + Airbnb + VRBO) e quelle
+                    confermate sul sito, più i blocchi manuali, così il
+                    proprietario vede tutto in un colpo d'occhio.
    Nessuna dipendenza esterna oltre a supabase-js (UMD) e config.js.
    Se Supabase non è configurato, la pagina gira in modalità DEMO con dati
    finti, così è mostrabile anche senza backend.
@@ -48,6 +53,35 @@
     for (let d = parseIso(start); d < last; d.setDate(d.getDate() + 1)) set.add(isoOf(d));
   }
 
+  /* ── CONFLITTI TRA RICHIESTE (fix 3 ago 2026) ──────────────────────────
+     Una richiesta in attesa non occupa la data: è voluto (una richiesta spam
+     non deve bloccare il calendario), ma significa che due ospiti possono
+     chiedere lo stesso periodo e nulla lo segnalava. Qui il conflitto si
+     calcola e si mostra, e confermare sopra a un soggiorno già preso richiede
+     una conferma esplicita. La rete di sicurezza vera è il vincolo di
+     esclusione sul database (supabase/migrations/2026-08-03-richieste-conflitti.sql).
+     Convenzione ovunque: [checkin, checkout) — chi parte il 10 non è in
+     conflitto con chi arriva il 10. */
+  const viva = (r) => !r.rifiutata;
+  function siSovrappongono(a, b) {
+    if (!a.checkin || !a.checkout || !b.checkin || !b.checkout) return false;
+    return a.checkin < b.checkout && b.checkin < a.checkout;
+  }
+  // Le altre richieste ancora in gioco che occupano lo stesso periodo.
+  function conflittiDi(r, rows) {
+    if (!viva(r)) return [];
+    return rows.filter((o) => o.id !== r.id && viva(o) && siSovrappongono(r, o));
+  }
+  // Notti del soggiorno già occupate da OTA, blocchi o soggiorni confermati.
+  // state.bookingBusy è la fonte unica (hyper-responder): per una richiesta NON
+  // confermata tutto ciò che vi compare è per definizione roba di altri.
+  function nottiGiaOccupate(r) {
+    if (r.confermata || !r.checkin || !r.checkout) return [];
+    const mie = new Set();
+    addRange(mie, r.checkin, r.checkout);
+    return [...mie].filter((iso) => state.bookingBusy.has(iso)).sort();
+  }
+
   function toast(msg, kind) {
     const t = document.createElement("div");
     t.className = "adm-toast " + (kind || "");
@@ -63,12 +97,17 @@
     const mk = (offset, notti, nome, email, tel, ospiti, tot, conf) => {
       const ci = new Date(base); ci.setDate(ci.getDate() + offset);
       const co = new Date(ci); co.setDate(co.getDate() + notti);
-      return { id: offset + 100, nome, email, telefono: tel, ospiti, checkin: isoOf(ci), checkout: isoOf(co), totale_stimato: tot, note: "", confermata: conf, creato: new Date().toISOString() };
+      return { id: offset + 100, nome, email, telefono: tel, ospiti, checkin: isoOf(ci), checkout: isoOf(co), totale_stimato: tot, note: "", confermata: conf, rifiutata: false, creato: new Date().toISOString() };
     };
     return [
       mk(0, 4, "Marco Bianchi", "marco@example.com", "333 1112223", 4, 620, false),
       mk(10, 7, "Giulia Verdi", "giulia@example.com", "347 9998887", 2, 980, true),
       mk(22, 3, "Luca Neri", "luca@example.com", "", 6, 540, false),
+      // Si sovrappone a Marco Bianchi: in demo mostra l'avviso di conflitto.
+      mk(2, 5, "Sara Costa", "sara@example.com", "339 4445556", 3, 710, false),
+      // Cade sulle date occupate da "Booking" (demoBookingBusy): mostra l'altro
+      // avviso, quello che evita di confermare sopra a una prenotazione OTA.
+      mk(-4, 3, "Paolo Ferri", "paolo@example.com", "340 7778889", 2, 430, false),
     ];
   }
   function demoBookingBusy() {
@@ -95,7 +134,7 @@
   async function fetchRichieste() {
     if (!sb) return demoRows();
     const { data, error } = await sb.from("richieste")
-      .select("id,nome,email,telefono,ospiti,checkin,checkout,totale_stimato,note,confermata,creato")
+      .select("id,nome,email,telefono,ospiti,checkin,checkout,totale_stimato,note,confermata,rifiutata,creato")
       .order("checkin", { ascending: true });
     if (error) throw error;
     return data || [];
@@ -214,12 +253,17 @@
   function renderRichieste() {
     const view = $("#admView");
     const rows = state.rows.slice();
-    const inAttesa = rows.filter((r) => !r.confermata).length;
+    // Le rifiutate escono dai contatori operativi: "Da confermare" deve dire
+    // quante richieste aspettano davvero una risposta.
+    const inAttesa = rows.filter((r) => !r.confermata && viva(r)).length;
     const confermate = rows.filter((r) => r.confermata).length;
+    const rifiutate = rows.filter((r) => r.rifiutata).length;
+    const daDecidere = rows.filter((r) => !r.confermata && viva(r) && conflittiDi(r, rows).length).length;
 
     const filtered = rows.filter((r) =>
       state.filtro === "tutte" ? true :
-      state.filtro === "attesa" ? !r.confermata : r.confermata);
+      state.filtro === "attesa" ? (!r.confermata && viva(r)) :
+      state.filtro === "rifiutate" ? r.rifiutata : r.confermata);
 
     view.innerHTML = `
       <div class="adm-stats">
@@ -227,36 +271,56 @@
         <div class="adm-stat"><b>${inAttesa}</b><span>Da confermare</span></div>
         <div class="adm-stat"><b>${confermate}</b><span>Confermate (bloccano Booking)</span></div>
       </div>
+      ${daDecidere ? `<div class="adm-conflict-bar">⚠︎ <b>${daDecidere}</b> ${daDecidere === 1 ? "richiesta in attesa si sovrappone" : "richieste in attesa si sovrappongono"} ad altre per le stesse date: confermane una e rifiuta le altre, così l'ospite escluso riceve una risposta invece del silenzio.</div>` : ""}
       <div class="adm-filters">
         <button class="adm-chip ${state.filtro === "tutte" ? "sel" : ""}" data-f="tutte">Tutte</button>
         <button class="adm-chip ${state.filtro === "attesa" ? "sel" : ""}" data-f="attesa">Da confermare</button>
         <button class="adm-chip ${state.filtro === "confermate" ? "sel" : ""}" data-f="confermate">Confermate</button>
+        ${rifiutate ? `<button class="adm-chip ${state.filtro === "rifiutate" ? "sel" : ""}" data-f="rifiutate">Rifiutate (${rifiutate})</button>` : ""}
       </div>
-      <div class="adm-list">${filtered.length ? filtered.map(rowCard).join("") : `<p class="adm-empty">Nessuna richiesta in questa vista.</p>`}</div>`;
+      <div class="adm-list">${filtered.length ? filtered.map((r) => rowCard(r)).join("") : `<p class="adm-empty">Nessuna richiesta in questa vista.</p>`}</div>`;
 
     view.querySelectorAll(".adm-chip").forEach((c) => c.onclick = () => { state.filtro = c.dataset.f; renderRichieste(); });
     view.querySelectorAll("[data-conf]").forEach((b) => b.onclick = () => setConfermata(Number(b.dataset.conf), true));
     view.querySelectorAll("[data-unconf]").forEach((b) => b.onclick = () => setConfermata(Number(b.dataset.unconf), false));
+    view.querySelectorAll("[data-rifiuta]").forEach((b) => b.onclick = () => setRifiutata(Number(b.dataset.rifiuta), true));
+    view.querySelectorAll("[data-riapri]").forEach((b) => b.onclick = () => setRifiutata(Number(b.dataset.riapri), false));
   }
 
   function rowCard(r) {
     const notti = (() => { try { return Math.round((parseIso(r.checkout) - parseIso(r.checkin)) / 86400000); } catch { return "—"; } })();
-    const stato = r.confermata
-      ? `<span class="adm-badge ok">Confermata</span>`
-      : `<span class="adm-badge wait">Da confermare</span>`;
+    const conflitti = conflittiDi(r, state.rows);
+    const occupate = nottiGiaOccupate(r);
+    const stato = r.rifiutata
+      ? `<span class="adm-badge no">Rifiutata</span>`
+      : r.confermata
+        ? `<span class="adm-badge ok">Confermata</span>`
+        : `<span class="adm-badge wait">Da confermare</span>`;
+    const allerta = r.rifiutata ? "" : [
+      occupate.length
+        ? `<div class="adm-card-warn"><b>Date già occupate.</b> ${occupate.length} nott${occupate.length === 1 ? "e" : "i"} di questo soggiorno risultano prese (altra prenotazione confermata, un blocco o una OTA), a partire dal ${fmtItaliano(occupate[0])}.</div>`
+        : "",
+      conflitti.length
+        ? `<div class="adm-card-warn"><b>In conflitto con ${conflitti.length === 1 ? "un'altra richiesta" : conflitti.length + " altre richieste"}:</b> ${conflitti.map((o) => `${o.nome || "Ospite"} (${fmtItaliano(o.checkin)} → ${fmtItaliano(o.checkout)}${o.confermata ? ", già confermata" : ""})`).join(" · ")}. Puoi confermarne solo una.</div>`
+        : "",
+    ].join("");
     const contatti = [
       r.email ? `<a href="mailto:${r.email}">${r.email}</a>` : "",
       r.telefono ? `<a href="tel:${r.telefono.replace(/\s/g, "")}">${r.telefono}</a>` : "",
     ].filter(Boolean).join(" · ") || "—";
-    const azione = r.confermata
-      ? `<button class="adm-btn adm-btn-ghost adm-btn-sm" data-unconf="${r.id}">Annulla conferma</button>`
-      : `<button class="adm-btn adm-btn-primary adm-btn-sm" data-conf="${r.id}">Conferma</button>`;
+    const azione = r.rifiutata
+      ? `<button class="adm-btn adm-btn-ghost adm-btn-sm" data-riapri="${r.id}">Riapri</button>`
+      : r.confermata
+        ? `<button class="adm-btn adm-btn-ghost adm-btn-sm" data-unconf="${r.id}">Annulla conferma</button>`
+        : `<button class="adm-btn adm-btn-primary adm-btn-sm" data-conf="${r.id}">Conferma</button>
+           <button class="adm-btn adm-btn-ghost adm-btn-sm" data-rifiuta="${r.id}">Rifiuta</button>`;
     return `
-      <div class="adm-card">
+      <div class="adm-card${r.rifiutata ? " is-off" : (conflitti.length || occupate.length) ? " is-conflict" : ""}">
         <div class="adm-card-main">
           <div class="adm-card-head">
             <strong>${r.nome || "Ospite"}</strong> ${stato}
           </div>
+          ${allerta}
           <div class="adm-card-dates">
             ${fmtItaliano(r.checkin)} → ${fmtItaliano(r.checkout)}
             <span class="adm-dot">·</span> ${notti} nott${notti === 1 ? "e" : "i"}
@@ -270,18 +334,95 @@
       </div>`;
   }
 
+  // Confermare significa mandare l'IBAN e bloccare le date: se il periodo è già
+  // preso, meglio una domanda in più che due ospiti sullo stesso letto.
+  function confermaConsentita(r) {
+    const occupate = nottiGiaOccupate(r);
+    const giaConfermata = conflittiDi(r, state.rows).filter((o) => o.confermata);
+    const inAttesa = conflittiDi(r, state.rows).filter((o) => !o.confermata);
+    if (giaConfermata.length) {
+      return confirm(
+        `ATTENZIONE: queste date sono già confermate a ${giaConfermata.map((o) => o.nome || "un altro ospite").join(", ")}.\n\n` +
+        `Confermando anche ${r.nome || "questa richiesta"} manderesti l'IBAN a due ospiti per lo stesso soggiorno. ` +
+        `Il database rifiuterà l'operazione.\n\nVuoi provare lo stesso?`);
+    }
+    if (occupate.length) {
+      return confirm(
+        `Queste date risultano già occupate (${occupate.length} nott${occupate.length === 1 ? "e" : "i"} dal ${fmtItaliano(occupate[0])}): ` +
+        `può essere una prenotazione su Booking/Airbnb/VRBO o un blocco tuo.\n\nConfermi comunque?`);
+    }
+    if (inAttesa.length) {
+      return confirm(inAttesa.length === 1
+        ? `C'è un'altra richiesta per le stesse date. Confermando questa, l'altra va rifiutata.\n\nProcedo?`
+        : `Ci sono altre ${inAttesa.length} richieste per le stesse date. Confermando questa, le altre vanno rifiutate.\n\nProcedo?`);
+    }
+    return true;
+  }
+
   async function setConfermata(id, value) {
     const row = state.rows.find((r) => r.id === id);
-    if (!sb) { if (row) row.confermata = value; renderRichieste(); toast(value ? "Confermata (demo)" : "Conferma annullata (demo)"); return; }
+    if (value && row && !confermaConsentita(row)) return;
+    if (!sb) {
+      if (row) row.confermata = value;
+      renderRichieste();
+      toast(value ? "Confermata (demo)" : "Conferma annullata (demo)");
+      // Anche in demo: è il passaggio che chiude il conflitto, e serve mostrarlo.
+      if (value && row) await proponiRifiutoConflitti(row);
+      return;
+    }
     try {
       const { error } = await sb.from("richieste").update({ confermata: value }).eq("id", id);
       if (error) throw error;
       if (row) row.confermata = value;
-      state.bookingBusy = state.bookingBusy; // invariato
       renderRichieste();
       toast(value ? "Confermata — la data verrà bloccata su Booking" : "Conferma annullata");
       // L'email di conferma (con IBAN) all'ospite parte server-side: l'UPDATE di
       // confermata → true innesca la Edge Function "conferma" (Resend, via webhook).
+      if (value && row) await proponiRifiutoConflitti(row);
+    } catch (err) {
+      // 23P01 = exclusion_violation: il vincolo anti-sovrapposizione ha fatto
+      // il suo lavoro. Meglio dirlo con parole sue che con un errore generico.
+      const msg = String(err?.code === "23P01" || /exclusion|overlap|conflicting key/i.test(String(err?.message || ""))
+        ? "Bloccata: c'è già una prenotazione confermata su queste date"
+        : "Operazione non riuscita");
+      toast(msg, "err");
+    }
+  }
+
+  // Chiuso il conflitto in favore di uno, gli altri non devono restare appesi:
+  // è il buco che lasciava l'ospite escluso senza risposta nonostante il
+  // "ti rispondiamo entro 24 ore" dell'email automatica.
+  async function proponiRifiutoConflitti(row) {
+    const altri = conflittiDi(row, state.rows).filter((o) => !o.confermata && viva(o));
+    if (!altri.length) return;
+    const ok = confirm(
+      (altri.length === 1 ? `C'è ancora una richiesta per queste date:\n` : `Ci sono ancora ${altri.length} richieste per queste date:\n`) +
+      altri.map((o) => `• ${o.nome || "Ospite"} (${fmtItaliano(o.checkin)} → ${fmtItaliano(o.checkout)})`).join("\n") +
+      `\n\nVuoi rifiutarl${altri.length === 1 ? "a" : "e"} adesso? Riceve${altri.length === 1 ? "rà" : "ranno"} un'email di scuse con le prime date ancora libere.`);
+    if (!ok) return;
+    for (const o of altri) await setRifiutata(o.id, true, true);
+  }
+
+  async function setRifiutata(id, value, silenzioso) {
+    const row = state.rows.find((r) => r.id === id);
+    if (value && !silenzioso && !confirm(
+      `Rifiutare la richiesta di ${row?.nome || "questo ospite"}?\n\n` +
+      `Gli arriva un'email di scuse con le prime date ancora libere. L'azione è reversibile con "Riapri".`)) return;
+    if (!sb) {
+      if (row) row.rifiutata = value;
+      renderRichieste();
+      toast(value ? "Rifiutata (demo)" : "Riaperta (demo)");
+      return;
+    }
+    try {
+      const patch = value ? { rifiutata: true, rifiutata_il: new Date().toISOString() } : { rifiutata: false, rifiutata_il: null };
+      const { error } = await sb.from("richieste").update(patch).eq("id", id);
+      if (error) throw error;
+      if (row) { row.rifiutata = value; row.rifiutata_il = patch.rifiutata_il; }
+      renderRichieste();
+      // L'email di scuse parte server-side: l'UPDATE di rifiutata → true
+      // innesca la Edge Function "rifiuta" (Resend, via webhook).
+      toast(value ? "Rifiutata — all'ospite parte l'email con le date libere" : "Richiesta riaperta");
     } catch (_) { toast("Operazione non riuscita", "err"); }
   }
 
@@ -297,7 +438,8 @@
     const oggi = isoOf(new Date());
 
     const conf = state.rows.filter((r) => r.confermata);
-    const attesa = state.rows.filter((r) => !r.confermata);
+    // Le rifiutate non sono più pipeline: gonfierebbero il valore potenziale.
+    const attesa = state.rows.filter((r) => !r.confermata && viva(r));
 
     const somma = (arr) => arr.reduce((s, r) => s + (Number(r.totale_stimato) || 0), 0);
     const incassato = somma(conf);

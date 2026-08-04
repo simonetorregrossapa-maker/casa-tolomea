@@ -79,6 +79,15 @@
   .adm-badge{font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:100px;}
   .adm-badge.ok{background:#e7eedd;color:var(--c-olive);}
   .adm-badge.wait{background:var(--c-accent-bg);color:var(--c-accent);}
+  .adm-badge.no{background:#efe9e2;color:#8a8172;}
+
+  /* Richieste sovrapposte: l'avviso deve saltare all'occhio prima del bottone
+     "Conferma", perché confermarne due manda l'IBAN a due ospiti. */
+  .adm-conflict-bar{background:#fdf1e7;border:1px solid #e8c9ac;color:#8a4b22;border-radius:12px;padding:11px 15px;font-size:.88rem;line-height:1.5;margin-bottom:14px;}
+  .adm-card.is-conflict{border-color:#e8c9ac;background:#fffaf5;}
+  .adm-card.is-off{opacity:.62;}
+  .adm-card-warn{font-size:.83rem;line-height:1.5;color:#8a4b22;background:#fdf1e7;border-radius:8px;padding:7px 11px;margin:6px 0 2px;}
+  .adm-card-actions{display:flex;gap:8px;flex-wrap:wrap;flex-shrink:0;}
 
   .adm-empty{color:var(--c-muted);text-align:center;padding:30px;}
   .adm-muted{color:var(--c-muted);}
