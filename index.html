@@ -173,10 +173,52 @@
       ]
     }
     </script>
-    <script type="module" crossorigin src="/assets/index-DLbnqHai.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-XTGJHL3R.css">
+
+    <!-- Stili del blocco guide: inline nel documento perché il blocco vive
+         fuori da #root e deve essere completo anche prima che il CSS del
+         bundle sia scaricato. Palette identica al footer (--ink / --bg). -->
+    <style>
+      .guide-statiche { background: #211d16; color: rgba(246, 239, 228, .8); padding: 0 0 clamp(40px, 6vw, 64px); font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+      /* Stessa gabbia di .wrap del sito, con fallback ai valori reali: il
+         blocco vive fuori da #root e deve allinearsi al footer anche se il CSS
+         del bundle non è ancora arrivato. */
+      .guide-statiche .guide-wrap { width: 100%; max-width: var(--maxw, 1280px); margin-inline: auto; padding-inline: var(--gutter, clamp(20px, 5vw, 72px)); }
+      .guide-statiche .guide-inner { border-top: 1px solid rgba(246, 239, 228, .14); padding-top: clamp(32px, 5vw, 48px); }
+      .guide-statiche h2 { font-size: .78rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: rgba(246, 239, 228, .5); margin: 0 0 .6rem; }
+      .guide-statiche p { margin: 0 0 1.4rem; font-size: .9rem; opacity: .75; }
+      .guide-statiche ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px 28px; }
+      .guide-statiche a { color: rgba(246, 239, 228, .85); text-decoration: none; font-size: .95rem; line-height: 1.45; display: block; transition: color .3s; }
+      .guide-statiche a:hover { color: #d9b779; }
+      @media (max-width: 560px) { .guide-statiche ul { grid-template-columns: 1fr; gap: 14px; } }
+    </style>
+    <script type="module" crossorigin src="/assets/index-rg28TV1S.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-B7EjlEi7.css">
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- Guide su Mondello: HTML statico e FUORI da #root, quindi presente
+         nell'HTML servito e non soltanto dentro il bundle JS. È l'unico
+         percorso crawlabile verso le pagine di contenuto. Prima stava nel
+         footer React: l'HTML servito non conteneva i link, le pagine restavano
+         raggiungibili solo dalla sitemap e Google non le indicizzava
+         (verificato il 09/08/2026: 3 pagine pubblicate il 27/07, zero
+         indicizzate, "Rilevata ma attualmente non indicizzata").
+         React monta dentro #root e non tocca questo nodo. -->
+    <section class="guide-statiche" aria-labelledby="guide-titolo">
+      <div class="guide-wrap">
+        <div class="guide-inner">
+          <h2 id="guide-titolo">Guide su Mondello</h2>
+          <p>Qualche guida sulla zona, per orientarti prima di prenotare.</p>
+          <ul>
+            <li><a href="/dove-dormire-a-mondello/" hreflang="it">Dove dormire a Mondello: le zone e come scegliere</a></li>
+            <li><a href="/affitto-casa-mondello-estate/" hreflang="it">Affitto casa a Mondello per l'estate: prezzi e come prenotare dal privato</a></li>
+            <li><a href="/come-arrivare-a-mondello/" hreflang="it">Come arrivare a Mondello: aeroporto, Palermo centro, porto e auto</a></li>
+            <li><a href="/mondello-fuori-stagione/" hreflang="it">Mondello e Palermo fuori stagione: dove dormire da ottobre a marzo</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
   </body>
 </html>
