@@ -321,13 +321,30 @@ window.SITE = {
      sulla OTA "dove si sente protetto". Risposte basate sui dati REALI della
      casa (caparra, animali, parcheggio, transfer, servizi inclusi). Bilingue.
      Vengono anche pubblicate come structured data FAQPage (rich snippet su
-     Google). Modifica/aggiungi voci liberamente: la sezione si popola da qui. */
+     Google). Modifica/aggiungi voci liberamente: la sezione si popola da qui.
+     ⚠️ ATTENZIONE (verificato il 06/08/2026): questo array NON alimenta più
+     la home pubblica. La home (index.html) carica il bundle React compilato
+     in /assets/index-*.js, generato da ~/casa-tolomea-react-demo (src/data.js
+     + src/i18n.jsx), non questo file. Oggi config.js è letto solo da
+     gestione.html (pannello proprietario) per i calcoli prezzo/provvigione:
+     questa voce FAQ resta quindi INERTE lato ospite finché non viene
+     replicata anche in ~/casa-tolomea-react-demo (src/i18n.jsx, chiave
+     `faq`, IT/EN/DE/FR) e quel progetto non viene ribuildato e pubblicato.
+     Vedi report di casa-tolomea per i dettagli. */
   faq: [
     {
       q: { it: "Come funziona la prenotazione? Devo pagare online?",
            en: "How does booking work? Do I pay online?" },
       a: { it: "Nessun pagamento online. Ci invii la richiesta con le tue date dal sito e ti rispondiamo entro 24 ore. Alla conferma versi una caparra del 30% con bonifico; il saldo lo paghi comodamente all'arrivo. Semplice e diretto, senza intermediari.",
            en: "No online payment. You send us your dates through the site and we reply within 24 hours. On confirmation you pay a 30% deposit by bank transfer; the balance is paid on arrival. Simple and direct, with no middleman." },
+    },
+    {
+      // Nuova voce proposta il 06/08/2026 (riposizionamento bassa stagione).
+      // INERTE lato home finché non replicata in react-demo (vedi nota sopra).
+      q: { it: "Casa Tolomea è aperta anche in autunno e inverno?",
+           en: "Is Casa Tolomea open in autumn and winter too?" },
+      a: { it: "Sì, tutto l'anno. Da ottobre a marzo siamo a 20 minuti dal centro di Palermo, con parcheggio gratuito davanti casa: comoda anche per chi viene in città per un weekend, un evento o i mercatini di Natale, non solo per il mare.",
+           en: "Yes, all year round. From October to March we are 20 minutes from downtown Palermo, with free parking right outside the house: handy even if you are coming to the city for a weekend, an event or the Christmas markets, not only for the sea." },
     },
     {
       q: { it: "Perché conviene prenotare qui invece che su Booking?",
