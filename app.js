@@ -326,7 +326,7 @@
       name: S.casa?.nome,
       description: t(S.casa?.intro),
       url: dominio || undefined,
-      image: dominio ? [`${dominio}/assets/social/social.jpg`] : undefined,
+      image: dominio ? [`${dominio}/assets/social/social-tolomea.jpg`] : undefined,
       telephone: S.contatti?.telHref,
       priceRange: `${S.valuta || "€"}${Math.min(...(S.stagioni || []).map((s) => s.prezzoNotte))}–${S.valuta || "€"}${Math.max(...(S.stagioni || []).map((s) => s.prezzoNotte))}`,
       address: {
