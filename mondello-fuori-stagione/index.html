@@ -29,15 +29,14 @@
      In attesa di conferma ufficiale dal Comune di Palermo, il testo sotto dice
      "fine novembre 2026 (data da confermare)" e NON una data precisa. Non
      pubblicare una data esatta finché non è confermata.
-  2) Prezzo bassa stagione: questa pagina usa 150 €/notte (min. 2 notti,
-     ottobre-marzo), il valore indicato come "reale" in config.js del 06/08/2026.
-     ATTENZIONE: verificando il bundle live di casatolomea.it il 06/08/2026
-     risultava un prezzo bassa stagione di 130 €/notte (e la sorgente
-     ~/casa-tolomea-react-demo/src/data.js, non ancora ripubblicata, indicava
-     126 €/notte) — cioè NÉ il bundle live NÉ la sorgente react-demo mostrano
-     150. config.js di questo repo non alimenta più la home (vedi report):
-     è verosimilmente disallineato. Riconciliare il prezzo vero con Simone/
-     Alessandro prima di pubblicare questa pagina.
+  2) Prezzo bassa stagione: RISOLTO il 15/09/2026 (ciclo casa-tolomea-crescita).
+     La pagina indicava 150 €/notte flat ottobre-marzo, un prezzo mai vero e
+     segnalato come bug dal 06/08/2026 senza mai essere corretto. I prezzi
+     reali di bassa stagione (da src/data.js, array `stagioni`, approvati da
+     Alessandro) vanno da 126 € (ottobre) a 180 € (gennaio-febbraio) a seconda
+     del mese: non esiste un unico prezzo per l'intero periodo ottobre-marzo.
+     Il testo ora dice "da 126 € a notte" e rimanda alla verifica date per il
+     prezzo esatto del mese, invece di affermare una cifra fissa sbagliata.
 -->
 
 <script type="application/ld+json">
@@ -125,7 +124,7 @@
 
   <div class="cta-box">
     <h2>Casa Tolomea, base per Palermo tutto l'anno</h2>
-    <p>Casa indipendente al piano terra di una villa, 85 m², due camere matrimoniali e un divano letto (fino a 6 ospiti), veranda con giardino, parcheggio gratuito. Alessandro e Marcella abitano nella stessa villa. Bassa stagione (ottobre-marzo): 150 € a notte, minimo 2 notti.</p>
+    <p>Casa indipendente al piano terra di una villa, 85 m², due camere matrimoniali e un divano letto (fino a 6 ospiti), veranda con giardino, parcheggio gratuito. Alessandro e Marcella abitano nella stessa villa. Bassa stagione (ottobre-marzo): da 126 € a notte, minimo 2 notti — il prezzo esatto dipende dal mese, lo vedi verificando le date.</p>
     <p class="quote">"Struttura luminosa e confortevole. L'accoglienza è familiare, con uno stuzzichino di benvenuto e del buon vino. Il parcheggio è vicinissimo e la spiaggia poco distante. Consiglio vivamente."
       <cite>Salvador, recensione su Booking.com</cite></p>
     <div class="cta-row">
