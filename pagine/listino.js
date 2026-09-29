@@ -28,12 +28,22 @@ window.CT_FASCE = [
     "periodi": [
       [
         "2026-11-01",
+        "2026-11-30"
+      ]
+    ]
+  },
+  {
+    "prezzo": 150,
+    "min": 2,
+    "periodi": [
+      [
+        "2026-12-01",
         "2026-12-31"
       ]
     ]
   },
   {
-    "prezzo": 180,
+    "prezzo": 150,
     "min": 2,
     "periodi": [
       [
@@ -53,21 +63,11 @@ window.CT_FASCE = [
     ]
   },
   {
-    "prezzo": 157,
+    "prezzo": 170,
     "min": 2,
     "periodi": [
       [
         "2027-04-01",
-        "2027-04-30"
-      ]
-    ]
-  },
-  {
-    "prezzo": 165,
-    "min": 2,
-    "periodi": [
-      [
-        "2027-05-01",
         "2027-05-31"
       ]
     ]
@@ -83,7 +83,7 @@ window.CT_FASCE = [
     ]
   },
   {
-    "prezzo": 210,
+    "prezzo": 240,
     "min": 2,
     "top": true,
     "periodi": [
@@ -99,12 +99,22 @@ window.CT_FASCE = [
     "periodi": [
       [
         "2027-09-01",
+        "2027-11-30"
+      ]
+    ]
+  },
+  {
+    "prezzo": 150,
+    "min": 2,
+    "periodi": [
+      [
+        "2027-12-01",
         "2027-12-31"
       ]
     ]
   },
   {
-    "prezzo": 180,
+    "prezzo": 150,
     "min": 2,
     "mostra": false,
     "periodi": [
@@ -126,23 +136,12 @@ window.CT_FASCE = [
     ]
   },
   {
-    "prezzo": 157,
+    "prezzo": 170,
     "min": 2,
     "mostra": false,
     "periodi": [
       [
         "04-01",
-        "04-30"
-      ]
-    ]
-  },
-  {
-    "prezzo": 165,
-    "min": 2,
-    "mostra": false,
-    "periodi": [
-      [
-        "05-01",
         "05-31"
       ]
     ]
@@ -159,7 +158,7 @@ window.CT_FASCE = [
     ]
   },
   {
-    "prezzo": 210,
+    "prezzo": 240,
     "min": 2,
     "mostra": false,
     "periodi": [
@@ -176,6 +175,17 @@ window.CT_FASCE = [
     "periodi": [
       [
         "09-01",
+        "11-30"
+      ]
+    ]
+  },
+  {
+    "prezzo": 150,
+    "min": 2,
+    "mostra": false,
+    "periodi": [
+      [
+        "12-01",
         "12-31"
       ]
     ]
