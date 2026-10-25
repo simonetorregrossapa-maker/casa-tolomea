@@ -70,10 +70,13 @@ Deno.serve(async (req) => {
     const record = body.record || {};
     const old = body.old_record || {};
 
-    // Reagisce SOLO alle cancellazioni: era confermata, ora non lo è più.
-    const eraConfermata = old.confermata === true;
-    const oraAnnullata = record.confermata === false;
-    if (!(eraConfermata && oraAnnullata)) {
+    // Reagisce SOLO quando delle date si liberano davvero. Dal 25/10/2026 le date
+    // si bloccano solo a pagamento ricevuto (`pagata`), quindi si liberano quando
+    // una prenotazione pagata torna non pagata (o viene annullata). Annullare una
+    // richiesta solo "confermata" non libera nulla: non c'era alcun blocco.
+    const eraBloccata = old.pagata === true;
+    const oraLibera = record.pagata === false || record.confermata === false;
+    if (!(eraBloccata && oraLibera)) {
       return new Response(JSON.stringify({ ignored: true }), { headers: { "Content-Type": "application/json" } });
     }
 

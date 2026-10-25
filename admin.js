@@ -257,6 +257,8 @@
     // quante richieste aspettano davvero una risposta.
     const inAttesa = rows.filter((r) => !r.confermata && viva(r)).length;
     const confermate = rows.filter((r) => r.confermata).length;
+    const daPagare = rows.filter((r) => r.confermata && !r.pagata).length;
+    const pagate = rows.filter((r) => r.confermata && r.pagata).length;
     const rifiutate = rows.filter((r) => r.rifiutata).length;
     const daDecidere = rows.filter((r) => !r.confermata && viva(r) && conflittiDi(r, rows).length).length;
 
@@ -266,10 +268,11 @@
       state.filtro === "rifiutate" ? r.rifiutata : r.confermata);
 
     view.innerHTML = `
-      <div class="adm-stats">
+      <div class="adm-stats adm-stats-4">
         <div class="adm-stat"><b>${rows.length}</b><span>Richieste totali</span></div>
         <div class="adm-stat"><b>${inAttesa}</b><span>Da confermare</span></div>
-        <div class="adm-stat"><b>${confermate}</b><span>Confermate (bloccano Booking)</span></div>
+        <div class="adm-stat"><b>${daPagare}</b><span>Confermate, in attesa di pagamento</span></div>
+        <div class="adm-stat"><b>${pagate}</b><span>Pagate (date bloccate su Booking)</span></div>
       </div>
       ${daDecidere ? `<div class="adm-conflict-bar">⚠︎ <b>${daDecidere}</b> ${daDecidere === 1 ? "richiesta in attesa si sovrappone" : "richieste in attesa si sovrappongono"} ad altre per le stesse date: confermane una e rifiuta le altre, così l'ospite escluso riceve una risposta invece del silenzio.</div>` : ""}
       <div class="adm-filters">
@@ -303,12 +306,12 @@
         ? `<div class="adm-card-warn"><b>Date già occupate.</b> ${occupate.length} nott${occupate.length === 1 ? "e" : "i"} di questo soggiorno risultano prese (altra prenotazione confermata, un blocco o una OTA), a partire dal ${fmtItaliano(occupate[0])}.</div>`
         : "",
       conflitti.length
-        ? `<div class="adm-card-warn"><b>In conflitto con ${conflitti.length === 1 ? "un'altra richiesta" : conflitti.length + " altre richieste"}:</b> ${conflitti.map((o) => `${o.nome || "Ospite"} (${fmtItaliano(o.checkin)} → ${fmtItaliano(o.checkout)}${o.confermata ? ", già confermata" : ""})`).join(" · ")}. Puoi confermarne solo una.</div>`
+        ? `<div class="adm-card-warn"><b>In conflitto con ${conflitti.length === 1 ? "un'altra richiesta" : conflitti.length + " altre richieste"}:</b> ${conflitti.map((o) => `${escH(o.nome || "Ospite")} (${fmtItaliano(o.checkin)} → ${fmtItaliano(o.checkout)}${o.confermata ? ", già confermata" : ""})`).join(" · ")}. Puoi confermarne solo una.</div>`
         : "",
     ].join("");
     const contatti = [
-      r.email ? `<a href="mailto:${r.email}">${r.email}</a>` : "",
-      r.telefono ? `<a href="tel:${r.telefono.replace(/\s/g, "")}">${r.telefono}</a>` : "",
+      r.email ? `<a href="mailto:${escH(r.email)}">${escH(r.email)}</a>` : "",
+      r.telefono ? `<a href="tel:${escH(String(r.telefono).replace(/\s/g, ""))}">${escH(r.telefono)}</a>` : "",
     ].filter(Boolean).join(" · ") || "—";
     const azione = r.rifiutata
       ? `<button class="adm-btn adm-btn-ghost adm-btn-sm" data-riapri="${r.id}">Riapri</button>`
@@ -323,7 +326,7 @@
       <div class="adm-card${r.rifiutata ? " is-off" : (conflitti.length || occupate.length) ? " is-conflict" : ""}">
         <div class="adm-card-main">
           <div class="adm-card-head">
-            <strong>${r.nome || "Ospite"}</strong> ${stato}
+            <strong>${escH(r.nome || "Ospite")}</strong> ${stato}
           </div>
           ${allerta}
           <div class="adm-card-dates">
@@ -333,7 +336,7 @@
             ${r.totale_stimato != null ? `<span class="adm-dot">·</span> ${euro(r.totale_stimato)}` : ""}
           </div>
           <div class="adm-card-contacts">${contatti}</div>
-          ${r.note ? `<div class="adm-card-note">${r.note}</div>` : ""}
+          ${r.note ? `<div class="adm-card-note">${escH(r.note)}</div>` : ""}
         </div>
         <div class="adm-card-actions">${azione}</div>
       </div>`;
@@ -456,7 +459,10 @@
     const pct = Number(CFG.gestione?.provvigionePct ?? 10);
     const oggi = isoOf(new Date());
 
-    const conf = state.rows.filter((r) => r.confermata);
+    // Si incassa solo quando la caparra è arrivata: le confermate non ancora
+    // pagate non sono né incasso né provvigione (prima gonfiavano entrambi).
+    const conf = state.rows.filter((r) => r.confermata && r.pagata);
+    const daIncassare = state.rows.filter((r) => r.confermata && !r.pagata);
     // Le rifiutate non sono più pipeline: gonfierebbero il valore potenziale.
     const attesa = state.rows.filter((r) => !r.confermata && viva(r));
 
@@ -476,7 +482,7 @@
       return `
         <div class="adm-inc-row">
           <div class="adm-inc-when">
-            <strong>${r.nome || "Ospite"}</strong>
+            <strong>${escH(r.nome || "Ospite")}</strong>
             <span class="adm-muted">${fmtItaliano(r.checkin)} → ${fmtItaliano(r.checkout)} · ${nottiOf(r)} nott${nottiOf(r) === 1 ? "e" : "i"}</span>
             ${passata ? `<span class="adm-badge ok">Conclusa</span>` : `<span class="adm-badge wait">In arrivo</span>`}
           </div>
@@ -489,7 +495,7 @@
 
     view.innerHTML = `
       <div class="adm-stats adm-stats-4">
-        <div class="adm-stat"><b>${conf.length}</b><span>Prenotazioni dirette</span></div>
+        <div class="adm-stat"><b>${conf.length}</b><span>Prenotazioni dirette pagate</span></div>
         <div class="adm-stat"><b>${notti}</b><span>Notti vendute</span></div>
         <div class="adm-stat"><b>${euro(incassato)}</b><span>Incassato stimato</span></div>
         <div class="adm-stat adm-stat-accent"><b>${euro(provvigione)}</b><span>Provvigione ${pct}%</span></div>
@@ -499,6 +505,8 @@
         In attesa di conferma: <strong>${attesa.length}</strong> richiest${attesa.length === 1 ? "a" : "e"}
         · valore <strong>${euro(valoreAttesa)}</strong>
         <span class="adm-muted">(provvigione potenziale ${euro(provvAttesa)})</span>
+        <br>Confermate, in attesa di pagamento: <strong>${daIncassare.length}</strong>
+        · valore <strong>${euro(somma(daIncassare))}</strong>
       </div>
 
       <div class="adm-inc-head">
@@ -506,9 +514,9 @@
         <span class="adm-inc-cols"><span>Totale</span><b>Provv. ${pct}%</b></span>
       </div>
       <div class="adm-inc-list">
-        ${confOrd.length ? confOrd.map(rigaIncasso).join("") : `<p class="adm-empty">Nessuna prenotazione diretta confermata. La provvigione si calcola sulle richieste che confermi nella tab "Richieste".</p>`}
+        ${confOrd.length ? confOrd.map(rigaIncasso).join("") : `<p class="adm-empty">Nessuna prenotazione diretta pagata. La provvigione si calcola sulle richieste per cui premi "Pagamento ricevuto" nella tab "Richieste".</p>`}
       </div>
-      <p class="adm-muted adm-cal-foot">Gli importi usano il totale stimato di ogni prenotazione (config prezzi). La provvigione è calcolata al ${pct}% sulle sole prenotazioni dirette confermate.</p>`;
+      <p class="adm-muted adm-cal-foot">Gli importi usano il totale stimato di ogni prenotazione (config prezzi). La provvigione è calcolata al ${pct}% sulle sole prenotazioni dirette con pagamento ricevuto.</p>`;
   }
 
   /* ── VISTA LISTA D'ATTESA ──────────────────────────────────────────── */
@@ -520,8 +528,8 @@
     const card = (r) => {
       const periodo = r.dal && r.al ? `${fmtItaliano(r.dal)} → ${fmtItaliano(r.al)}` : "Date flessibili";
       const contatti = [
-        r.email ? `<a href="mailto:${r.email}">${r.email}</a>` : "",
-        r.telefono ? `<a href="tel:${String(r.telefono).replace(/\s/g, "")}">${r.telefono}</a>` : "",
+        r.email ? `<a href="mailto:${escH(r.email)}">${escH(r.email)}</a>` : "",
+        r.telefono ? `<a href="tel:${escH(String(r.telefono).replace(/\s/g, ""))}">${escH(r.telefono)}</a>` : "",
       ].filter(Boolean).join(" · ") || "—";
       const badge = r.avvisato ? `<span class="adm-badge ok">Avvisato</span>` : `<span class="adm-badge wait">In attesa</span>`;
       const azione = r.avvisato
@@ -530,7 +538,7 @@
       return `
         <div class="adm-card">
           <div class="adm-card-main">
-            <div class="adm-card-head"><strong>${r.nome || "Ospite"}</strong> ${badge}</div>
+            <div class="adm-card-head"><strong>${escH(r.nome || "Ospite")}</strong> ${badge}</div>
             <div class="adm-card-dates">${periodo}${r.ospiti ? `<span class="adm-dot">·</span> ${r.ospiti} osp.` : ""}</div>
             <div class="adm-card-contacts">${contatti}</div>
           </div>
@@ -625,7 +633,7 @@
     const blocchiHtml = listaBlocchi.length
       ? listaBlocchi.map((b) => `
           <div class="adm-blocco-row">
-            <span>${fmtItaliano(b.dal)} → ${fmtItaliano(b.al)}${b.motivo ? ` · <em>${b.motivo}</em>` : ""}</span>
+            <span>${fmtItaliano(b.dal)} → ${fmtItaliano(b.al)}${b.motivo ? ` · <em>${escH(b.motivo)}</em>` : ""}</span>
             <button class="adm-btn adm-btn-ghost adm-btn-sm" data-delblock="${b.id}">Rimuovi</button>
           </div>`).join("")
       : `<p class="adm-muted" style="margin:.3rem 0">Nessun blocco manuale attivo.</p>`;
@@ -645,7 +653,7 @@
         ${WD.map((w) => `<div class="adm-wd">${w}</div>`).join("")}
         ${cells}
       </div>
-      <p class="adm-muted adm-cal-foot">Le date "sul sito" sono le richieste che hai confermato; quelle "su OTA" arrivano dai calendari di Booking, Airbnb e VRBO (aggiornati ogni poche ore).</p>
+      <p class="adm-muted adm-cal-foot">Le date "sul sito" sono le richieste con pagamento ricevuto; quelle "su OTA" arrivano dai calendari di Booking, Airbnb e VRBO (aggiornati ogni poche ore).</p>
 
       <div class="adm-block-box">
         <h3>Blocca date a mano</h3>
@@ -720,7 +728,7 @@
     const map = new Map();
     const today = isoOf(new Date());
     (state.rows || []).forEach((r) => {
-      if (!r.confermata || !r.email) return;
+      if (!(r.confermata && r.pagata) || !r.email) return;
       const email = String(r.email).toLowerCase().trim();
       if (!email) return;
       const c = map.get(email) || { email, nome: r.nome || "", soggiorni: 0, ultimo: "", futura: false };
@@ -748,8 +756,8 @@
     const clienti = clientiFromRows();
 
     if (!clienti.length) {
-      view.innerHTML = `<p class="adm-empty">Non ci sono ancora clienti con un soggiorno confermato.<br>
-        Appena confermi le prime richieste, potrai scrivere ai tuoi ospiti da qui.</p>`;
+      view.innerHTML = `<p class="adm-empty">Non ci sono ancora clienti con un soggiorno pagato.<br>
+        Appena registri i primi pagamenti, potrai scrivere ai tuoi ospiti da qui.</p>`;
       return;
     }
 
@@ -770,7 +778,7 @@
       <div class="adm-msg">
         <div class="adm-msg-box">
           <h3>A chi scrivere</h3>
-          <p class="adm-muted">${clienti.length} client${clienti.length === 1 ? "e" : "i"} con soggiorno confermato. Scegli un gruppo o seleziona a mano.</p>
+          <p class="adm-muted">${clienti.length} client${clienti.length === 1 ? "e" : "i"} con soggiorno pagato. Scegli un gruppo o seleziona a mano.</p>
           <div class="adm-seg">
             <button class="adm-chip" data-seg="tutti">Tutti</button>
             <button class="adm-chip" data-seg="ritorno">Ospiti di ritorno</button>

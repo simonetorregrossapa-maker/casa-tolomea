@@ -90,7 +90,7 @@ Deno.serve(async () => {
     const mittente = `${s.nome_casa || "Casa Tolomea"} <${s.email_mittente || "onboarding@resend.dev"}>`;
 
     // Tutte le prenotazioni confermate con email, per aggregare per ospite.
-    const res = await rest(`richieste?select=nome,email,checkout&confermata=eq.true&email=not.is.null`);
+    const res = await rest(`richieste?select=nome,email,checkout&confermata=eq.true&pagata=eq.true&email=not.is.null`);
     if (!res.ok) throw new Error(`Query richieste fallita (HTTP ${res.status})`);
     const righe = await res.json();
 

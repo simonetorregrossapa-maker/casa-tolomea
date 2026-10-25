@@ -50,6 +50,7 @@
   .adm-tabs{display:inline-flex;background:var(--c-surface);border:1px solid var(--c-line);border-radius:100px;padding:4px;}
   .adm-tab{border:none;background:transparent;padding:9px 20px;border-radius:100px;font-family:var(--font-body);font-weight:700;font-size:.9rem;color:var(--c-muted);cursor:pointer;}
   .adm-tab.sel{background:var(--c-accent);color:#fff;}
+  @media(max-width:640px){.adm-tabs{display:flex;width:100%;max-width:100%;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;}.adm-tabs::-webkit-scrollbar{display:none;}.adm-tab{white-space:nowrap;flex:0 0 auto;padding:10px 15px;}}
   .adm-bar-right{display:flex;align-items:center;gap:8px;}
   .adm-demo-pill{background:var(--c-accent-bg);color:var(--c-accent);font-size:.76rem;font-weight:700;padding:6px 12px;border-radius:100px;}
 
@@ -117,7 +118,7 @@
   /* Incassi / provvigione */
   .adm-stats-4{grid-template-columns:repeat(4,1fr);}
   @media(max-width:720px){.adm-stats-4{grid-template-columns:repeat(2,1fr);}}
-  @media(max-width:560px){.adm-stats-4{grid-template-columns:1fr;}}
+  @media(max-width:560px){.adm-stats-4{grid-template-columns:repeat(2,1fr);}}
   .adm-stat-accent{background:var(--c-accent-bg);border-color:var(--c-accent);}
   .adm-inc-pipeline{background:var(--c-surface);border:1px solid var(--c-line);border-radius:12px;padding:12px 16px;font-size:.92rem;margin-bottom:18px;}
   .adm-inc-head{display:flex;justify-content:space-between;align-items:center;padding:0 4px 8px;font-size:.78rem;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--c-line);}
