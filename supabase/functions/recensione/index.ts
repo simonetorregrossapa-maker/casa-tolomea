@@ -111,7 +111,7 @@ Deno.serve(async () => {
     const mittente = `${s.nome_casa || "Casa Tolomea"} <${s.email_mittente || "onboarding@resend.dev"}>`;
 
     const res = await rest(
-      `richieste?select=id,nome,email,checkout&confermata=eq.true&recensione_inviata=eq.false&checkout=lte.${finePeriodo}&checkout=gte.${inizioPeriodo}`,
+      `richieste?select=id,nome,email,checkout&confermata=eq.true&pagata=eq.true&recensione_inviata=eq.false&checkout=lte.${finePeriodo}&checkout=gte.${inizioPeriodo}`,
     );
     if (!res.ok) throw new Error(`Query richieste fallita (HTTP ${res.status})`);
     const righe = await res.json();

@@ -107,7 +107,7 @@ async function fetchEventi(): Promise<Evento[]> {
     fromIcal(BOOKING_ICAL_URL, "Booking", oggi),
     fromIcal(AIRBNB_ICAL_URL, "Airbnb", oggi),
     fromIcal(VRBO_ICAL_URL, "Vrbo", oggi),
-    query(`richieste?select=id,checkin,checkout&confermata=eq.true&checkout=gte.${oggi}`),
+    query(`richieste?select=id,checkin,checkout&confermata=eq.true&pagata=eq.true&checkout=gte.${oggi}`),
     query(`blocchi?select=id,dal,al&al=gte.${oggi}`),
   ]);
   return [

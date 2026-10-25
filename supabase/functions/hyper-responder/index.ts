@@ -171,7 +171,7 @@ async function build(): Promise<Payload> {
     otaSource(ICAL_URL, "Booking", "booking"),
     otaSource(AIRBNB_ICAL_URL, "Airbnb", "airbnb"),
     otaSource(VRBO_ICAL_URL, "Vrbo", "vrbo"),
-    fromTable(`richieste?select=checkin,checkout&confermata=eq.true&checkout=gte.${today}`,
+    fromTable(`richieste?select=checkin,checkout&confermata=eq.true&pagata=eq.true&checkout=gte.${today}`,
       (r) => ({ start: r.checkin, end: r.checkout })),
     fromTable(`blocchi?select=dal,al&al=gte.${today}`,
       (r) => ({ start: r.dal, end: r.al })),

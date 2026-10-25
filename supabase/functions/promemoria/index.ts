@@ -125,7 +125,7 @@ Deno.serve(async (req) => {
     const tmpl = tipo === "arrivo" ? templateArrivo : templateVigilia;
 
     const res = await rest(
-      `richieste?select=id,nome,email,checkin,checkout,ospiti&confermata=eq.true&${flag}=eq.false&checkin=eq.${giorno}`,
+      `richieste?select=id,nome,email,checkin,checkout,ospiti&confermata=eq.true&pagata=eq.true&${flag}=eq.false&checkin=eq.${giorno}`,
     );
     if (!res.ok) throw new Error(`Query richieste fallita (HTTP ${res.status})`);
     const righe = await res.json();

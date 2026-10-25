@@ -134,7 +134,7 @@
   async function fetchRichieste() {
     if (!sb) return demoRows();
     const { data, error } = await sb.from("richieste")
-      .select("id,nome,email,telefono,ospiti,checkin,checkout,totale_stimato,note,confermata,rifiutata,creato")
+      .select("id,nome,email,telefono,ospiti,checkin,checkout,totale_stimato,note,confermata,pagata,rifiutata,creato")
       .order("checkin", { ascending: true });
     if (error) throw error;
     return data || [];
@@ -282,6 +282,8 @@
 
     view.querySelectorAll(".adm-chip").forEach((c) => c.onclick = () => { state.filtro = c.dataset.f; renderRichieste(); });
     view.querySelectorAll("[data-conf]").forEach((b) => b.onclick = () => setConfermata(Number(b.dataset.conf), true));
+    view.querySelectorAll("[data-paga]").forEach((b) => b.onclick = () => setPagata(Number(b.dataset.paga), true));
+    view.querySelectorAll("[data-unpaga]").forEach((b) => b.onclick = () => setPagata(Number(b.dataset.unpaga), false));
     view.querySelectorAll("[data-unconf]").forEach((b) => b.onclick = () => setConfermata(Number(b.dataset.unconf), false));
     view.querySelectorAll("[data-rifiuta]").forEach((b) => b.onclick = () => setRifiutata(Number(b.dataset.rifiuta), true));
     view.querySelectorAll("[data-riapri]").forEach((b) => b.onclick = () => setRifiutata(Number(b.dataset.riapri), false));
@@ -294,7 +296,7 @@
     const stato = r.rifiutata
       ? `<span class="adm-badge no">Rifiutata</span>`
       : r.confermata
-        ? `<span class="adm-badge ok">Confermata</span>`
+        ? (r.pagata ? `<span class="adm-badge ok">Pagata, date bloccate</span>` : `<span class="adm-badge wait">Confermata, in attesa di pagamento</span>`)
         : `<span class="adm-badge wait">Da confermare</span>`;
     const allerta = r.rifiutata ? "" : [
       occupate.length
@@ -311,7 +313,10 @@
     const azione = r.rifiutata
       ? `<button class="adm-btn adm-btn-ghost adm-btn-sm" data-riapri="${r.id}">Riapri</button>`
       : r.confermata
-        ? `<button class="adm-btn adm-btn-ghost adm-btn-sm" data-unconf="${r.id}">Annulla conferma</button>`
+        ? (r.pagata
+            ? `<button class="adm-btn adm-btn-ghost adm-btn-sm" data-unpaga="${r.id}">Segna non pagata</button>`
+            : `<button class="adm-btn adm-btn-primary adm-btn-sm" data-paga="${r.id}">Pagamento ricevuto</button>
+               <button class="adm-btn adm-btn-ghost adm-btn-sm" data-unconf="${r.id}">Annulla conferma</button>`)
         : `<button class="adm-btn adm-btn-primary adm-btn-sm" data-conf="${r.id}">Conferma</button>
            <button class="adm-btn adm-btn-ghost adm-btn-sm" data-rifiuta="${r.id}">Rifiuta</button>`;
     return `
@@ -357,6 +362,20 @@
         : `Ci sono altre ${inAttesa.length} richieste per le stesse date. Confermando questa, le altre vanno rifiutate.\n\nProcedo?`);
     }
     return true;
+  }
+
+  // Le date si bloccano (sito, Booking, Airbnb) SOLO quando la caparra è incassata.
+  async function setPagata(id, value) {
+    const row = state.rows.find((r) => r.id === id);
+    if (!row) return;
+    if (value && !confirm(`Confermi di aver ricevuto il pagamento di ${row.nome || "questo ospite"}?\n\nLe date si bloccheranno su sito, Booking e Airbnb.`)) return;
+    if (sb) {
+      const { error } = await sb.from("richieste").update({ pagata: value, pagata_il: value ? new Date().toISOString() : null }).eq("id", id);
+      if (error) { toast(error.code === "23P01" ? "Date già occupate da un'altra prenotazione pagata" : "Operazione non riuscita", "err"); return; }
+    }
+    row.pagata = value;
+    renderRichieste();
+    toast(value ? "Pagamento registrato, date bloccate (Booking si aggiorna entro 10-15 minuti)" : "Date di nuovo libere");
   }
 
   async function setConfermata(id, value) {
@@ -562,7 +581,7 @@
   /* ── VISTA CALENDARIO UNICO ────────────────────────────────────────── */
   function siteBusySet() {
     const set = new Set();
-    state.rows.filter((r) => r.confermata).forEach((r) => addRange(set, r.checkin, r.checkout));
+    state.rows.filter((r) => r.confermata && r.pagata).forEach((r) => addRange(set, r.checkin, r.checkout));
     return set;
   }
 
