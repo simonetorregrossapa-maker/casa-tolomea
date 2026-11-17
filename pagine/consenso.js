@@ -20,7 +20,7 @@
 
   // ID del progetto Clarity (clarity.microsoft.com → Impostazioni → Installazione).
   // Vuoto = niente banner e niente Clarity: il sito resta come prima.
-  var CLARITY_ID = "";
+  var CLARITY_ID = "zf72rht2hc";
 
   var CHIAVE = "ct_consenso";
   var VERSIONE = 1;
