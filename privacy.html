@@ -23,6 +23,7 @@
   .legal p, .legal li { color: var(--muted); line-height: 1.75; }
   .legal ul { padding-left: 1.2em; margin-top: .4em; }
   .legal a { color: var(--accent); }
+  .legal .pref { padding: 0; border: 0; background: none; font: inherit; color: var(--accent); text-decoration: underline; cursor: pointer; }
   .legal a.back { display: inline-block; margin-bottom: 2em; font-weight: 700; text-decoration: none; }
 </style>
 </head>
@@ -30,7 +31,7 @@
 <main class="legal">
   <a class="back" href="./">← Torna al sito</a>
   <h1>Informativa sulla privacy</h1>
-  <p>Ultimo aggiornamento: <span id="updated"></span></p>
+  <p>Ultimo aggiornamento: 17 novembre 2026</p>
 
   <h2>Titolare del trattamento</h2>
   <p>Alessandro Li Brizzi (Casa Tolomea), contattabile via email all'indirizzo <a href="mailto:casa.tolomea@tiscali.it">casa.tolomea@tiscali.it</a>.</p>
@@ -58,11 +59,15 @@
   </ul>
   <p>Questi servizi agiscono in qualità di responsabili del trattamento limitatamente alle operazioni tecniche necessarie all'invio e alla conservazione della richiesta.</p>
 
+  <h2 id="cookie">Statistiche di visita e cookie</h2>
+  <p><strong>Conteggio delle visite, senza cookie.</strong> Per capire quante persone visitano il sito, da dove arrivano (per esempio Google o un link condiviso) e quali parti della pagina usano (sezioni viste, calendario aperto, date scelte, modulo iniziato, errori all'invio, tempo sulla pagina), registriamo sul nostro database (Supabase) dati tecnici anonimi: pagina, provenienza, tipo di dispositivo, lingua. Non usiamo cookie e non salviamo niente sul tuo dispositivo per questo scopo: ogni apertura della pagina ha un numero casuale che sparisce quando la chiudi. Non raccogliamo nome, email, indirizzo IP né le date che scegli. Base giuridica: legittimo interesse a far funzionare e migliorare il sito (art. 6.1.f GDPR).</p>
+  <p><strong>Microsoft Clarity, solo se accetti.</strong> Se clicchi "Accetta" nel riquadro dei cookie, usiamo Microsoft Clarity per vedere in forma anonima come viene usato il sito: dove si clicca, fin dove si scorre, dove ci si blocca, con brevi registrazioni della navigazione. Il testo scritto nei moduli viene oscurato e non viene registrato. Clarity usa cookie propri (per esempio _clck e _clsk, durata fino a 1 anno) ed è fornito da Microsoft Corporation, che tratta i dati come indicato nella sua <a href="https://privacy.microsoft.com/it-it/privacystatement" target="_blank" rel="noopener">informativa</a>, anche fuori dall'Unione europea. Base giuridica: il tuo consenso (art. 6.1.a GDPR). Se clicchi "Rifiuta" o chiudi il riquadro, Clarity non viene caricato.</p>
+  <p><strong>Cookie tecnici.</strong> Il sito ricorda nel tuo browser la lingua scelta e la tua scelta sui cookie (per 6 mesi, poi te la richiede). Servono solo a far funzionare il sito e non richiedono consenso.</p>
+  <p>Puoi cambiare idea quando vuoi: <button type="button" class="pref" onclick="window.ctConsenso && window.ctConsenso.apri()">apri le preferenze cookie</button>.</p>
+
   <h2>Diritti dell'interessato</h2>
   <p>In qualsiasi momento puoi richiedere l'accesso, la rettifica, la cancellazione o la limitazione del trattamento dei tuoi dati, oltre a opporti al trattamento e richiederne la portabilità, scrivendo all'indirizzo email sopra indicato. Hai inoltre diritto di proporre reclamo al Garante per la protezione dei dati personali.</p>
 </main>
-<script>
-  document.getElementById("updated").textContent = new Date().toLocaleDateString("it-IT");
-</script>
+<script src="/pagine/consenso.js" defer></script>
 </body>
 </html>

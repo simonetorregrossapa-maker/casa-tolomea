@@ -161,7 +161,7 @@
       + '<button type="button" class="ct-pop__x" aria-label="' + T.close + '" data-chiudi>&times;</button>'
       + '<h3>' + T.title + '</h3>'
       + '<p class="ct-lead">' + T.lead + '</p>'
-      + '<form novalidate>'
+      + '<form novalidate data-clarity-mask="True">'
       + '<div class="ct-row">'
       + '<div class="ct-f"><label for="ct-ci">' + T.checkin + '</label><input id="ct-ci" type="date" min="' + oggi + '"></div>'
       + '<div class="ct-f"><label for="ct-co">' + T.checkout + '</label><input id="ct-co" type="date" min="' + oggi + '"></div>'
