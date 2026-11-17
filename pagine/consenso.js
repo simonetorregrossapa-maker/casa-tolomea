@@ -31,23 +31,23 @@
 
   var TESTI = {
     it: {
-      titolo: "Ci aiuti a migliorare il sito?",
-      testo: "Usiamo cookie di statistica solo se accetti. Ci servono a migliorare il sito.",
+      titolo: "Questo sito usa i cookie",
+      testo: "Usiamo cookie tecnici per far funzionare il sito e, se accetti, cookie di statistica.",
       accetta: "Accetta", rifiuta: "Rifiuta", chiudi: "Chiudi e rifiuta", info: "Informativa privacy"
     },
     en: {
-      titolo: "Help us improve the site?",
-      testo: "We use analytics cookies only if you accept. They help us improve the site.",
+      titolo: "This site uses cookies",
+      testo: "We use technical cookies to run the site and, if you accept, analytics cookies.",
       accetta: "Accept", rifiuta: "Decline", chiudi: "Close and decline", info: "Privacy policy"
     },
     de: {
-      titolo: "Helfen Sie uns, die Seite zu verbessern?",
-      testo: "Wir verwenden Statistik-Cookies nur mit Ihrer Zustimmung. Sie helfen uns, die Seite zu verbessern.",
+      titolo: "Diese Website verwendet Cookies",
+      testo: "Wir verwenden technische Cookies für den Betrieb der Website und, mit Ihrer Zustimmung, Statistik-Cookies.",
       accetta: "Akzeptieren", rifiuta: "Ablehnen", chiudi: "Schließen und ablehnen", info: "Datenschutz"
     },
     fr: {
-      titolo: "Vous nous aidez à améliorer le site ?",
-      testo: "Nous utilisons des cookies de statistiques uniquement si vous acceptez. Ils nous aident à améliorer le site.",
+      titolo: "Ce site utilise des cookies",
+      testo: "Nous utilisons des cookies techniques pour faire fonctionner le site et, si vous acceptez, des cookies de statistiques.",
       accetta: "Accepter", rifiuta: "Refuser", chiudi: "Fermer et refuser", info: "Confidentialité"
     }
   };
