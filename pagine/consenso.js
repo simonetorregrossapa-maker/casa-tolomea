@@ -32,22 +32,22 @@
   var TESTI = {
     it: {
       titolo: "Ci aiuti a migliorare il sito?",
-      testo: "Se accetti usiamo Microsoft Clarity per vedere, in forma anonima, dove si clicca e dove ci si blocca. I campi dei moduli non vengono mai registrati.",
+      testo: "Usiamo cookie di statistica solo se accetti. Ci servono a migliorare il sito.",
       accetta: "Accetta", rifiuta: "Rifiuta", chiudi: "Chiudi e rifiuta", info: "Informativa privacy"
     },
     en: {
       titolo: "Help us improve the site?",
-      testo: "With your OK we use Microsoft Clarity to see, anonymously, where visitors click and where they get stuck. Form fields are never recorded.",
+      testo: "We use analytics cookies only if you accept. They help us improve the site.",
       accetta: "Accept", rifiuta: "Decline", chiudi: "Close and decline", info: "Privacy policy"
     },
     de: {
       titolo: "Helfen Sie uns, die Seite zu verbessern?",
-      testo: "Mit Ihrer Zustimmung nutzen wir Microsoft Clarity, um anonym zu sehen, wo geklickt wird und wo es hakt. Formularfelder werden nie aufgezeichnet.",
+      testo: "Wir verwenden Statistik-Cookies nur mit Ihrer Zustimmung. Sie helfen uns, die Seite zu verbessern.",
       accetta: "Akzeptieren", rifiuta: "Ablehnen", chiudi: "Schließen und ablehnen", info: "Datenschutz"
     },
     fr: {
       titolo: "Vous nous aidez à améliorer le site ?",
-      testo: "Avec votre accord, nous utilisons Microsoft Clarity pour voir, de façon anonyme, où l'on clique et où l'on bloque. Les champs des formulaires ne sont jamais enregistrés.",
+      testo: "Nous utilisons des cookies de statistiques uniquement si vous acceptez. Ils nous aident à améliorer le site.",
       accetta: "Accepter", rifiuta: "Refuser", chiudi: "Fermer et refuser", info: "Confidentialité"
     }
   };

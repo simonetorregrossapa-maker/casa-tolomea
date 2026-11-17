@@ -1,0 +1,23 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "fraunces",
+        "createdAt": "2026-10-25T17:25:54.939Z",
+        "reason": "user confirmed: Simone ha scelto di tenere la grafica originale del pannello (identità Casa Tolomea)"
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          "gestione.html"
+        ],
+        "createdAt": "2026-10-25T17:25:54.963Z",
+        "reason": "user confirmed: Simone ha scelto di tenere la grafica originale, sfondo crema del sito Casa Tolomea"
+      }
+    ]
+  }
+}
