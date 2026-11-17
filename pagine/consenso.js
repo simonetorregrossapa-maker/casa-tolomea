@@ -32,22 +32,22 @@
   var TESTI = {
     it: {
       titolo: "Questo sito usa i cookie",
-      testo: "Usiamo cookie tecnici per far funzionare il sito e, se accetti, cookie di statistica.",
+      testo: "Usiamo i cookie per offrirti la migliore esperienza sul sito.",
       accetta: "Accetta", rifiuta: "Rifiuta", chiudi: "Chiudi e rifiuta", info: "Informativa privacy"
     },
     en: {
       titolo: "This site uses cookies",
-      testo: "We use technical cookies to run the site and, if you accept, analytics cookies.",
+      testo: "We use cookies to give you the best experience on our site.",
       accetta: "Accept", rifiuta: "Decline", chiudi: "Close and decline", info: "Privacy policy"
     },
     de: {
       titolo: "Diese Website verwendet Cookies",
-      testo: "Wir verwenden technische Cookies für den Betrieb der Website und, mit Ihrer Zustimmung, Statistik-Cookies.",
+      testo: "Wir verwenden Cookies, um Ihnen das beste Erlebnis auf unserer Website zu bieten.",
       accetta: "Akzeptieren", rifiuta: "Ablehnen", chiudi: "Schließen und ablehnen", info: "Datenschutz"
     },
     fr: {
       titolo: "Ce site utilise des cookies",
-      testo: "Nous utilisons des cookies techniques pour faire fonctionner le site et, si vous acceptez, des cookies de statistiques.",
+      testo: "Nous utilisons des cookies pour vous offrir la meilleure expérience sur notre site.",
       accetta: "Accepter", rifiuta: "Refuser", chiudi: "Fermer et refuser", info: "Confidentialité"
     }
   };
