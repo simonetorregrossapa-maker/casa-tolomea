@@ -58,7 +58,8 @@ returns table(passo text, dettaglio text, visite bigint)
 language sql stable security definer set search_path = public as $$
   select
     e.passo,
-    case when e.passo in ('invio_errore', 'avviso', 'lingua', 'faq_aperta', 'invio_fallito')
+    case when e.passo in ('invio_errore', 'avviso', 'lingua', 'faq_aperta', 'invio_fallito',
+                          'ritorno', 'richiesta_da', 'contatto_da')
          then e.dettaglio end as dettaglio,
     count(distinct e.visita)::bigint as visite
   from public.eventi_percorso e

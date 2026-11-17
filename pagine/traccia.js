@@ -54,6 +54,18 @@
     } catch (e) { /* best-effort */ }
   }
 
+  // Prima provenienza (stessa chiave e stesse regole di src/analytics.js):
+  // chi entra da Google su questa pagina e poi passa alla home o torna giorni
+  // dopo digitando l'indirizzo resta "arrivato da Google". Qui si scrive solo
+  // la prima volta: i ritorni li conta la home, che ha il resto del percorso.
+  try {
+    var ora = Date.now(), p = JSON.parse(localStorage.getItem("ct_prima") || "null");
+    if (!(p && p.s && ora - p.t < 90 * 864e5)) {
+      var s0 = sorgente();
+      if (s0 !== "interno" && s0 !== "selftest") localStorage.setItem("ct_prima", JSON.stringify({ s: s0, t: ora, u: ora, n: 1 }));
+    }
+  } catch (e) { /* storage bloccato */ }
+
   // Visita: una riga per caricamento, deduplicata nella sessione di navigazione.
   try {
     if (!sessionStorage.getItem("v_sent_" + location.pathname)) {
