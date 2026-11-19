@@ -51,6 +51,7 @@
           "@id": "https://www.casatolomea.it/#casa",
           "additionalType": "Apartment",
           "identifier": "casa-tolomea-mondello",
+        "telephone": "+39 339 429 0856",
           "name": "Casa Tolomea",
           "alternateName": "Casa vacanze Casa Tolomea Mondello",
           "description": "Casa vacanze a Mondello (Palermo): appartamento indipendente al piano terra, a 700 m dal mare. Fino a 6 ospiti, 2 camere matrimoniali, cucina attrezzata, giardino e patio; ideale per famiglie, animali ammessi e parcheggio gratuito. Prenoti diretto col proprietario: nessuna commissione e miglior prezzo.",
@@ -193,6 +194,10 @@
       .guide-statiche ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px 28px; }
       .guide-statiche a { color: rgba(246, 239, 228, .85); text-decoration: none; font-size: .95rem; line-height: 1.45; display: block; transition: color .3s; }
       .guide-statiche a:hover { color: #d9b779; }
+      .guide-statiche .guide-inner + .guide-inner { margin-top: clamp(32px, 5vw, 48px); }
+      .guide-statiche .casa-breve { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px 28px; }
+      .guide-statiche .casa-breve dt { font-size: .74rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #d9b779; margin-bottom: 4px; }
+      .guide-statiche .casa-breve dd { margin: 0; font-size: .92rem; line-height: 1.5; color: rgba(246, 239, 228, .82); }
       @media (max-width: 560px) { .guide-statiche ul { grid-template-columns: 1fr; gap: 14px; } }
     </style>
     <script type="module" crossorigin src="/assets/index-DZa-z2vU.js"></script>
@@ -209,8 +214,22 @@
          (verificato il 09/08/2026: 3 pagine pubblicate il 27/07, zero
          indicizzate, "Rilevata ma attualmente non indicizzata").
          React monta dentro #root e non tocca questo nodo. -->
-    <section class="guide-statiche" aria-labelledby="guide-titolo">
+    <section class="guide-statiche" lang="it" aria-labelledby="guide-titolo">
       <div class="guide-wrap">
+        <div class="guide-inner">
+          <h2 id="casa-breve-titolo">Casa Tolomea in breve</h2>
+          <p>I dati della casa in un colpo d'occhio. Aggiornati il 19 novembre 2026.</p>
+          <dl class="casa-breve" aria-labelledby="casa-breve-titolo">
+            <div><dt>Cos'è</dt><dd>Casa vacanze a Mondello (Palermo): appartamento indipendente al piano terra di una villa, 85 m², casa intera per gli ospiti.</dd></div>
+            <div><dt>Ospiti</dt><dd>Fino a 6: due camere matrimoniali e un divano letto matrimoniale in soggiorno. Un bagno con doccia.</dd></div>
+            <div><dt>Distanze</dt><dd>Spiaggia di Mondello 700 m a piedi, bar e ristoranti 550 m, aeroporto di Palermo 21 km.</dd></div>
+            <div><dt>Dotazioni</dt><dd>Giardino, veranda e patio, cucina attrezzata, lavatrice, aria condizionata, Wi-Fi, parcheggio gratuito in strada. Animali ammessi e culla gratis.</dd></div>
+            <div><dt>Prezzi 2027</dt><dd>Per la casa intera, da 142 € a notte (marzo) a 240 € (luglio e agosto). Pulizia, tassa di soggiorno e biancheria comprese. Minimo 2 notti.</dd></div>
+            <div><dt>Prenotare</dt><dd>Richiesta dal sito, risposta entro 24 ore, caparra del 30% con bonifico e saldo all'arrivo. Prenotando diretto non si paga la commissione del portale.</dd></div>
+            <div><dt>Host</dt><dd>Alessandro e Marcella, che vivono nella villa. Parlano italiano e inglese. Check-in dalle 16, check-out entro le 10.</dd></div>
+            <div><dt>Recensioni</dt><dd>9,3 su 10 su Booking.com, 61 recensioni.</dd></div>
+          </dl>
+        </div>
         <div class="guide-inner">
           <h2 id="guide-titolo">Guide su Mondello</h2>
           <p>Qualche guida sulla zona, per orientarti prima di prenotare.</p>
