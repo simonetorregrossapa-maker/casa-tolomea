@@ -122,8 +122,10 @@ td.price { font-family: var(--font-display); font-size: 1.1rem; white-space: now
 
 .dl-zone { margin-top: 18px; }
 .dl-zone div { display: flex; justify-content: space-between; gap: 16px; padding: 11px 0; border-bottom: 1px solid var(--line); }
-.dl-zone dt { color: var(--muted); }
-.dl-zone dd { margin: 0; font-weight: 600; white-space: nowrap; }
+.dl-zone dt { color: var(--muted); flex-shrink: 0; }
+/* I valori lunghi ("giardino indipendente, veranda, patio, barbecue") vanno a
+   capo allineati a destra: con nowrap uscivano dallo schermo sul telefono. */
+.dl-zone dd { margin: 0; font-weight: 600; text-align: right; }
 
 .quote {
   border-left: 3px solid var(--accent); padding: 4px 0 4px 18px;
